@@ -81,13 +81,28 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta name="description" content="故事起因 估计也会有很多同学升学时其亲友收到过这样的短信：   xxx家长您好，这是您孩子的升学资料 xxx.com 请查看 blablabla～   家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。 结果访问该网址后发现是自动下载一个apk文件，360发出了警告，    emmm……突然就来了兴趣-。-">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次简单的恶意apk逆向分析">
+<meta property="og:url" content="http://yoursite.com/2017/08/01/记一次简单的恶意apk逆向分析/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="故事起因 估计也会有很多同学升学时其亲友收到过这样的短信：   xxx家长您好，这是您孩子的升学资料 xxx.com 请查看 blablabla～   家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。 结果访问该网址后发现是自动下载一个apk文件，360发出了警告，    emmm……突然就来了兴趣-。-">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/images/apk_reverse/fake.jpg">
+<meta property="og:image" content="http://yoursite.com/images/apk_reverse/classes_dex.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/01/记一次简单的恶意apk逆向分析/images/apk_reverse/start_find.png">
+<meta property="og:image" content="http://yoursite.com/images/apk_reverse/find_smtp1.png">
+<meta property="og:image" content="http://yoursite.com/images/apk_reverse/find_smtp2.png">
+<meta property="og:image" content="http://yoursite.com/images/apk_reverse/login.png">
+<meta property="og:image" content="http://yoursite.com/images/apk_reverse/operation1.png">
+<meta property="og:image" content="http://yoursite.com/images/apk_reverse/operation2.png">
+<meta property="og:image" content="http://yoursite.com/images/apk_reverse/operation3.png">
+<meta property="og:image" content="http://yoursite.com/images/apk_reverse/group.png">
+<meta property="og:updated_time" content="2017-09-30T04:07:56.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="记一次简单的恶意apk逆向分析">
+<meta name="twitter:description" content="故事起因 估计也会有很多同学升学时其亲友收到过这样的短信：   xxx家长您好，这是您孩子的升学资料 xxx.com 请查看 blablabla～   家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。 结果访问该网址后发现是自动下载一个apk文件，360发出了警告，    emmm……突然就来了兴趣-。-">
+<meta name="twitter:image" content="http://yoursite.com/images/apk_reverse/fake.jpg">
 
 
 
@@ -117,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/">
+  <link rel="canonical" href="http://yoursite.com/2017/08/01/记一次简单的恶意apk逆向分析/">
 
 
 
 
 
-  <title>Archive | Hexo</title>
+  <title>记一次简单的恶意apk逆向分析 | Hexo</title>
   
 
 
@@ -142,7 +157,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -278,401 +293,182 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/01/记一次简单的恶意apk逆向分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Or1onX">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/Or1onX.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">记一次简单的恶意apk逆向分析</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-01T12:00:24+08:00">
+                2017-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        Um..! 15 posts in total. Keep on posting.
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/02/C++优先队列实现哈夫曼编码/" itemprop="url">
-              
-                <span itemprop="name">C++优先队列实现哈夫曼编码</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-02T09:15:46+08:00" content="2019-03-02">
-          03-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
+            
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/23/narnia-writeup/" itemprop="url">
-              
-                <span itemprop="name">narnia writeup</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-04-23T11:15:41+08:00" content="2018-04-23">
-          04-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/19/初探缓冲区溢出/" itemprop="url">
-              
-                <span itemprop="name">初探缓冲区溢出</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-04-19T23:29:49+08:00" content="2018-04-19">
-          04-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/15/Linux下进程状态的切换/" itemprop="url">
-              
-                <span itemprop="name">Linux下进程状态的切换</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-03-15T23:03:36+08:00" content="2018-03-15">
-          03-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/29/https攻击小结/" itemprop="url">
-              
-                <span itemprop="name">https攻击小结</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-01-29T11:57:31+08:00" content="2018-01-29">
-          01-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2017">2017</h1>
-          </div>
-        
-        
+          
 
-        
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/10/16/DDoS攻防小结/" itemprop="url">
-              
-                <span itemprop="name">DDoS攻防小结</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-10-16T19:28:38+08:00" content="2017-10-16">
-          10-16
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/23/由一道Vigenere想到的造轮子/" itemprop="url">
-              
-                <span itemprop="name">由一道Vigenere想到的造轮子</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-09-23T18:10:18+08:00" content="2017-09-23">
-          09-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/01/记一次简单的恶意apk逆向分析/" itemprop="url">
-              
-                <span itemprop="name">记一次简单的恶意apk逆向分析</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-08-01T12:00:24+08:00" content="2017-08-01">
-          08-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h1 id="故事起因"><a href="#故事起因" class="headerlink" title="故事起因"></a>故事起因</h1><ul>
+<li>估计也会有很多同学升学时其亲友收到过这样的短信：  <blockquote>
+<p>xxx家长您好，这是您孩子的升学资料 xxx.com 请查看 blablabla～</p>
+</blockquote>
+</li>
+<li>家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。</li>
+<li>结果访问该网址后发现是自动下载一个apk文件，360发出了警告，<br>  <img src="/images/apk_reverse/fake.jpg" alt><br>  emmm……突然就来了兴趣-。-</li>
+</ul>
+<a id="more"></a>
+<h1 id="分析过程"><a href="#分析过程" class="headerlink" title="分析过程"></a>分析过程</h1><ol>
+<li>之前从未接触过android逆向方面的东西，起初我也是上网找了找apk病毒分析的相关资料（这里推荐<a href="http://www.cnblogs.com/hkleak/archive/2016/01/07/5110384.html" target="_blank" rel="noopener">一篇文章</a>），感觉只要能读到源码一切也就简单了。遂下载了这个apk文件，开始分析（xjb搞）。</li>
+<li>下载下来的自然是apk后缀，将其改为rar，然后在win下解压</li>
+<li>解压后有一个<code>classes.dex</code>文件  <blockquote>
+<p>我们都知道android开发语言是Java，Java 源代码经过 Java 编译器编译后生成 <code>.class</code> 文件，android SDK 自带的工具会将这些 <code>.class</code>文件转换成<code>classes.dex</code>, 而<code>classes.dex</code>就是运行在Dalvik虚拟机上的文件。  </p>
+</blockquote>
+</li>
+<li>将<code>classes.dex</code>拖至<code>dex2jar</code>的安装目录下，打开命令行并切换至<code>dex2jar</code>的目录下，运行<code>d2j-dex2jar.bat classes.dex</code>将产生一个名为<code>classes-dex2jar.jar</code>的文件<br><img src="/images/apk_reverse/classes_dex.png" alt></li>
+<li>在<code>jd-gui</code>中打开<code>classes-dex2jar.jar</code>文件，开始找敏感字段，当然，代码经过了混淆处理<br><img src="images/apk_reverse/start_find.png" alt>  </li>
+<li>既然是apk文件，那么制造木马者一定想要窃取用户一些信息，最重要的自然是将这些信息发送出去，可以判断是邮箱或是手机号等等。那么尝试全局搜索（shift+ctrl+s）<code>mail、smtp、@qq.com</code>等等关键字，也可以慢慢审计代码摸清主要逻辑，去挖掘更多好玩的东西-。-<br>我是搜smtp，直接就把189邮箱的账户、密码爆出来了。。。<br><img src="/images/apk_reverse/find_smtp1.png" alt><br><img src="/images/apk_reverse/find_smtp2.png" alt></li>
+</ol>
+<h1 id="继续深入"><a href="#继续深入" class="headerlink" title="继续深入"></a>继续深入</h1><ul>
+<li><p>既然找到账户、密码，抱着研究型的态度，我决定登录进去。<br><img src="/images/apk_reverse/login.png" alt><br>这里可以看到，所有下载了文件的用户的部分通讯录、短信被发送到该邮箱下   </p>
+</li>
+<li><p>再看部分源码<br><img src="/images/apk_reverse/operation1.png" alt><br><img src="/images/apk_reverse/operation2.png" alt><br><img src="/images/apk_reverse/operation3.png" alt>  </p>
+</li>
+<li><p>从微步在线威胁情报分析上得到的结果<br><img src="/images/apk_reverse/group.png" alt><br>点了几个相似的域名都是 apk 文件下载地址，文件名也很有欺骗性，如 “车辆违规查询”、“体检报告单”等等。  </p>
+</li>
+</ul>
+<h1 id="简单小结"><a href="#简单小结" class="headerlink" title="简单小结"></a>简单小结</h1><ul>
+<li>能力有限，分析得比较水 0_0，对很多方面没有深入研究</li>
+<li>出于安全考虑，android 用户尽量注意别轻易下载未知的 apk 文件</li>
+<li>最后把这些信息交给互联网检举中心，至于他们有没有处理，我就不得而知了</li>
+</ul>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/03/03/Tips-of-Sharkfest-Challenge-2016/" itemprop="url">
-              
-                <span itemprop="name">Tips-of-Sharkfest_Challenge_2016</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-03-03T21:25:40+08:00" content="2017-03-03">
-          03-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/02/27/python与多线程/" itemprop="url">
-              
-                <span itemprop="name">python与多线程</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-02-27T15:27:48+08:00" content="2017-02-27">
-          02-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/03/Tips-of-Sharkfest-Challenge-2016/" rel="next" title="Tips-of-Sharkfest_Challenge_2016">
+                <i class="fa fa-chevron-left"></i> Tips-of-Sharkfest_Challenge_2016
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/23/由一道Vigenere想到的造轮子/" rel="prev" title="由一道Vigenere想到的造轮子">
+                由一道Vigenere想到的造轮子 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -680,6 +476,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -700,8 +500,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -770,6 +579,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#故事起因"><span class="nav-text">故事起因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析过程"><span class="nav-text">分析过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#继续深入"><span class="nav-text">继续深入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#简单小结"><span class="nav-text">简单小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -922,6 +747,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

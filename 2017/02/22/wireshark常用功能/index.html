@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Or1onX blog">
+  <meta name="keywords" content="wireshark,">
 
 
 
@@ -81,13 +81,28 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta name="description" content="前言前些天回顾了一下《Wireshark数据包分析实战》，就想写一些关于协议/数据分析的东西，但也只是从本书中总结一些Wireshark常用的使用功能，书中写的很详细，这里算是一个简化版吧～">
+<meta name="keywords" content="wireshark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="wireshark常用功能">
+<meta property="og:url" content="http://yoursite.com/2017/02/22/wireshark常用功能/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言前些天回顾了一下《Wireshark数据包分析实战》，就想写一些关于协议/数据分析的东西，但也只是从本书中总结一些Wireshark常用的使用功能，书中写的很详细，这里算是一个简化版吧～">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-DHCP-DORA.png">
+<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-DNSQuery.jpg">
+<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-FindPacket.png">
+<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-Endpoints.png">
+<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-Conversations.png">
+<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-ProtoHierachy.png">
+<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-RTTGraph.png">
+<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-FlowGraph.png">
+<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-DecodeProto.png">
+<meta property="og:updated_time" content="2017-03-03T12:33:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="wireshark常用功能">
+<meta name="twitter:description" content="前言前些天回顾了一下《Wireshark数据包分析实战》，就想写一些关于协议/数据分析的东西，但也只是从本书中总结一些Wireshark常用的使用功能，书中写的很详细，这里算是一个简化版吧～">
+<meta name="twitter:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-DHCP-DORA.png">
 
 
 
@@ -117,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/">
+  <link rel="canonical" href="http://yoursite.com/2017/02/22/wireshark常用功能/">
 
 
 
 
 
-  <title>Archive | Hexo</title>
+  <title>wireshark常用功能 | Hexo</title>
   
 
 
@@ -142,7 +157,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -278,401 +293,223 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/22/wireshark常用功能/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Or1onX">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/Or1onX.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">wireshark常用功能</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-22T16:19:03+08:00">
+                2017-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        Um..! 15 posts in total. Keep on posting.
-      </span>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/proto/" itemprop="url" rel="index">
+                    <span itemprop="name">proto</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/02/C++优先队列实现哈夫曼编码/" itemprop="url">
-              
-                <span itemprop="name">C++优先队列实现哈夫曼编码</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-02T09:15:46+08:00" content="2019-03-02">
-          03-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/23/narnia-writeup/" itemprop="url">
-              
-                <span itemprop="name">narnia writeup</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-04-23T11:15:41+08:00" content="2018-04-23">
-          04-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/19/初探缓冲区溢出/" itemprop="url">
-              
-                <span itemprop="name">初探缓冲区溢出</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-04-19T23:29:49+08:00" content="2018-04-19">
-          04-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/15/Linux下进程状态的切换/" itemprop="url">
-              
-                <span itemprop="name">Linux下进程状态的切换</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-03-15T23:03:36+08:00" content="2018-03-15">
-          03-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/29/https攻击小结/" itemprop="url">
-              
-                <span itemprop="name">https攻击小结</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-01-29T11:57:31+08:00" content="2018-01-29">
-          01-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
+            
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2017">2017</h1>
-          </div>
-        
-        
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/10/16/DDoS攻防小结/" itemprop="url">
-              
-                <span itemprop="name">DDoS攻防小结</span>
-              
-            </a>
-        
-      </h2>
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-10-16T19:28:38+08:00" content="2017-10-16">
-          10-16
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
 
+        </div>
+      </header>
+    
 
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/23/由一道Vigenere想到的造轮子/" itemprop="url">
-              
-                <span itemprop="name">由一道Vigenere想到的造轮子</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-09-23T18:10:18+08:00" content="2017-09-23">
-          09-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/01/记一次简单的恶意apk逆向分析/" itemprop="url">
-              
-                <span itemprop="name">记一次简单的恶意apk逆向分析</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-08-01T12:00:24+08:00" content="2017-08-01">
-          08-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>前些天回顾了一下《Wireshark数据包分析实战》，就想写一些关于协议/数据分析的东西，但也只是从本书中总结一些Wireshark常用的使用功能，书中写的很详细，这里算是一个简化版吧～</p>
+<a id="more"></a>
+<h5 id="一些常见的网络协议"><a href="#一些常见的网络协议" class="headerlink" title="一些常见的网络协议"></a>一些常见的网络协议</h5><ul>
+<li>ARP（OSI数据链路层）<br>交换机上使用的内容寻址寄存器（CAM）将列出它在每一个端口的所有连接设备的MAC地址，负责将IP地址解析为MAC地址。  </li>
+<li>IP（OSI网络层）  </li>
+</ul>
+<p>1.互联网本身就是由无数局域网和路由器所组成的一个集合<br>2.网络掩码有32位长，并且被设为1的每一位都标识着IP地址的对应部分时属于网络地址的，而剩下设为0的部分则标识着主机地址。<br>3.IP地址和网络掩码为方便起见，通常被写成无类型域间选路（CIDR）的形式，在此形式下，一个完整的IP地址后面会有一个左斜杠（/），以及一个用来表示IP地址中网络部分位数的数字<br>4.IP分片，以太网的MTU最大为1500字节（仅数据部分）  </p>
+<ul>
+<li>TCP（OSI传输层）  </li>
+</ul>
+<p>1.TCP会话<br>三次握手：1.A-&gt;B(SYN) &nbsp;&nbsp;&nbsp;&nbsp; 2.B-&gt;A(SYN/ACK) &nbsp;&nbsp;&nbsp;&nbsp;  3.A-&gt;B(ACK)<br>终止会话：1.A-&gt;B(FIN/ACK) &nbsp;&nbsp;&nbsp;&nbsp; 2.B-&gt;A(ACK) &nbsp;&nbsp;&nbsp;&nbsp; 3.B-&gt;A(FIN/ACK) &nbsp;&nbsp;&nbsp;&nbsp; 4.A-&gt;B(ACK)<br>重置：RST和ACK标志着通信的结束<br>2.Wireshark会维护一个端口的列表，并记录着它们最普遍的应用。尽管列表还是以标准端口为主，但很多临时端口也关联着常用服务。并可通过Edit-&gt;Preference-&gt;Name Resolution，然后取消勾选Enable Transport Name Resolution 就可以将其禁用了。<br>3.Wireshark为了分析将简便，引入了一个特性，可以将TCP数据包的序列号替换为相对值。<br>Edit-&gt;Preferences-&gt;Protocols，选择TCP，然后取消Relative Sequence Numbers and Window Scaling框，并单击OK就可以禁用了。</p>
+<ul>
+<li>DHCP（OSI应用层）  </li>
+</ul>
+<p>1.早先是由BOOTP协议（Bootstrap Protocol）解决给连接到网络的设备自动分配地址的问题。在目前的Wireshark中，Packets Detail面板仍是Bootstrap Protocol而不是DHCP。<br>2.最主要任务就是在续租过程中向客户端分配IP地址。<br>3.DHCP的DPRA过程<br><img src="http://www.jupiter23.cn/images/wireshark/wireshark-DHCP-DORA.png" alt>  </p>
+<ul>
+<li>DNS（OSI应用层）  </li>
+</ul>
+<p>1.DNS查询过程<br><img src="http://www.jupiter23.cn/images/wireshark/wireshark-DNSQuery.jpg" alt><br>2.区域传输 —— 备份主DNS服务器的信息到另一台备用DNS服务器，在两台设备之间传送区域数据<br>完整区域传送（AXFR）<br>增量区域传送（IXFR）：仅传送区域信息的一部分<br>数据在传输时是基于TCP协议，因为TCP对于规模数据的传输更加可靠。  </p>
+<h5 id="常用功能"><a href="#常用功能" class="headerlink" title="常用功能"></a>常用功能</h5><ul>
+<li>File-&gt;<br>Export 导出<br>Save As 保存<br>Merge 合并所捕获的数据包  </li>
+<li>【Ctrl-F】-&gt;Find（查找所匹配的第一个数据包）<img src="http://www.jupiter23.cn/images/wireshark/wireshark-FindPacket.png" alt><br>【Ctrl-N】 下一个数据包<br>【Ctrl-B】 前一个数据包  </li>
+<li>Edit-&gt;Set Time Reference<br>设定相对时间参数（只有当捕获的时间显示格式设定为相对于捕获开始的时间，设定数据包对时间参考才有意义）  </li>
+</ul>
+<h5 id="高级特性之Statistcs"><a href="#高级特性之Statistcs" class="headerlink" title="高级特性之Statistcs"></a>高级特性之Statistcs</h5><ul>
+<li>-&gt; Endpoints 端点（给出了每一个端点的许多有用统计数据，包括每个端点的地址、传输发送数据包的数量和字节数）<img src="http://www.jupiter23.cn/images/wireshark/wireshark-Endpoints.png" alt>  </li>
+<li>-&gt; Conversations 会话（记录两个端点之间的会话信息）<img src="http://www.jupiter23.cn/images/wireshark/wireshark-Conversations.png" alt>  </li>
+<li>-&gt; Protocol Hierachy 协议分层（查看协议）<img src="http://www.jupiter23.cn/images/wireshark/wireshark-ProtoHierachy.png" alt>  </li>
+<li>-&gt; Packet Lengths-&gt;Create Stat<br>在正常情况下，一个以太网上的帧的最大长度为1518字节，除去以太网、IP以及TCP头，还剩下1460字节以供应用层协议的头域或者数据使用。<br>以太网14字节</li>
+<li>-&gt; IO Graphs Wireshark上的IO图窗口可以让你对网络上的吞吐量进行绘图  </li>
+<li>-&gt; TCP Stram Graph-&gt;Round Trip Time Graph  </li>
+</ul>
+<p>1.对RTT（Round-Trip Time，确认一个数据包已被成功接受所需要的时间）进行分析通常是被用来找到通信中的慢点和瓶颈，以确定是否存在延迟<br>2.双向时间图（图中每一个点都代表了一个数据包的双向时间，你可以点击图中任何一个点，并将在Packet List面板中看到相应的数据包）<br><img src="http://www.jupiter23.cn/images/wireshark/wireshark-RTTGraph.png" alt>  </p>
+<ul>
+<li>-&gt;Flow Graph<br>创建数据流图<br><img src="http://www.jupiter23.cn/images/wireshark/wireshark-FlowGraph.png" alt>  </li>
+</ul>
+<h5 id="高级特性之Analyze"><a href="#高级特性之Analyze" class="headerlink" title="高级特性之Analyze"></a>高级特性之Analyze</h5><ul>
+<li>-&gt;Expert Info<br>专家信息（对话&nbsp;&nbsp;&nbsp;注意&nbsp;&nbsp;&nbsp;警告&nbsp;&nbsp;&nbsp;错误）  </li>
+</ul>
+<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><ul>
+<li><p>Capture-&gt;Options-&gt;name resolution<br>捕获开始前有选项设置，如名字解析（会存在一些弊端：如会产生额外的数据包等）  </p>
+</li>
+<li><p>更换解析器<br>解析器可理解为网络原始数据流和Wireshark程序之间的翻译器<br>Wireshark在给一个数据包选择解析器时也并非每次都能选对，尤其是当网络上的一个协议使用了不同于标准的配置，比如一个非默认端口（网络管理员通常会出于安全考虑，或者员工想要避开访问控制时进行设置）。这时我们可以更改Wireshark使用特定解析器的方式（注：进行强制解码时产生的更改，并不会在你保存捕获文件并关闭Wireshark后保存，每次打开捕获文件时，都要重新进行强制解码的设置）<br>具体方法：  </p>
+</li>
+</ul>
+<p>1.右键单击所要强制解码的数据包，并选择Decode As<br>2.<img src="http://www.jupiter23.cn/images/wireshark/wireshark-DecodeProto.png" alt><br>3.选好相应解码条件后单击OK  </p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/03/03/Tips-of-Sharkfest-Challenge-2016/" itemprop="url">
-              
-                <span itemprop="name">Tips-of-Sharkfest_Challenge_2016</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-03-03T21:25:40+08:00" content="2017-03-03">
-          03-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/02/27/python与多线程/" itemprop="url">
-              
-                <span itemprop="name">python与多线程</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-02-27T15:27:48+08:00" content="2017-02-27">
-          02-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/wireshark/" rel="tag"># wireshark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/08/scapy_uses/" rel="next" title="Scapy中文使用手册">
+                <i class="fa fa-chevron-left"></i> Scapy中文使用手册
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/27/python与多线程/" rel="prev" title="python与多线程">
+                python与多线程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -680,6 +517,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -700,8 +541,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -770,6 +620,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一些常见的网络协议"><span class="nav-text">一些常见的网络协议</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常用功能"><span class="nav-text">常用功能</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#高级特性之Statistcs"><span class="nav-text">高级特性之Statistcs</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#高级特性之Analyze"><span class="nav-text">高级特性之Analyze</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#其他"><span class="nav-text">其他</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -922,6 +788,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

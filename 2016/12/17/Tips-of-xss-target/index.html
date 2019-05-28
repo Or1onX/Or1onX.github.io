@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Or1onX blog">
+  <meta name="keywords" content="xss那些事儿,">
 
 
 
@@ -81,13 +81,22 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta name="description" content="xss-target是我从github上找到的一个开源项目，只可惜没提供解题思路，在此奉上自己做题时的一些解法，供大家参考。大家在做的时候建议用firefox浏览器，毕竟大多数是反射型xss，使用其他浏览器会受其xss filter的影响。xss-target传送门">
+<meta name="keywords" content="xss那些事儿">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tips of xss-target">
+<meta property="og:url" content="http://yoursite.com/2016/12/17/Tips-of-xss-target/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="xss-target是我从github上找到的一个开源项目，只可惜没提供解题思路，在此奉上自己做题时的一些解法，供大家参考。大家在做的时候建议用firefox浏览器，毕竟大多数是反射型xss，使用其他浏览器会受其xss filter的影响。xss-target传送门">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://jupiter23.cn/images/xss-target/xss_IE.png">
+<meta property="og:image" content="http://jupiter23.cn/images/xss-target/xss_test.png">
+<meta property="og:image" content="http://jupiter23.cn/images/xss-target/xss_cookie.png">
+<meta property="og:updated_time" content="2017-05-06T11:25:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="Tips of xss-target">
+<meta name="twitter:description" content="xss-target是我从github上找到的一个开源项目，只可惜没提供解题思路，在此奉上自己做题时的一些解法，供大家参考。大家在做的时候建议用firefox浏览器，毕竟大多数是反射型xss，使用其他浏览器会受其xss filter的影响。xss-target传送门">
+<meta name="twitter:image" content="http://jupiter23.cn/images/xss-target/xss_IE.png">
 
 
 
@@ -117,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/">
+  <link rel="canonical" href="http://yoursite.com/2016/12/17/Tips-of-xss-target/">
 
 
 
 
 
-  <title>Archive | Hexo</title>
+  <title>Tips of xss-target | Hexo</title>
   
 
 
@@ -142,7 +151,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -278,401 +287,254 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/17/Tips-of-xss-target/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Or1onX">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/Or1onX.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">Tips of xss-target</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-17T20:56:37+08:00">
+                2016-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        Um..! 15 posts in total. Keep on posting.
-      </span>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/02/C++优先队列实现哈夫曼编码/" itemprop="url">
-              
-                <span itemprop="name">C++优先队列实现哈夫曼编码</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-02T09:15:46+08:00" content="2019-03-02">
-          03-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/23/narnia-writeup/" itemprop="url">
-              
-                <span itemprop="name">narnia writeup</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-04-23T11:15:41+08:00" content="2018-04-23">
-          04-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/19/初探缓冲区溢出/" itemprop="url">
-              
-                <span itemprop="name">初探缓冲区溢出</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-04-19T23:29:49+08:00" content="2018-04-19">
-          04-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/15/Linux下进程状态的切换/" itemprop="url">
-              
-                <span itemprop="name">Linux下进程状态的切换</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-03-15T23:03:36+08:00" content="2018-03-15">
-          03-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/29/https攻击小结/" itemprop="url">
-              
-                <span itemprop="name">https攻击小结</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-01-29T11:57:31+08:00" content="2018-01-29">
-          01-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
+            
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2017">2017</h1>
-          </div>
-        
-        
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/10/16/DDoS攻防小结/" itemprop="url">
-              
-                <span itemprop="name">DDoS攻防小结</span>
-              
-            </a>
-        
-      </h2>
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-10-16T19:28:38+08:00" content="2017-10-16">
-          10-16
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
 
+        </div>
+      </header>
+    
 
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/23/由一道Vigenere想到的造轮子/" itemprop="url">
-              
-                <span itemprop="name">由一道Vigenere想到的造轮子</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-09-23T18:10:18+08:00" content="2017-09-23">
-          09-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/01/记一次简单的恶意apk逆向分析/" itemprop="url">
-              
-                <span itemprop="name">记一次简单的恶意apk逆向分析</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-08-01T12:00:24+08:00" content="2017-08-01">
-          08-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h5 id="xss-target是我从github上找到的一个开源项目，只可惜没提供解题思路，在此奉上自己做题时的一些解法，供大家参考。大家在做的时候建议用firefox浏览器，毕竟大多数是反射型xss，使用其他浏览器会受其xss-filter的影响。xss-target传送门"><a href="#xss-target是我从github上找到的一个开源项目，只可惜没提供解题思路，在此奉上自己做题时的一些解法，供大家参考。大家在做的时候建议用firefox浏览器，毕竟大多数是反射型xss，使用其他浏览器会受其xss-filter的影响。xss-target传送门" class="headerlink" title="xss-target是我从github上找到的一个开源项目，只可惜没提供解题思路，在此奉上自己做题时的一些解法，供大家参考。大家在做的时候建议用firefox浏览器，毕竟大多数是反射型xss，使用其他浏览器会受其xss filter的影响。xss-target传送门"></a>xss-target是我从github上找到的一个<a href="https://github.com/Y4ngshu/xss-target" target="_blank" rel="noopener">开源项目</a>，只可惜没提供解题思路，在此奉上自己做题时的一些解法，供大家参考。大家在做的时候建议用firefox浏览器，毕竟大多数是反射型xss，使用其他浏览器会受其xss filter的影响。<a href="http://jupiter23.cn/xss-target" target="_blank" rel="noopener">xss-target传送门</a></h5><a id="more"></a>
+<h4 id="level1"><a href="#level1" class="headerlink" title="level1"></a>level1</h4><ul>
+<li>常规做法，反射点为body标签，直接上payload：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>    </li>
+</ul>
+<h4 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h4><ul>
+<li>查看页面源码，可以看到反射点在<code>&lt;input name=keyword value=&quot;&quot;&gt;</code>里的value中，可以选择闭合双引号<br>payload：<code>&quot; onclick=&quot;alert(1)</code>  </li>
+<li>其实level2本意是想让你新创建<code>&lt;script&gt;</code>标签，即payload为：<code>&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code> ， 但只要达到同样效果便可。</li>
+</ul>
+<h4 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h4><ul>
+<li>这次的反射点依旧是在<code>&lt;input name=&quot;keyword&quot; value=&gt;</code>里的value中，但是这是过滤了双引号，应该是经过了htmlspecialchars并且仅过滤了双引号，因为当你把payload写成<code>&#39;onclick=&#39;alert(1)</code>时就可以绕过。  </li>
+</ul>
+<h4 id="level4"><a href="#level4" class="headerlink" title="level4"></a>level4</h4><ul>
+<li>与level2的payload相同：<code>&quot;onclick=&quot;alert(1)</code>  </li>
+</ul>
+<h4 id="level5"><a href="#level5" class="headerlink" title="level5"></a>level5</h4><ul>
+<li>这一关基本上就没法用事件触发了，因为你会发现所有的<code>on</code>字段都被转换成<code>o_n</code>，但是双引号还是可以闭合的，因此，可以尝试闭合标签并新建一个<code>&lt;a&gt;</code>标签，<code>href</code>用js伪协议。  </li>
+<li>payload：<code>&quot;&gt;&lt;a href=&quot;javascript:alert(1)&quot;&gt;haha</code>  </li>
+</ul>
+<h4 id="level6"><a href="#level6" class="headerlink" title="level6"></a>level6</h4><ul>
+<li>基本上从这一关开始，每一题的payload都不同于前面几关，这一关里，后端将<code>on src href script</code>全都转换成其他的了，乍一看有些不知所措 ：p ，但是这里还是可以闭合标签的。实际上，html对标签规范书写的要求很低，标签名可以大小写参杂。因此，payload可以是：<code>&quot;&gt;&lt;ScriPt&gt;alert(1)&lt;/scRipt&gt;&quot;</code>    </li>
+</ul>
+<h4 id="level7"><a href="#level7" class="headerlink" title="level7"></a>level7</h4><ul>
+<li>by the way，每一关都是建立在上一关的过滤基础上进行过滤的，这一次大小写参杂不起作用，应该是后端将输入的字符县转换成小写的，按照level6的payload提交后，你会在反射点处发现<code>&lt;ScriPt&gt;</code>变成了<code>&lt;&gt;</code>，那么可以尝试一个经典的绕过payload：<code>&quot;&gt;scriscriptpt&gt;alert(1)&lt;/scriscriptpt&gt;&quot;</code>  </li>
+</ul>
+<h4 id="level8"><a href="#level8" class="headerlink" title="level8"></a>level8</h4><ul>
+<li>不得不说，这一关有一点狗血…题意一目了然，就是将你的输入反射到“友情链接”的href值里去，一开始你会想必然得用js伪协议啊-。-     想法很对，但不久你也会发现，后端将包含<code>script</code>的字段替换成<code>scr_ipt</code>，那就还是看你怎么绕了～<br>同样，html对标签规范书写的低要求，让你可以在<code>&lt;script&gt;</code>中参杂着<code>\t \n</code>等，这些都不影响浏览器的解析。因此，payload可以是：<code>java script:alert(1)</code>（其中a与s用\t间隔）  </li>
+</ul>
+<h4 id="level9"><a href="#level9" class="headerlink" title="level9"></a>level9</h4><ul>
+<li>这里同样是添加友情链接，但是用level8的payload后端会提示链接不合法，试了很多字符段后发现，你的输入必须有<code>http://</code>而不管其出现在什么位置，就会被认为是合法链接，因此，payload可以是：<code>javascr  ipt:alert(1)//http://</code>像这样将<code>http://</code>注释掉即可。  </li>
+</ul>
+<h4 id="level10"><a href="#level10" class="headerlink" title="level10"></a>level10</h4><ul>
+<li>这一关主要是找对反射点，正确的反射点应该是在<code>&lt;input name=&quot;t_sort&quot; value= type=&quot;hidden&quot;&gt;</code>中的value值里，注意到这里的input是hidden类型，payload里需要将type改成其他类型：<code>&quot; type=&quot;text&quot; onclick=&quot;alert(1)</code>  </li>
+</ul>
+<h4 id="level11"><a href="#level11" class="headerlink" title="level11"></a>level11</h4><ul>
+<li>在这一关里，足够细心才有可能找到反射点。对了，就是在t_ref里，这里存放的是<code>$_SERVER[&#39;HTTP_REFERER&#39;]</code>的值，如果是从level10跳转来的并且使用的是FF/GG浏览器，那么你会发现在t_ref中是已经经过encode的referer了。但IE下不会（测试的是IE8），因此，可以这样做：<img src="http://jupiter23.cn/images/xss-target/xss_IE.png" alt>   </li>
+</ul>
+<h4 id="level12"><a href="#level12" class="headerlink" title="level12"></a>level12</h4><ul>
+<li>与level11相似，这次反射点是在<code>t_ua</code>的value里，因此，得想办法修改默认的User-Agent。firefox里就有很多修改ua的插件，例如：<img src="http://jupiter23.cn/images/xss-target/xss_test.png" alt><br>payload：<code>&quot;type=text onclick=&quot;alert(1)</code>  </li>
+</ul>
+<h4 id="level13"><a href="#level13" class="headerlink" title="level13"></a>level13</h4><ul>
+<li>同样，这次是在cookie中，推荐一个插件：<strong>tamper data</strong> <img src="http://jupiter23.cn/images/xss-target/xss_cookie.png" alt><br>payload同上  </li>
+</ul>
+<h4 id="level14"><a href="#level14" class="headerlink" title="level14"></a>level14</h4><ul>
+<li>这一关有些问题，直接看level15吧。  </li>
+</ul>
+<h4 id="level15"><a href="#level15" class="headerlink" title="level15"></a>level15</h4><ul>
+<li><p>还是找反射点，查看页面源码可以发现：</p>
+<ol>
+<li>页面导入了<code>angularjs</code>；</li>
+</ol>
+<ul>
+<li>反射点是在<code>class=&quot;ng-include: &#39;src&#39;&quot;</code>；</li>
+<li>可控参数实际上是<code>$_GET[&#39;src&#39;]</code>。</li>
+</ul>
+</li>
+<li><p><code>angularjs</code>中的<code>ng-include</code>有如下用法：  </p>
+<ol>
+<li>ng-include,如果单纯指定地址，必须要加引号</li>
+<li>ng-include,加载外部html，script标签中的内容不执行，不能加载，如果需要控制器处理需要在主页中注册</li>
+<li>ng-include,加载外部html中含有style标签样式可以识别</li>
+<li>ng-inclue,记载外部html中的link标签可以加载  </li>
+</ol>
+</li>
+<li><p>由此可见，我们可以构建一个页面 <strong>test.html</strong>，<code>body</code>下写一个<code>&lt;img src=&quot;&quot; onerror=&quot;alert(1)&quot;&gt;</code>，然后<code>?src=&#39;test.html&#39;</code>，成功执行</p>
+</li>
+</ul>
+<h4 id="level16"><a href="#level16" class="headerlink" title="level16"></a>level16</h4><ul>
+<li>先尝试一下，看看哪些字段被过滤：<code>script</code>（大小写过滤）、<code>空格</code>、<code>/</code>、<code>\t</code>，这些都被替换成了<code>&amp;nbsp;</code></li>
+<li>常见的<code>bypass</code>是不起效了，而且过滤了<code>/</code>，导致一些需要闭合的标签也没法用</li>
+<li>可以尝试一些不需要闭合的标签，例如我们喜欢的<code>img</code></li>
+<li>可是<code>空格</code>和<code>/</code>都被过滤，<code>img</code>、<code>src</code>和<code>onerror</code>怎么间隔开呢？还是像以前一样，<code>html</code>标签内容支持以多个空格、换行符、缩进符进行间隔，换行符还没有过滤呢～  </li>
+<li>构造payload：<code>&lt;img%0asrc=&quot;&quot;%0aonerror=&quot;alert(1)&quot;</code></li>
+</ul>
+<h4 id="level17-18"><a href="#level17-18" class="headerlink" title="level17/18"></a>level17/18</h4><ul>
+<li>看源码发现，这两题是一样的。。。</li>
+<li>payload：<code>?arg01=a&amp;arg02=b onmouseover=alert(1)</code></li>
+</ul>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/03/03/Tips-of-Sharkfest-Challenge-2016/" itemprop="url">
-              
-                <span itemprop="name">Tips-of-Sharkfest_Challenge_2016</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-03-03T21:25:40+08:00" content="2017-03-03">
-          03-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/02/27/python与多线程/" itemprop="url">
-              
-                <span itemprop="name">python与多线程</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-02-27T15:27:48+08:00" content="2017-02-27">
-          02-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/xss那些事儿/" rel="tag"># xss那些事儿</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/26/关于xss漏洞点的挖掘/" rel="next" title="关于xss漏洞点的挖掘">
+                <i class="fa fa-chevron-left"></i> 关于xss漏洞点的挖掘
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/08/scapy_uses/" rel="prev" title="Scapy中文使用手册">
+                Scapy中文使用手册 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -680,6 +542,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -700,8 +566,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -770,6 +645,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#xss-target是我从github上找到的一个开源项目，只可惜没提供解题思路，在此奉上自己做题时的一些解法，供大家参考。大家在做的时候建议用firefox浏览器，毕竟大多数是反射型xss，使用其他浏览器会受其xss-filter的影响。xss-target传送门"><span class="nav-text">xss-target是我从github上找到的一个开源项目，只可惜没提供解题思路，在此奉上自己做题时的一些解法，供大家参考。大家在做的时候建议用firefox浏览器，毕竟大多数是反射型xss，使用其他浏览器会受其xss filter的影响。xss-target传送门</span></a></li></ol><li class="nav-item nav-level-4"><a class="nav-link" href="#level1"><span class="nav-text">level1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level2"><span class="nav-text">level2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level3"><span class="nav-text">level3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level4"><span class="nav-text">level4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level5"><span class="nav-text">level5</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level6"><span class="nav-text">level6</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level7"><span class="nav-text">level7</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level8"><span class="nav-text">level8</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level9"><span class="nav-text">level9</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level10"><span class="nav-text">level10</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level11"><span class="nav-text">level11</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level12"><span class="nav-text">level12</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level13"><span class="nav-text">level13</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level14"><span class="nav-text">level14</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level15"><span class="nav-text">level15</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level16"><span class="nav-text">level16</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#level17-18"><span class="nav-text">level17/18</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -922,6 +813,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

