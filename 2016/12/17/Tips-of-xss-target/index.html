@@ -89,14 +89,14 @@
 <meta property="og:site_name" content="Or1onX&#39;s blog">
 <meta property="og:description" content="xss-target是我从github上找到的一个开源项目，只可惜没提供解题思路，在此奉上自己做题时的一些解法，供大家参考。大家在做的时候建议用firefox浏览器，毕竟大多数是反射型xss，使用其他浏览器会受其xss filter的影响。xss-target传送门">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://jupiter23.cn/images/xss-target/xss_IE.png">
-<meta property="og:image" content="http://jupiter23.cn/images/xss-target/xss_test.png">
-<meta property="og:image" content="http://jupiter23.cn/images/xss-target/xss_cookie.png">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhyvcadsj20fv05i0t2.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhz2wcldj20ik0ha3zm.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhzagn9sj20gl0hs3z2.jpg">
 <meta property="og:updated_time" content="2017-05-06T11:25:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tips of xss-target">
 <meta name="twitter:description" content="xss-target是我从github上找到的一个开源项目，只可惜没提供解题思路，在此奉上自己做题时的一些解法，供大家参考。大家在做的时候建议用firefox浏览器，毕竟大多数是反射型xss，使用其他浏览器会受其xss filter的影响。xss-target传送门">
-<meta name="twitter:image" content="http://jupiter23.cn/images/xss-target/xss_IE.png">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhyvcadsj20fv05i0t2.jpg">
 
 
 
@@ -434,13 +434,13 @@
 <li>这一关主要是找对反射点，正确的反射点应该是在<code>&lt;input name=&quot;t_sort&quot; value= type=&quot;hidden&quot;&gt;</code>中的value值里，注意到这里的input是hidden类型，payload里需要将type改成其他类型：<code>&quot; type=&quot;text&quot; onclick=&quot;alert(1)</code>  </li>
 </ul>
 <h4 id="level11"><a href="#level11" class="headerlink" title="level11"></a>level11</h4><ul>
-<li>在这一关里，足够细心才有可能找到反射点。对了，就是在t_ref里，这里存放的是<code>$_SERVER[&#39;HTTP_REFERER&#39;]</code>的值，如果是从level10跳转来的并且使用的是FF/GG浏览器，那么你会发现在t_ref中是已经经过encode的referer了。但IE下不会（测试的是IE8），因此，可以这样做：<img src="http://jupiter23.cn/images/xss-target/xss_IE.png" alt>   </li>
+<li>在这一关里，足够细心才有可能找到反射点。对了，就是在t_ref里，这里存放的是<code>$_SERVER[&#39;HTTP_REFERER&#39;]</code>的值，如果是从level10跳转来的并且使用的是FF/GG浏览器，那么你会发现在t_ref中是已经经过encode的referer了。但IE下不会（测试的是IE8），因此，可以这样做：<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhyvcadsj20fv05i0t2.jpg" alt>   </li>
 </ul>
 <h4 id="level12"><a href="#level12" class="headerlink" title="level12"></a>level12</h4><ul>
-<li>与level11相似，这次反射点是在<code>t_ua</code>的value里，因此，得想办法修改默认的User-Agent。firefox里就有很多修改ua的插件，例如：<img src="http://jupiter23.cn/images/xss-target/xss_test.png" alt><br>payload：<code>&quot;type=text onclick=&quot;alert(1)</code>  </li>
+<li>与level11相似，这次反射点是在<code>t_ua</code>的value里，因此，得想办法修改默认的User-Agent。firefox里就有很多修改ua的插件，例如：<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhz2wcldj20ik0ha3zm.jpg" alt><br>payload：<code>&quot;type=text onclick=&quot;alert(1)</code>  </li>
 </ul>
 <h4 id="level13"><a href="#level13" class="headerlink" title="level13"></a>level13</h4><ul>
-<li>同样，这次是在cookie中，推荐一个插件：<strong>tamper data</strong> <img src="http://jupiter23.cn/images/xss-target/xss_cookie.png" alt><br>payload同上  </li>
+<li>同样，这次是在cookie中，推荐一个插件：<strong>tamper data</strong> <img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhzagn9sj20gl0hs3z2.jpg" alt><br>payload同上  </li>
 </ul>
 <h4 id="level14"><a href="#level14" class="headerlink" title="level14"></a>level14</h4><ul>
 <li>这一关有些问题，直接看level15吧。  </li>

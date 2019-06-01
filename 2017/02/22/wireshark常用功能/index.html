@@ -89,20 +89,20 @@
 <meta property="og:site_name" content="Or1onX&#39;s blog">
 <meta property="og:description" content="前言前些天回顾了一下《Wireshark数据包分析实战》，就想写一些关于协议/数据分析的东西，但也只是从本书中总结一些Wireshark常用的使用功能，书中写的很详细，这里算是一个简化版吧～">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-DHCP-DORA.png">
-<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-DNSQuery.jpg">
-<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-FindPacket.png">
-<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-Endpoints.png">
-<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-Conversations.png">
-<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-ProtoHierachy.png">
-<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-RTTGraph.png">
-<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-FlowGraph.png">
-<meta property="og:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-DecodeProto.png">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhmsbtcxj20ch05mweh.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhn4clunj20l90f4t9b.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhnkl4dtj20ba074aah.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhochinhj216o0ftta3.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhozes8hj216o0g5jt7.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhpc9u8ej21hc0u0jv4.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhpw2inrj20ok0je0v9.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhq6ikpxj20io0eodhg.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhqjplyuj20gv094jrz.jpg">
 <meta property="og:updated_time" content="2017-03-03T12:33:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="wireshark常用功能">
 <meta name="twitter:description" content="前言前些天回顾了一下《Wireshark数据包分析实战》，就想写一些关于协议/数据分析的东西，但也只是从本书中总结一些Wireshark常用的使用功能，书中写的很详细，这里算是一个简化版吧～">
-<meta name="twitter:image" content="http://www.jupiter23.cn/images/wireshark/wireshark-DHCP-DORA.png">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhmsbtcxj20ch05mweh.jpg">
 
 
 
@@ -420,27 +420,27 @@
 <ul>
 <li>DHCP（OSI应用层）  </li>
 </ul>
-<p>1.早先是由BOOTP协议（Bootstrap Protocol）解决给连接到网络的设备自动分配地址的问题。在目前的Wireshark中，Packets Detail面板仍是Bootstrap Protocol而不是DHCP。<br>2.最主要任务就是在续租过程中向客户端分配IP地址。<br>3.DHCP的DPRA过程<br><img src="http://www.jupiter23.cn/images/wireshark/wireshark-DHCP-DORA.png" alt>  </p>
+<p>1.早先是由BOOTP协议（Bootstrap Protocol）解决给连接到网络的设备自动分配地址的问题。在目前的Wireshark中，Packets Detail面板仍是Bootstrap Protocol而不是DHCP。<br>2.最主要任务就是在续租过程中向客户端分配IP地址。<br>3.DHCP的DPRA过程<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhmsbtcxj20ch05mweh.jpg" alt>  </p>
 <ul>
 <li>DNS（OSI应用层）  </li>
 </ul>
-<p>1.DNS查询过程<br><img src="http://www.jupiter23.cn/images/wireshark/wireshark-DNSQuery.jpg" alt><br>2.区域传输 —— 备份主DNS服务器的信息到另一台备用DNS服务器，在两台设备之间传送区域数据<br>完整区域传送（AXFR）<br>增量区域传送（IXFR）：仅传送区域信息的一部分<br>数据在传输时是基于TCP协议，因为TCP对于规模数据的传输更加可靠。  </p>
+<p>1.DNS查询过程<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhn4clunj20l90f4t9b.jpg" alt><br>2.区域传输 —— 备份主DNS服务器的信息到另一台备用DNS服务器，在两台设备之间传送区域数据<br>完整区域传送（AXFR）<br>增量区域传送（IXFR）：仅传送区域信息的一部分<br>数据在传输时是基于TCP协议，因为TCP对于规模数据的传输更加可靠。  </p>
 <h5 id="常用功能"><a href="#常用功能" class="headerlink" title="常用功能"></a>常用功能</h5><ul>
 <li>File-&gt;<br>Export 导出<br>Save As 保存<br>Merge 合并所捕获的数据包  </li>
-<li>【Ctrl-F】-&gt;Find（查找所匹配的第一个数据包）<img src="http://www.jupiter23.cn/images/wireshark/wireshark-FindPacket.png" alt><br>【Ctrl-N】 下一个数据包<br>【Ctrl-B】 前一个数据包  </li>
+<li>【Ctrl-F】-&gt;Find（查找所匹配的第一个数据包）<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhnkl4dtj20ba074aah.jpg" alt><br>【Ctrl-N】 下一个数据包<br>【Ctrl-B】 前一个数据包  </li>
 <li>Edit-&gt;Set Time Reference<br>设定相对时间参数（只有当捕获的时间显示格式设定为相对于捕获开始的时间，设定数据包对时间参考才有意义）  </li>
 </ul>
 <h5 id="高级特性之Statistcs"><a href="#高级特性之Statistcs" class="headerlink" title="高级特性之Statistcs"></a>高级特性之Statistcs</h5><ul>
-<li>-&gt; Endpoints 端点（给出了每一个端点的许多有用统计数据，包括每个端点的地址、传输发送数据包的数量和字节数）<img src="http://www.jupiter23.cn/images/wireshark/wireshark-Endpoints.png" alt>  </li>
-<li>-&gt; Conversations 会话（记录两个端点之间的会话信息）<img src="http://www.jupiter23.cn/images/wireshark/wireshark-Conversations.png" alt>  </li>
-<li>-&gt; Protocol Hierachy 协议分层（查看协议）<img src="http://www.jupiter23.cn/images/wireshark/wireshark-ProtoHierachy.png" alt>  </li>
+<li>-&gt; Endpoints 端点（给出了每一个端点的许多有用统计数据，包括每个端点的地址、传输发送数据包的数量和字节数）<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhochinhj216o0ftta3.jpg" alt></li>
+<li>-&gt; Conversations 会话（记录两个端点之间的会话信息）<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhozes8hj216o0g5jt7.jpg" alt></li>
+<li>-&gt; Protocol Hierachy 协议分层（查看协议）<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhpc9u8ej21hc0u0jv4.jpg" alt>  </li>
 <li>-&gt; Packet Lengths-&gt;Create Stat<br>在正常情况下，一个以太网上的帧的最大长度为1518字节，除去以太网、IP以及TCP头，还剩下1460字节以供应用层协议的头域或者数据使用。<br>以太网14字节</li>
 <li>-&gt; IO Graphs Wireshark上的IO图窗口可以让你对网络上的吞吐量进行绘图  </li>
 <li>-&gt; TCP Stram Graph-&gt;Round Trip Time Graph  </li>
 </ul>
-<p>1.对RTT（Round-Trip Time，确认一个数据包已被成功接受所需要的时间）进行分析通常是被用来找到通信中的慢点和瓶颈，以确定是否存在延迟<br>2.双向时间图（图中每一个点都代表了一个数据包的双向时间，你可以点击图中任何一个点，并将在Packet List面板中看到相应的数据包）<br><img src="http://www.jupiter23.cn/images/wireshark/wireshark-RTTGraph.png" alt>  </p>
+<p>1.对RTT（Round-Trip Time，确认一个数据包已被成功接受所需要的时间）进行分析通常是被用来找到通信中的慢点和瓶颈，以确定是否存在延迟<br>2.双向时间图（图中每一个点都代表了一个数据包的双向时间，你可以点击图中任何一个点，并将在Packet List面板中看到相应的数据包）<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhpw2inrj20ok0je0v9.jpg" alt>  </p>
 <ul>
-<li>-&gt;Flow Graph<br>创建数据流图<br><img src="http://www.jupiter23.cn/images/wireshark/wireshark-FlowGraph.png" alt>  </li>
+<li>-&gt;Flow Graph<br>创建数据流图<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhq6ikpxj20io0eodhg.jpg" alt>  </li>
 </ul>
 <h5 id="高级特性之Analyze"><a href="#高级特性之Analyze" class="headerlink" title="高级特性之Analyze"></a>高级特性之Analyze</h5><ul>
 <li>-&gt;Expert Info<br>专家信息（对话&nbsp;&nbsp;&nbsp;注意&nbsp;&nbsp;&nbsp;警告&nbsp;&nbsp;&nbsp;错误）  </li>
@@ -451,7 +451,7 @@
 <li><p>更换解析器<br>解析器可理解为网络原始数据流和Wireshark程序之间的翻译器<br>Wireshark在给一个数据包选择解析器时也并非每次都能选对，尤其是当网络上的一个协议使用了不同于标准的配置，比如一个非默认端口（网络管理员通常会出于安全考虑，或者员工想要避开访问控制时进行设置）。这时我们可以更改Wireshark使用特定解析器的方式（注：进行强制解码时产生的更改，并不会在你保存捕获文件并关闭Wireshark后保存，每次打开捕获文件时，都要重新进行强制解码的设置）<br>具体方法：  </p>
 </li>
 </ul>
-<p>1.右键单击所要强制解码的数据包，并选择Decode As<br>2.<img src="http://www.jupiter23.cn/images/wireshark/wireshark-DecodeProto.png" alt><br>3.选好相应解码条件后单击OK  </p>
+<p>1.右键单击所要强制解码的数据包，并选择Decode As<br>2.<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhqjplyuj20gv094jrz.jpg" alt><br>3.选好相应解码条件后单击OK  </p>
 
       
     </div>

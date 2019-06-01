@@ -81,29 +81,29 @@
 
 
 
-<meta name="description" content="故事起因 估计也会有很多同学升学时其亲友收到过这样的短信：   xxx家长您好，这是您孩子的升学资料 xxx.com 请查看 blablabla～   家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。 结果访问该网址后发现是自动下载一个apk文件，360发出了警告，    emmm……突然就来了兴趣-。-">
+<meta name="description" content="故事起因 估计也会有很多同学升学时其亲友收到过这样的短信：    xxx家长您好，这是您孩子的升学资料 xxx.com 请查看 blablabla～   家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。  结果访问该网址后发现是自动下载一个apk文件，360发出了警告，    emmm……突然就来了兴趣-。-">
 <meta name="keywords" content="Or1onX blog share">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次简单的恶意apk逆向分析">
 <meta property="og:url" content="https://or1onx.github.io/2017/08/01/记一次简单的恶意apk逆向分析/index.html">
 <meta property="og:site_name" content="Or1onX&#39;s blog">
-<meta property="og:description" content="故事起因 估计也会有很多同学升学时其亲友收到过这样的短信：   xxx家长您好，这是您孩子的升学资料 xxx.com 请查看 blablabla～   家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。 结果访问该网址后发现是自动下载一个apk文件，360发出了警告，    emmm……突然就来了兴趣-。-">
+<meta property="og:description" content="故事起因 估计也会有很多同学升学时其亲友收到过这样的短信：    xxx家长您好，这是您孩子的升学资料 xxx.com 请查看 blablabla～   家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。  结果访问该网址后发现是自动下载一个apk文件，360发出了警告，    emmm……突然就来了兴趣-。-">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://or1onx.github.io/images/apk_reverse/fake.jpg">
-<meta property="og:image" content="https://or1onx.github.io/images/apk_reverse/classes_dex.png">
-<meta property="og:image" content="https://or1onx.github.io/2017/08/01/记一次简单的恶意apk逆向分析/images/apk_reverse/start_find.png">
-<meta property="og:image" content="https://or1onx.github.io/images/apk_reverse/find_smtp1.png">
-<meta property="og:image" content="https://or1onx.github.io/images/apk_reverse/find_smtp2.png">
-<meta property="og:image" content="https://or1onx.github.io/images/apk_reverse/login.png">
-<meta property="og:image" content="https://or1onx.github.io/images/apk_reverse/operation1.png">
-<meta property="og:image" content="https://or1onx.github.io/images/apk_reverse/operation2.png">
-<meta property="og:image" content="https://or1onx.github.io/images/apk_reverse/operation3.png">
-<meta property="og:image" content="https://or1onx.github.io/images/apk_reverse/group.png">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhbmqsqij20k00zkmzw.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhdlqhcmj207401pwea.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhe6amcvj20fv0qy0tr.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lheh9rz6j20ua0kht9p.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lher00wij20ti0jogn5.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhf0qc0rj21220ljdl6.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhf92cp2j20rr0qn75c.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhfj4y9dj20s90azjro.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhfwd4qkj20q10ig74z.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhg46sc4j20qk0o9wgn.jpg">
 <meta property="og:updated_time" content="2017-09-30T04:07:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次简单的恶意apk逆向分析">
-<meta name="twitter:description" content="故事起因 估计也会有很多同学升学时其亲友收到过这样的短信：   xxx家长您好，这是您孩子的升学资料 xxx.com 请查看 blablabla～   家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。 结果访问该网址后发现是自动下载一个apk文件，360发出了警告，    emmm……突然就来了兴趣-。-">
-<meta name="twitter:image" content="https://or1onx.github.io/images/apk_reverse/fake.jpg">
+<meta name="twitter:description" content="故事起因 估计也会有很多同学升学时其亲友收到过这样的短信：    xxx家长您好，这是您孩子的升学资料 xxx.com 请查看 blablabla～   家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。  结果访问该网址后发现是自动下载一个apk文件，360发出了警告，    emmm……突然就来了兴趣-。-">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhbmqsqij20k00zkmzw.jpg">
 
 
 
@@ -386,31 +386,40 @@
 
       
         <h1 id="故事起因"><a href="#故事起因" class="headerlink" title="故事起因"></a>故事起因</h1><ul>
-<li>估计也会有很多同学升学时其亲友收到过这样的短信：  <blockquote>
+<li><p>估计也会有很多同学升学时其亲友收到过这样的短信：  </p>
+<blockquote>
 <p>xxx家长您好，这是您孩子的升学资料 xxx.com 请查看 blablabla～</p>
 </blockquote>
 </li>
-<li>家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。</li>
-<li>结果访问该网址后发现是自动下载一个apk文件，360发出了警告，<br>  <img src="/images/apk_reverse/fake.jpg" alt><br>  emmm……突然就来了兴趣-。-</li>
+<li><p>家人最近也收到了类似的短信，一开始我的心情是比较紧张的，毕竟前不久考完期末。。。</p>
+</li>
+<li><p>结果访问该网址后发现是自动下载一个apk文件，360发出了警告，<br>  <img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhbmqsqij20k00zkmzw.jpg" alt><br>  emmm……突然就来了兴趣-。-</p>
+</li>
 </ul>
 <a id="more"></a>
 <h1 id="分析过程"><a href="#分析过程" class="headerlink" title="分析过程"></a>分析过程</h1><ol>
-<li>之前从未接触过android逆向方面的东西，起初我也是上网找了找apk病毒分析的相关资料（这里推荐<a href="http://www.cnblogs.com/hkleak/archive/2016/01/07/5110384.html" target="_blank" rel="noopener">一篇文章</a>），感觉只要能读到源码一切也就简单了。遂下载了这个apk文件，开始分析（xjb搞）。</li>
-<li>下载下来的自然是apk后缀，将其改为rar，然后在win下解压</li>
-<li>解压后有一个<code>classes.dex</code>文件  <blockquote>
+<li><p>之前从未接触过android逆向方面的东西，起初我也是上网找了找apk病毒分析的相关资料（这里推荐<a href="http://www.cnblogs.com/hkleak/archive/2016/01/07/5110384.html" target="_blank" rel="noopener">一篇文章</a>），感觉只要能读到源码一切也就简单了。遂下载了这个apk文件，开始分析（xjb搞）。</p>
+</li>
+<li><p>下载下来的自然是apk后缀，将其改为rar，然后在win下解压</p>
+</li>
+<li><p>解压后有一个<code>classes.dex</code>文件  </p>
+<blockquote>
 <p>我们都知道android开发语言是Java，Java 源代码经过 Java 编译器编译后生成 <code>.class</code> 文件，android SDK 自带的工具会将这些 <code>.class</code>文件转换成<code>classes.dex</code>, 而<code>classes.dex</code>就是运行在Dalvik虚拟机上的文件。  </p>
 </blockquote>
 </li>
-<li>将<code>classes.dex</code>拖至<code>dex2jar</code>的安装目录下，打开命令行并切换至<code>dex2jar</code>的目录下，运行<code>d2j-dex2jar.bat classes.dex</code>将产生一个名为<code>classes-dex2jar.jar</code>的文件<br><img src="/images/apk_reverse/classes_dex.png" alt></li>
-<li>在<code>jd-gui</code>中打开<code>classes-dex2jar.jar</code>文件，开始找敏感字段，当然，代码经过了混淆处理<br><img src="images/apk_reverse/start_find.png" alt>  </li>
-<li>既然是apk文件，那么制造木马者一定想要窃取用户一些信息，最重要的自然是将这些信息发送出去，可以判断是邮箱或是手机号等等。那么尝试全局搜索（shift+ctrl+s）<code>mail、smtp、@qq.com</code>等等关键字，也可以慢慢审计代码摸清主要逻辑，去挖掘更多好玩的东西-。-<br>我是搜smtp，直接就把189邮箱的账户、密码爆出来了。。。<br><img src="/images/apk_reverse/find_smtp1.png" alt><br><img src="/images/apk_reverse/find_smtp2.png" alt></li>
+<li><p>将<code>classes.dex</code>拖至<code>dex2jar</code>的安装目录下，打开命令行并切换至<code>dex2jar</code>的目录下，运行<code>d2j-dex2jar.bat classes.dex</code>将产生一个名为<code>classes-dex2jar.jar</code>的文件<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhdlqhcmj207401pwea.jpg" alt></p>
+</li>
+<li><p>在<code>jd-gui</code>中打开<code>classes-dex2jar.jar</code>文件，开始找敏感字段，当然，代码经过了混淆处理<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhe6amcvj20fv0qy0tr.jpg" alt></p>
+</li>
+<li><p>既然是apk文件，那么制造木马者一定想要窃取用户一些信息，最重要的自然是将这些信息发送出去，可以判断是邮箱或是手机号等等。那么尝试全局搜索（shift+ctrl+s）<code>mail、smtp、@qq.com</code>等等关键字，也可以慢慢审计代码摸清主要逻辑，去挖掘更多好玩的东西-。-<br>我是搜smtp，直接就把189邮箱的账户、密码爆出来了。。。<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lheh9rz6j20ua0kht9p.jpg" alt><br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lher00wij20ti0jogn5.jpg" alt></p>
+</li>
 </ol>
 <h1 id="继续深入"><a href="#继续深入" class="headerlink" title="继续深入"></a>继续深入</h1><ul>
-<li><p>既然找到账户、密码，抱着研究型的态度，我决定登录进去。<br><img src="/images/apk_reverse/login.png" alt><br>这里可以看到，所有下载了文件的用户的部分通讯录、短信被发送到该邮箱下   </p>
+<li><p>既然找到账户、密码，抱着研究型的态度，我决定登录进去。<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhf0qc0rj21220ljdl6.jpg" alt><br>这里可以看到，所有下载了文件的用户的部分通讯录、短信被发送到该邮箱下   </p>
 </li>
-<li><p>再看部分源码<br><img src="/images/apk_reverse/operation1.png" alt><br><img src="/images/apk_reverse/operation2.png" alt><br><img src="/images/apk_reverse/operation3.png" alt>  </p>
+<li><p>再看部分源码<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhf92cp2j20rr0qn75c.jpg" alt><br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhfj4y9dj20s90azjro.jpg" alt><br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhfwd4qkj20q10ig74z.jpg" alt></p>
 </li>
-<li><p>从微步在线威胁情报分析上得到的结果<br><img src="/images/apk_reverse/group.png" alt><br>点了几个相似的域名都是 apk 文件下载地址，文件名也很有欺骗性，如 “车辆违规查询”、“体检报告单”等等。  </p>
+<li><p>从微步在线威胁情报分析上得到的结果<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhg46sc4j20qk0o9wgn.jpg" alt><br>点了几个相似的域名都是 apk 文件下载地址，文件名也很有欺骗性，如 “车辆违规查询”、“体检报告单”等等。  </p>
 </li>
 </ul>
 <h1 id="简单小结"><a href="#简单小结" class="headerlink" title="简单小结"></a>简单小结</h1><ul>

@@ -89,12 +89,12 @@
 <meta property="og:site_name" content="Or1onX&#39;s blog">
 <meta property="og:description" content="多线程 让许多独立的任务同时运行 使用多线程编程时，一个编程任务可以规划成几个执行特定函数的线程UserRequestThread：负责读取客户端输入，该输入可能来自I/O通道。程序将创建多个线程，每个客户端各一个，客户端的请求将会被放入队列中。RequestProcessor：该程序负责从队列中获取请求并进行处理，为第3个线程提供输出。ReplyThread：负责向用户输出，将结果传回给用户（如">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.jupiter23.cn/images/python/python_processing.png">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li19abmwj210v0qphax.jpg">
 <meta property="og:updated_time" content="2017-06-25T08:41:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python与多线程">
 <meta name="twitter:description" content="多线程 让许多独立的任务同时运行 使用多线程编程时，一个编程任务可以规划成几个执行特定函数的线程UserRequestThread：负责读取客户端输入，该输入可能来自I/O通道。程序将创建多个线程，每个客户端各一个，客户端的请求将会被放入队列中。RequestProcessor：该程序负责从队列中获取请求并进行处理，为第3个线程提供输出。ReplyThread：负责向用户输出，将结果传回给用户（如">
-<meta name="twitter:image" content="http://www.jupiter23.cn/images/python/python_processing.png">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li19abmwj210v0qphax.jpg">
 
 
 
@@ -427,13 +427,12 @@
 <h5 id="Python与多线程"><a href="#Python与多线程" class="headerlink" title="Python与多线程"></a>Python与多线程</h5><h6 id="全局解释器锁（GIL）"><a href="#全局解释器锁（GIL）" class="headerlink" title="全局解释器锁（GIL）"></a>全局解释器锁（GIL）</h6><ul>
 <li>Python代码的执行是由Python虚拟机（又名解释器主循环）进行控制的，Python在设计时是这样考虑的，在主循环中同时只能有一个控制线程在执行，就像单核CPU系统中的多进程一样。内存中可以有许多程序，但是在任意给定时刻只能有一个程序在运行。同理，尽管Python解释器中可以运行多个线程，但是在任意给定时刻只有一个线程会被解释器执行</li>
 <li>《python核心编程》里这样写道<blockquote>
-<p>对Python虚拟机的访问是由GIL控制的。这个锁就是用来保证同时只能有一个线程运行的。在多线程环境中，Python虚拟机将按照下面所述的方式执行  </p>
-</blockquote>
-</li>
-</ul>
-<p>1.设置GIL<br>2.切换进一个线程去运行<br>3.执行下面操作之一<br>&nbsp;&nbsp;&nbsp;&nbsp;a. 指定数量的字节码指令<br>&nbsp;&nbsp;&nbsp;&nbsp;b. 线程主动让出控制权（可以调用time.sleep(0)来完成）<br>4.把线程设置回睡眠状态（切换出线程）<br>5.解锁GIL<br>6.重复上述步骤  </p>
+<p>对Python虚拟机的访问是由GIL控制的。这个锁就是用来保证同时只能有一个线程运行的。在多线程环境中，Python虚拟机将按照下面所述的方式执行<br>1.设置GIL<br>2.切换进一个线程去运行<br>3.执行下面操作之一<br>&nbsp;&nbsp;&nbsp;&nbsp;a. 指定数量的字节码指令<br>&nbsp;&nbsp;&nbsp;&nbsp;b. 线程主动让出控制权（可以调用time.sleep(0)来完成）<br>4.把线程设置回睡眠状态（切换出线程）<br>5.解锁GIL<br>6.重复上述步骤  </p>
 <ul>
 <li>在这里推荐<a href="http://www.tuicool.com/articles/7zIra2r" target="_blank" rel="noopener">一篇文章</a>，详细介绍了GIL  </li>
+</ul>
+</blockquote>
+</li>
 <li>由于Python的GIL的限制，多线程更适合于I/O密集型应用（I/O释放了GIL，可以允许更多的并发），而不是计算密集型应用。</li>
 </ul>
 <h6 id="几个模块"><a href="#几个模块" class="headerlink" title="几个模块"></a>几个模块</h6><ul>
@@ -460,7 +459,7 @@
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>pool = threadpool.ThreadPool(poolsize)    </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>requests = threadpool.makeRequests(some_callable, list_of_args, callback)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[pool.putRequest(req) <span class="keyword">for</span> req <span class="keyword">in</span> requests]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pool.wait()</span><br></pre></td></tr></table></figure>
 
-<p>将《python核心编程》（第3版）示例4-12的生产者-消费者改成线程池<br><img src="http://www.jupiter23.cn/images/python/python_processing.png" alt></p>
+<p>将《python核心编程》（第3版）示例4-12的生产者-消费者改成线程池<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3li19abmwj210v0qphax.jpg" alt></p>
 <ul>
 <li>concurrent.futures<br>一个新的高级库，它只在“任务”级别进行操作，也就是说，你不再需要过分关注同步和线程/进程的管理了。你只需要指定一个给定了“worker”数量的线程/进程池，提交任务，然后整理结果。  </li>
 <li>Queue<br>供多线程使用的同步先入先出队列  </li>
