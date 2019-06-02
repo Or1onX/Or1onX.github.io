@@ -91,6 +91,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqoztrykwbj20fj0act98.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fpzrxrgmccj20z00cw4av.jpg">
+<meta property="og:image" content="http://ws4.sinaimg.cn/large/a105112bly1g3n5lydlmrj215n0n8tdb.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fq0gn70319j20sn0heq58.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fq0tvl4bg5j20sk0aadgu.jpg">
 <meta property="og:updated_time" content="2019-06-02T13:56:05.346Z">
@@ -391,13 +392,10 @@
   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TASK_RUNNING 0 <span class="comment">// 进程正在运行或已准备就绪</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TASK_INTERRUPTIBLE 1 <span class="comment">// 进程处于可中断等待状态</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TASK_UNITERRUPTIBLE 2 <span class="comment">// 进程处于不可中断等待状态</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TASK_ZOMBIE 3 <span class="comment">// 进程处于僵死状态，已经停止运行，但父进程还没发信号</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TASK_STOPPED 4 <span class="comment">// 进程已停止</span></span></span><br></pre></td></tr></table></figure>
 
 
-
-
 </li>
 </ul>
-<pre><code>具体状态转换如下图：
-
-![image](http://ws4.sinaimg.cn/large/a105112bly1g3n5lydlmrj215n0n8tdb.jpg)</code></pre><ul>
+<p>具体状态转换如下图：<br><img src="http://ws4.sinaimg.cn/large/a105112bly1g3n5lydlmrj215n0n8tdb.jpg" alt></p>
+<ul>
 <li><p><code>Linux 0.11</code>支持的任务总数</p>
   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NR_TASK 64</span></span><br></pre></td></tr></table></figure>
 
