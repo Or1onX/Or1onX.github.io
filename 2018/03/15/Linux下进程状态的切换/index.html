@@ -391,6 +391,8 @@
   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TASK_RUNNING 0 <span class="comment">// 进程正在运行或已准备就绪</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TASK_INTERRUPTIBLE 1 <span class="comment">// 进程处于可中断等待状态</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TASK_UNITERRUPTIBLE 2 <span class="comment">// 进程处于不可中断等待状态</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TASK_ZOMBIE 3 <span class="comment">// 进程处于僵死状态，已经停止运行，但父进程还没发信号</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TASK_STOPPED 4 <span class="comment">// 进程已停止</span></span></span><br></pre></td></tr></table></figure>
 
 
+
+
 </li>
 </ul>
 <pre><code>具体状态转换如下图：
