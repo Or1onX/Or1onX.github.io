@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="墙墙墙,">
+  <meta name="keywords" content="wireshark,">
 
 
 
@@ -81,22 +81,28 @@
 
 
 
-<meta name="description" content="很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。">
-<meta name="keywords" content="墙墙墙">
+<meta name="description" content="前言前些天回顾了一下《Wireshark数据包分析实战》，就想写一些关于协议/数据分析的东西，但也只是从本书中总结一些Wireshark常用的使用功能，书中写的很详细，这里算是一个简化版吧～">
+<meta name="keywords" content="wireshark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="利用net-speeder实现对ss的优化">
-<meta property="og:url" content="https://or1onx.github.io/title.html">
+<meta property="og:title" content="wireshark常用功能">
+<meta property="og:url" content="https://or1onx.github.io/wireshark常用功能/index.html">
 <meta property="og:site_name" content="Or1onX&#39;s blog">
-<meta property="og:description" content="很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。">
+<meta property="og:description" content="前言前些天回顾了一下《Wireshark数据包分析实战》，就想写一些关于协议/数据分析的东西，但也只是从本书中总结一些Wireshark常用的使用功能，书中写的很详细，这里算是一个简化版吧～">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li5f6zq6j20j808xt8l.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li4nig79j20om05uwnp.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li4bkia0j208q01iweb.jpg">
-<meta property="og:updated_time" content="2019-06-01T03:38:40.105Z">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhmsbtcxj20ch05mweh.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhn4clunj20l90f4t9b.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhnkl4dtj20ba074aah.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhochinhj216o0ftta3.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhozes8hj216o0g5jt7.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhpc9u8ej21hc0u0jv4.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhpw2inrj20ok0je0v9.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhq6ikpxj20io0eodhg.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhqjplyuj20gv094jrz.jpg">
+<meta property="og:updated_time" content="2019-06-01T03:24:42.060Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="利用net-speeder实现对ss的优化">
-<meta name="twitter:description" content="很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li5f6zq6j20j808xt8l.jpg">
+<meta name="twitter:title" content="wireshark常用功能">
+<meta name="twitter:description" content="前言前些天回顾了一下《Wireshark数据包分析实战》，就想写一些关于协议/数据分析的东西，但也只是从本书中总结一些Wireshark常用的使用功能，书中写的很详细，这里算是一个简化版吧～">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3lhmsbtcxj20ch05mweh.jpg">
 
 
 
@@ -126,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="https://or1onx.github.io/title.html">
+  <link rel="canonical" href="https://or1onx.github.io/wireshark常用功能/">
 
 
 
 
 
-  <title>利用net-speeder实现对ss的优化 | Or1onX's blog</title>
+  <title>wireshark常用功能 | Or1onX's blog</title>
   
 
 
@@ -301,7 +307,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://or1onx.github.io/title.html">
+    <link itemprop="mainEntityOfPage" href="https://or1onx.github.io/wireshark常用功能/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Or1onX">
@@ -318,7 +324,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">利用net-speeder实现对ss的优化</h1>
+          <h1 class="post-title" itemprop="name headline">wireshark常用功能</h1>
         
 
         <div class="post-meta">
@@ -330,8 +336,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-22T12:51:05+08:00">
-                2016-10-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-22T16:19:03+08:00">
+                2017-02-22
               </time>
             
 
@@ -400,17 +406,52 @@
       
 
       
-        <h4 id="很多玩家-翻GFW-都是通过租一个海外vps，并在其上布置shadowsocks-后文用ss代之-服务端。"><a href="#很多玩家-翻GFW-都是通过租一个海外vps，并在其上布置shadowsocks-后文用ss代之-服务端。" class="headerlink" title="很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。"></a>很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。</h4><a id="more"></a>
-<h6 id="对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-。"><a href="#对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-。" class="headerlink" title="对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-.-。"></a>对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-.-。</h6><h5 id="前些天想下载一些东西，无奈下载速度只有十几KB-s，最终还下载失败-！就想去了解如何优化ss的上网速度（找到了net-speeder）。"><a href="#前些天想下载一些东西，无奈下载速度只有十几KB-s，最终还下载失败-！就想去了解如何优化ss的上网速度（找到了net-speeder）。" class="headerlink" title="前些天想下载一些东西，无奈下载速度只有十几KB/s，最终还下载失败 - -！就想去了解如何优化ss的上网速度（找到了net-speeder）。"></a>前些天想下载一些东西，无奈下载速度只有十几KB/s，最终还下载失败 - -！就想去了解如何优化ss的上网速度（找到了<a href="https://github.com/snooda/net-speeder" target="_blank" rel="noopener">net-speeder</a>）。</h5><h5 id="使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。"><a href="#使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。" class="headerlink" title="使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。"></a>使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。</h5><h5 id="首先有必要了解一下ss的工作原理："><a href="#首先有必要了解一下ss的工作原理：" class="headerlink" title="首先有必要了解一下ss的工作原理："></a>首先有必要了解一下ss的工作原理：</h5><p>ss是基于ssh创建的sock5协议工作的，由于GFW设置了许多过滤，数据包在进行ssh的client ——&gt;GFW——&gt; server过程中，虽然避免了gfw的关键词分析，但是ssh本身特征是明显的，GFW会通过分析连接的特征进行干扰，导致ssh存在被定向进行干扰的问题。<br>ss的作者曾在github上分享了他的解决方案(一年前被和谐…)，简单理解：ss是将原来ssh创建的socks5协议拆成server端和client端…<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3li5f6zq6j20j808xt8l.jpg" alt><br><a href="http://chinadigitaltimes.net/chinese/2016/01/shadowsocks-%E7%9A%84%E7%BF%BB%E5%A2%99%E5%8E%9F%E7%90%86%EF%BC%88%E4%B8%A4%E7%AF%87%EF%BC%89/" target="_blank" rel="noopener"><em>详细原理戳这儿</em></a></p>
-<h5 id="net-speeder"><a href="#net-speeder" class="headerlink" title="net-speeder:"></a>net-speeder:</h5><p><a href="http://www.snooda.com/read/324" target="_blank" rel="noopener"><em>项目简介</em></a><br>源码是c写的，没看懂= =！简单来讲，net-speeder就是通过翻倍发包来降低丢包率</p>
-<p><img src="http://ww1.sinaimg.cn/large/a105112bly1g3li4nig79j20om05uwnp.jpg" alt></p>
-<p>这是我在vps上ping google.com -c 2的结果，连接还算稳定，发出去的两个包全收到了。想必有些同学已经发现这和ping局域网的广播ip一样(linux系统下)出现了DUP。But，DUP是个啥？？  </p>
-<p>在《tcp/ip详解》里，提到过unix某些主机在ping广播地址时，</p>
-<blockquote>
-<p>如果出现重复序列号的数据包就显示DUP！这意味着一个数据包已经在某处重复了。</p>
-</blockquote>
-<p>下面是使用net-speeder后的效果图：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3li4bkia0j208q01iweb.jpg" alt><br>这速度下载个小文件还是能够接受的～不过作者也提到了：对于不加速就可以跑满带宽的类型来讲（<strong>多线程下载</strong>），开启后反而由于多出来的无效流量，导致速度减半。所以对于多线程/高速链路，这个方案是<strong>不适合的</strong>。</p>
-<p>第一次写博客，如有错误或表达不善的地方，还垦请大家不吝赐教。^_^</p>
+        <h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>前些天回顾了一下《Wireshark数据包分析实战》，就想写一些关于协议/数据分析的东西，但也只是从本书中总结一些Wireshark常用的使用功能，书中写的很详细，这里算是一个简化版吧～</p>
+<a id="more"></a>
+<h5 id="一些常见的网络协议"><a href="#一些常见的网络协议" class="headerlink" title="一些常见的网络协议"></a>一些常见的网络协议</h5><ul>
+<li>ARP（OSI数据链路层）<br>交换机上使用的内容寻址寄存器（CAM）将列出它在每一个端口的所有连接设备的MAC地址，负责将IP地址解析为MAC地址。  </li>
+<li>IP（OSI网络层）  </li>
+</ul>
+<p>1.互联网本身就是由无数局域网和路由器所组成的一个集合<br>2.网络掩码有32位长，并且被设为1的每一位都标识着IP地址的对应部分时属于网络地址的，而剩下设为0的部分则标识着主机地址。<br>3.IP地址和网络掩码为方便起见，通常被写成无类型域间选路（CIDR）的形式，在此形式下，一个完整的IP地址后面会有一个左斜杠（/），以及一个用来表示IP地址中网络部分位数的数字<br>4.IP分片，以太网的MTU最大为1500字节（仅数据部分）  </p>
+<ul>
+<li>TCP（OSI传输层）  </li>
+</ul>
+<p>1.TCP会话<br>三次握手：1.A-&gt;B(SYN) &nbsp;&nbsp;&nbsp;&nbsp; 2.B-&gt;A(SYN/ACK) &nbsp;&nbsp;&nbsp;&nbsp;  3.A-&gt;B(ACK)<br>终止会话：1.A-&gt;B(FIN/ACK) &nbsp;&nbsp;&nbsp;&nbsp; 2.B-&gt;A(ACK) &nbsp;&nbsp;&nbsp;&nbsp; 3.B-&gt;A(FIN/ACK) &nbsp;&nbsp;&nbsp;&nbsp; 4.A-&gt;B(ACK)<br>重置：RST和ACK标志着通信的结束<br>2.Wireshark会维护一个端口的列表，并记录着它们最普遍的应用。尽管列表还是以标准端口为主，但很多临时端口也关联着常用服务。并可通过Edit-&gt;Preference-&gt;Name Resolution，然后取消勾选Enable Transport Name Resolution 就可以将其禁用了。<br>3.Wireshark为了分析将简便，引入了一个特性，可以将TCP数据包的序列号替换为相对值。<br>Edit-&gt;Preferences-&gt;Protocols，选择TCP，然后取消Relative Sequence Numbers and Window Scaling框，并单击OK就可以禁用了。</p>
+<ul>
+<li>DHCP（OSI应用层）  </li>
+</ul>
+<p>1.早先是由BOOTP协议（Bootstrap Protocol）解决给连接到网络的设备自动分配地址的问题。在目前的Wireshark中，Packets Detail面板仍是Bootstrap Protocol而不是DHCP。<br>2.最主要任务就是在续租过程中向客户端分配IP地址。<br>3.DHCP的DPRA过程<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhmsbtcxj20ch05mweh.jpg" alt>  </p>
+<ul>
+<li>DNS（OSI应用层）  </li>
+</ul>
+<p>1.DNS查询过程<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhn4clunj20l90f4t9b.jpg" alt><br>2.区域传输 —— 备份主DNS服务器的信息到另一台备用DNS服务器，在两台设备之间传送区域数据<br>完整区域传送（AXFR）<br>增量区域传送（IXFR）：仅传送区域信息的一部分<br>数据在传输时是基于TCP协议，因为TCP对于规模数据的传输更加可靠。  </p>
+<h5 id="常用功能"><a href="#常用功能" class="headerlink" title="常用功能"></a>常用功能</h5><ul>
+<li>File-&gt;<br>Export 导出<br>Save As 保存<br>Merge 合并所捕获的数据包  </li>
+<li>【Ctrl-F】-&gt;Find（查找所匹配的第一个数据包）<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhnkl4dtj20ba074aah.jpg" alt><br>【Ctrl-N】 下一个数据包<br>【Ctrl-B】 前一个数据包  </li>
+<li>Edit-&gt;Set Time Reference<br>设定相对时间参数（只有当捕获的时间显示格式设定为相对于捕获开始的时间，设定数据包对时间参考才有意义）  </li>
+</ul>
+<h5 id="高级特性之Statistcs"><a href="#高级特性之Statistcs" class="headerlink" title="高级特性之Statistcs"></a>高级特性之Statistcs</h5><ul>
+<li>-&gt; Endpoints 端点（给出了每一个端点的许多有用统计数据，包括每个端点的地址、传输发送数据包的数量和字节数）<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhochinhj216o0ftta3.jpg" alt></li>
+<li>-&gt; Conversations 会话（记录两个端点之间的会话信息）<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhozes8hj216o0g5jt7.jpg" alt></li>
+<li>-&gt; Protocol Hierachy 协议分层（查看协议）<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhpc9u8ej21hc0u0jv4.jpg" alt>  </li>
+<li>-&gt; Packet Lengths-&gt;Create Stat<br>在正常情况下，一个以太网上的帧的最大长度为1518字节，除去以太网、IP以及TCP头，还剩下1460字节以供应用层协议的头域或者数据使用。<br>以太网14字节</li>
+<li>-&gt; IO Graphs Wireshark上的IO图窗口可以让你对网络上的吞吐量进行绘图  </li>
+<li>-&gt; TCP Stram Graph-&gt;Round Trip Time Graph  </li>
+</ul>
+<p>1.对RTT（Round-Trip Time，确认一个数据包已被成功接受所需要的时间）进行分析通常是被用来找到通信中的慢点和瓶颈，以确定是否存在延迟<br>2.双向时间图（图中每一个点都代表了一个数据包的双向时间，你可以点击图中任何一个点，并将在Packet List面板中看到相应的数据包）<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhpw2inrj20ok0je0v9.jpg" alt>  </p>
+<ul>
+<li>-&gt;Flow Graph<br>创建数据流图<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhq6ikpxj20io0eodhg.jpg" alt>  </li>
+</ul>
+<h5 id="高级特性之Analyze"><a href="#高级特性之Analyze" class="headerlink" title="高级特性之Analyze"></a>高级特性之Analyze</h5><ul>
+<li>-&gt;Expert Info<br>专家信息（对话&nbsp;&nbsp;&nbsp;注意&nbsp;&nbsp;&nbsp;警告&nbsp;&nbsp;&nbsp;错误）  </li>
+</ul>
+<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><ul>
+<li><p>Capture-&gt;Options-&gt;name resolution<br>捕获开始前有选项设置，如名字解析（会存在一些弊端：如会产生额外的数据包等）  </p>
+</li>
+<li><p>更换解析器<br>解析器可理解为网络原始数据流和Wireshark程序之间的翻译器<br>Wireshark在给一个数据包选择解析器时也并非每次都能选对，尤其是当网络上的一个协议使用了不同于标准的配置，比如一个非默认端口（网络管理员通常会出于安全考虑，或者员工想要避开访问控制时进行设置）。这时我们可以更改Wireshark使用特定解析器的方式（注：进行强制解码时产生的更改，并不会在你保存捕获文件并关闭Wireshark后保存，每次打开捕获文件时，都要重新进行强制解码的设置）<br>具体方法：  </p>
+</li>
+</ul>
+<p>1.右键单击所要强制解码的数据包，并选择Decode As<br>2.<img src="http://ww1.sinaimg.cn/large/a105112bly1g3lhqjplyuj20gv094jrz.jpg" alt><br>3.选好相应解码条件后单击OK  </p>
 
       
     </div>
@@ -431,7 +472,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://or1onx.github.io/title.html" title="利用net-speeder实现对ss的优化">https://or1onx.github.io/title.html</a>
+    <a href="https://or1onx.github.io/wireshark常用功能/" title="wireshark常用功能">https://or1onx.github.io/wireshark常用功能/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -446,7 +487,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/墙墙墙/" rel="tag"># 墙墙墙</a>
+            <a href="/tags/wireshark/" rel="tag"># wireshark</a>
           
         </div>
       
@@ -459,14 +500,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/scapy_uses/" rel="next" title="Scapy中文使用手册">
+                <i class="fa fa-chevron-left"></i> Scapy中文使用手册
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/title.html" rel="prev" title="关于xss漏洞点的挖掘">
-                关于xss漏洞点的挖掘 <i class="fa fa-chevron-right"></i>
+              <a href="/python与多线程/" rel="prev" title="python与多线程">
+                python与多线程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -608,7 +653,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#很多玩家-翻GFW-都是通过租一个海外vps，并在其上布置shadowsocks-后文用ss代之-服务端。"><span class="nav-text">很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-。"><span class="nav-text">对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-.-。</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#前些天想下载一些东西，无奈下载速度只有十几KB-s，最终还下载失败-！就想去了解如何优化ss的上网速度（找到了net-speeder）。"><span class="nav-text">前些天想下载一些东西，无奈下载速度只有十几KB/s，最终还下载失败 - -！就想去了解如何优化ss的上网速度（找到了net-speeder）。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。"><span class="nav-text">使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#首先有必要了解一下ss的工作原理："><span class="nav-text">首先有必要了解一下ss的工作原理：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#net-speeder"><span class="nav-text">net-speeder:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一些常见的网络协议"><span class="nav-text">一些常见的网络协议</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常用功能"><span class="nav-text">常用功能</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#高级特性之Statistcs"><span class="nav-text">高级特性之Statistcs</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#高级特性之Analyze"><span class="nav-text">高级特性之Analyze</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#其他"><span class="nav-text">其他</span></a></li></ol></div>
             
 
           </div>

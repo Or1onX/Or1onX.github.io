@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="hgJm_NMToxnJSGCvEYC7x0VsU5DdYaEjpBAhqdc-eR8">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Or1onX.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/Or1onX.jpg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="DDoS,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Or1onX's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="简介 DDoS（Distributed Denial of Service）分布式拒绝服务攻击指借助于C/S技术，将多台计算机联合起来作为攻击平台，对一个或多个目标发动DDoS攻击，从而成倍地提高拒绝服务攻击的威力。 利用分布式的客户端，向服务提供者发起大量看似合法的请求，消耗或长期占用大量资源，从而达到拒绝服务的目的。从僵尸网络谈起僵尸网络一般指僵尸主人出于恶意目的，传播大量僵尸程序，并采用一对">
+<meta name="keywords" content="DDoS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DDoS攻防小结">
+<meta property="og:url" content="https://or1onx.github.io/DDoS攻防小结/index.html">
+<meta property="og:site_name" content="Or1onX&#39;s blog">
+<meta property="og:description" content="简介 DDoS（Distributed Denial of Service）分布式拒绝服务攻击指借助于C/S技术，将多台计算机联合起来作为攻击平台，对一个或多个目标发动DDoS攻击，从而成倍地提高拒绝服务攻击的威力。 利用分布式的客户端，向服务提供者发起大量看似合法的请求，消耗或长期占用大量资源，从而达到拒绝服务的目的。从僵尸网络谈起僵尸网络一般指僵尸主人出于恶意目的，传播大量僵尸程序，并采用一对">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubrzr7udsj20dr06874c.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs0a8uodj20g906j3yq.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs1eqle6j20hq068mxe.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs24pvndj20hp06hjrn.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs33m3ztj20rt0at3z5.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs3jao6kj20eq0b0mxc.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs4721wzj20ny0lr3z0.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs4qbsprj20o00lvgm4.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs58fsdbj20nt0lw0td.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs5pw7m1j20nt0lowf4.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs69f4gwj20td0fwq4o.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs6qqr4aj20ob0m5q3i.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs7f0mnqj20o20lk74s.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs88ozkij210p08ldg6.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs8q348uj20p2059mxi.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs97fy80j20vd0ecgmf.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs9r96mmj20z006hweu.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubukhnjhdj20xd0ba74w.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubs9r96mmj20z006hweu.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubsau9n0pj20o70h70t6.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubsb7q7rqj20nt0eewf2.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubsblo3apj20o30eggm7.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubsbz6p1pj20nl0fvq3k.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubscdixfjj20o60hhdgp.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubscslvsaj20nv0h4jrz.jpg">
+<meta property="og:updated_time" content="2018-08-16T13:12:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DDoS攻防小结">
+<meta name="twitter:description" content="简介 DDoS（Distributed Denial of Service）分布式拒绝服务攻击指借助于C/S技术，将多台计算机联合起来作为攻击平台，对一个或多个目标发动DDoS攻击，从而成倍地提高拒绝服务攻击的威力。 利用分布式的客户端，向服务提供者发起大量看似合法的请求，消耗或长期占用大量资源，从而达到拒绝服务的目的。从僵尸网络谈起僵尸网络一般指僵尸主人出于恶意目的，传播大量僵尸程序，并采用一对">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1fubrzr7udsj20dr06874c.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://or1onx.github.io/DDoS攻防小结/">
+
+
+
+
+
+  <title>DDoS攻防小结 | Or1onX's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Or1onX's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://or1onx.github.io/DDoS攻防小结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Or1onX">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/Or1onX.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Or1onX's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DDoS攻防小结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-16T19:28:38+08:00">
+                2017-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><ul>
+<li>DDoS（Distributed Denial of Service）分布式拒绝服务攻击指借助于C/S技术，将多台计算机联合起来作为攻击平台，对一个或多个目标发动DDoS攻击，从而成倍地提高拒绝服务攻击的威力。</li>
+<li><strong>利用分布式的客户端，向服务提供者发起大量看似合法的请求，消耗或长期占用大量资源，从而达到拒绝服务的目的。</strong><h1 id="从僵尸网络谈起"><a href="#从僵尸网络谈起" class="headerlink" title="从僵尸网络谈起"></a>从僵尸网络谈起</h1><h3 id="僵尸网络"><a href="#僵尸网络" class="headerlink" title="僵尸网络"></a>僵尸网络</h3>一般指僵尸主人出于恶意目的，传播大量僵尸程序，并采用一对多方式进行控制的大型网络。<h3 id="僵尸网络的组建"><a href="#僵尸网络的组建" class="headerlink" title="僵尸网络的组建"></a>僵尸网络的组建</h3><h4 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h4></li>
+</ul>
+<ol>
+<li>普通PC利用过程<ol>
+<li>感染传播  <a id="more"></a>
+<ol>
+<li><strong>主动性</strong>：自动化的漏洞扫描</li>
+<li><strong>被动性</strong>：
+通常包括带有欺骗性质的电子邮件、网页挂马、即时通信、内网的文件共享、移动存储感染，以及网络存储共享等。</li>
+</ol>
+</li>
+<li>安装执行<br> 通常僵尸程序一旦在受害主机上执行，就会进行一系列的自我复制、实现自启动（创建或修改注册表以保证程序开机自启动）以及隐藏（将自身复制到系统特定的目录下并设置其隐藏属性，甚至修改文件生成时间）等行为。</li>
+<li>接入僵尸网络<br> 当僵尸程序在受害者主机上完成各种安装和隐藏后，便通过解析内置的域名和端口进行通信，构建C&amp;C通道加入僵尸网络</li>
+<li>命令执行<br> 接入僵尸网络的僵尸程序将执行Botmaster预先设置好的命令，在没有收到指令时，僵尸程序会静静等待</li>
+</ol>
+</li>
+<li>服务器<br>攻击Web服务器的步骤有：通过CMS或其他Web应用的漏洞拿到shell、提权、植入恶意程序或者是在访问量大的页面上挂DDoS代码</li>
+<li>移动设备<br>渗透步骤类似PC端</li>
+<li>其他物联网设备</li>
+</ol>
+<h1 id="攻击手段"><a href="#攻击手段" class="headerlink" title="攻击手段"></a>攻击手段</h1><h2 id="攻击网络带宽资源"><a href="#攻击网络带宽资源" class="headerlink" title="攻击网络带宽资源"></a>攻击网络带宽资源</h2><h4 id="直接攻击"><a href="#直接攻击" class="headerlink" title="直接攻击"></a>直接攻击</h4><ol>
+<li>ICMP/IGMP洪水攻击  </li>
+<li>UDP洪水攻击  <ul>
+<li>原理：<br>UDP是一种不可靠连接，在发动DoS攻击时只要确定目标机某个端口开放，直接打这个端口即可  </li>
+</ul>
+</li>
+</ol>
+<p>以上两种攻击方式都极大依赖于攻击端本身的网络性能，通俗地说就是和目标机拼带宽资源</p>
+<h4 id="反射放大攻击"><a href="#反射放大攻击" class="headerlink" title="反射放大攻击"></a>反射放大攻击</h4><p><strong>反射攻击又被称为DRDoS（Distributed Reflection Denial of Service，分布式反射拒绝服务）攻击，是指利用路由器、服务器等设施对请求产生应答，从而反射攻击流量并隐藏攻击来源的一种分布式拒绝服务攻击技术。</strong></p>
+<ol>
+<li>ACK 反射攻击<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubrzr7udsj20dr06874c.jpg" alt></li>
+<li>DNS 放大攻击  </li>
+</ol>
+<ul>
+<li><p><strong>DNS 使用的TCP与UDP端口号都是53，主要使用UDP协议。通常，DNS响应的数据包会比查询的数据包大，因此攻击者利用普通的DNS查询请求就能够发动放大攻击，并将攻击流量放大2~10倍。但更有效的方法是使用RFC 2671 中定义的 DNS 扩展机制 EDNS0</strong></p>
+<blockquote>
+<p>在没有EDNS0以前，对DNS查询的响应数据包被限制在512字节以内。……在EDNS0中，扩展了DNS数据包的结构，增加了OPT RR 字段。在 <strong>OPT RR 字段中，包含了客户端能够处理的最大 UDP 报文的大小，并根据该大小生成响应的报文。</strong></p>
+</blockquote>
+</li>
+<li><p>攻击者能够利用<code>dig</code>和<code>EDNS0</code>进行高效的DNS放大攻击。<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs0a8uodj20g906j3yq.jpg" alt></p>
+</li>
+</ul>
+<ol start="3">
+<li>NTP 放大攻击  </li>
+</ol>
+<ul>
+<li><p>网络时间协议（Network Time Protocol，NTP）是用来使计算机时间同步化的一种协议，它可以使计算机与时钟源进行同步化并提供高精准度的时间校正，NTP使用 UDP 123 端口进行通信。</p>
+<blockquote>
+<p>在 NTP 协议的服务器实现上，通常会实现一系列 Mode 7 的调试接口，而接口中的 monlist 请求能够获取到与目标 NTP 服务器进行同步的最后600个客户端的 IP 地址等信息。这意味着，<strong>只需要发送一个很小的请求包，就能够触发大量连续的包含 IP 地址信息等数据的 UDP 响应数据包。</strong></p>
+</blockquote>
+</li>
+<li><p>据统计，只要向 NTP 放大器<strong>发送 600 个不超过 64 字节请求包（约 40KB 数据）</strong>，就能够快速地将 NTP 放大器的<strong>放大倍数提高到 700 倍以上</strong>，并在该服务器的 NTP 服务关闭或重新启动之前一直保持这么大的放大倍数。</p>
+</li>
+<li><p>原理图<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs1eqle6j20hq068mxe.jpg" alt></p>
+</li>
+<li><p>工具<br><code>[root@F #] ntpdc -n -c monlist x.x.x.x</code><br><code>scapy</code><br><code>nmap -sU -pU:123 -n --script=ntp-monlist x.x.x.x</code></p>
+</li>
+<li><p>寻找 NTP 放大攻击漏洞（@心伤的胖子）</p>
+<ol>
+<li><code>[root@F #] masscan -pU:123 -oX ntp.xml --rate 160000 start.0.0.0-end.255.255.255</code></li>
+<li>对<code>ntp.xml</code>里的 ip 去重（如果有重复的）</li>
+<li>python scapy<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> thread</span><br><span class="line"><span class="comment">#Raw packet data used to request Monlist from NTP server</span></span><br><span class="line">rawData = <span class="string">"\x17\x00\x03\x2a"</span> + <span class="string">"\x00"</span> * <span class="number">61</span></span><br><span class="line"><span class="comment">#File containing all IP addresses with NTP port open.</span></span><br><span class="line">logfile = open(<span class="string">'output.txt'</span>, <span class="string">'r'</span>)</span><br><span class="line"><span class="comment">#Output file used to store all monlist enabled servers</span></span><br><span class="line">outputFile = open(<span class="string">'monlistServers.txt'</span>, <span class="string">'a'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sniffer</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment">#Sniffs incomming network traffic on UDP port 48769, all packets meeting thease requirements run through the analyser function.</span></span><br><span class="line">    sniffedPacket = sniff(filter=<span class="string">"udp port 48769 and dst net 99.99.99.99"</span>, store=<span class="number">0</span>, prn=analyser)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">analyser</span><span class="params">(packet)</span>:</span></span><br><span class="line">    <span class="comment">#If the server responds to the GET_MONLIST command.</span></span><br><span class="line">    <span class="keyword">if</span> len(packet) &gt; <span class="number">200</span>:</span><br><span class="line">        <span class="keyword">if</span> packet.haslayer(IP):</span><br><span class="line">            <span class="keyword">print</span> packet.getlayer(IP).src</span><br><span class="line">            <span class="comment">#Outputs the IP address to a log file.</span></span><br><span class="line">            outputFile.write(packet.getlayer(IP).src + <span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line">thread.start_new_thread(sniffer, ())</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> address <span class="keyword">in</span> logfile:</span><br><span class="line">    <span class="comment">#Creates a UDP packet with NTP port 123 as the destination and the MON_GETLIST payload.</span></span><br><span class="line">    send(IP(dst=address)/UDP(sport=<span class="number">48769</span>, dport=<span class="number">123</span>)/Raw(load=rawData))</span><br><span class="line"><span class="keyword">print</span> <span class="string">'End'</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>防御</p>
+<ol>
+<li>加固 NTP 服务：<ol>
+<li>把 NTP 服务器升级到 4.2.7p26或以上</li>
+<li>关闭现在 NTP 服务的<code>monlist</code>功能，在<code>ntp.conf</code>配置文件中增加<code>disable monitor</code>选项  </li>
+<li>在网络出口封禁 UDP 123 端口</li>
+<li>一些顶层的 NTP 服务器采用“Closed Account”选项</li>
+</ol>
+</li>
+<li>防御 NTP 反射和放大攻击：  <ol>
+<li>由于这种攻击的特征比较明显，所以可以通过网络层或者借助运营商实施 ACL 来防御</li>
+<li>使用防 DDoS 设备进行清洗</li>
+</ol>
+</li>
+<li>使用restrict … noquery 或 restrict … ignore 来限制ntpd服务响应的源地址  <ul>
+<li>eg:在 NTP 配置文件中包含下面的代码行<br>  <code>restrict -4 default nomodify nopeer noquery notrap</code><br>  <code>restrict -6 default nomodify nopeer noquery notrap</code>  </li>
+</ul>
+</li>
+<li><a href="http://www.team-cymru.org/templates.html" target="_blank" rel="noopener">http://www.team-cymru.org/templates.html</a>  <ul>
+<li>建议有：<br><code>iptables -A INPUT -s 0/0 -d 0/0 -p udp --source-port 123:123 -m state --state ESTABLISHED -j ACCEPT</code><br><code>iptables -A OUTPUT -s 0/0 -d 0/0 -p udp --destination-port 123:123 -m state --state NEW,ESTABLISHED -j ACCEPT</code></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<ol start="4">
+<li><p>SNMP 放大攻击  </p>
+<ul>
+<li><p>简单网络管理协议（Simple Network Management Protocol, SNMP）是目前网络中应用最为广泛的网络管理协议，它提供了一个管理框架来监控和维护互联网设备。SNMP 协议使用 UDP 161 端口进行通信。</p>
+</li>
+<li><p>利用 SNMP 协议中的默认通信字符串和 GetBulk 请求，攻击者能够展开有效的 SNMP 放大攻击。  </p>
+<blockquote>
+<p>攻击者向广泛存在并开启了 SNMP 服务的网络设备发送 GetBulk 请求，<strong>使用默认通信字符串作为认证凭据，并将源 IP 地址伪造成攻击目标的 IP 地址。设备收到 GetBulk 请求后，会将响应结果发送给攻击目标。</strong> 当大量的响应结果涌向攻击目标时，就会导致攻击目标网络拥堵和缓慢，<strong>造成拒绝服务攻击</strong>。</p>
+</blockquote>
+</li>
+<li><p>攻击者发送的 GetBulk 请求数据包约为 60 字节，而请求的响应数据能够达到 1500 字节以上，使用该方式进行放大攻击能够达到 25 倍以上的放大效果。<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs24pvndj20hp06hjrn.jpg" alt></p>
+</li>
+<li><p>工具<br><code>[root@F #] snmpwalk –c public –v2c x.x.x.x oid</code><br>@付弘雪</p>
+<blockquote>
+<p>这里oid是获取snmp具体信息内容的一个标识，snmp里面存的信息是一个树状的信息结构</p>
+</blockquote>
+<blockquote>
+<p>其实snmpwalk是获取一条oid信息，但是这个oid里面附带了下一个树节点的oid号，然后snmp会通过 snmpget继续访问下一个oid号（在getnext字段里面），来执行一个类似于循环的行为，但是snmpget的协议大家也看到了，只能获取到一条信息，79的信息长度，只能获得279的反馈，这样实现攻击的放大倍数是不给力的。<br>关键点来了，根据rfc1441-rfc1452文档说明，snmp第二版里面引入了getbulk来取代反复getnext，用来更好的在单个请求里面获得大量的管理数据。相对应的bt5下还有个snmpbulkget命令</p>
+</blockquote>
+<p><code>[root@F #] snmpbulkget -v2c -Cn0 -Cr70 -c public x.x.x.x oid</code></p>
+<blockquote>
+<p>对应就是获取当前oid后面的70个团体字，这样如果你用snmpwalk跑一个1.3.6的团体字会看到很多信息，而你用bulkget这个一次就可以收到一个包里面包含70条信息的数据包</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="攻击链路"><a href="#攻击链路" class="headerlink" title="攻击链路"></a>攻击链路</h4><ul>
+<li>攻击链路与前面两种攻击方式不同，其攻击的目标并不是作为互联网端点的服务器的带宽资源，而是<strong>骨干网上的链路的带宽资源。</strong></li>
+<li>对链路进行攻击的一种典型的方式是 Coremelt 攻击。</li>
+<li>攻击者通过<code>traceroute</code>等方式确定各个僵尸机的链路之间的相对位置，然后由攻击机控制僵尸机，使其与链路另一边的每台僵尸机进行大流量通信。使得骨干网链路拥塞甚至瘫痪。<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs33m3ztj20rt0at3z5.jpg" alt><h2 id="攻击系统资源"><a href="#攻击系统资源" class="headerlink" title="攻击系统资源"></a>攻击系统资源</h2></li>
+<li>消耗系统资源的分布式拒绝服务攻击的主要目的是对系统维护的<strong>连接资源进行消耗和占用</strong>，阻止正常连接的建立，从而达到拒绝服务的目的。<h4 id="攻击-TCP-连接"><a href="#攻击-TCP-连接" class="headerlink" title="攻击 TCP 连接"></a>攻击 TCP 连接</h4></li>
+</ul>
+<ol>
+<li><p>TCP 连接洪水攻击<br>思路：攻击者利用大量受控主机，通过快速建立大量恶意的 TCP 连接占满被攻击目标的连接表，<strong>使目标无法接受新的 TCP 连接请求</strong>，从而达到拒绝服务的目的。  </p>
+</li>
+<li><p>SYN 洪水攻击  </p>
+<ul>
+<li><p>TCP 半开连接  </p>
+<blockquote>
+<p>在建立 TCP 连接过程中，如果在服务器返回 SYN+ACK 报文后，客户端由于某种原因没有对其进行确认，服务器将<strong>重传 SYN+ACK 报文</strong>，并等待客户端的确认报文直到 TCP 连接超时。</p>
+</blockquote>
+</li>
+<li><p>为了减少攻击者的暴露面以及降低攻击者的带宽资源，可以将 TCP SYN 包的源 IP 改成其他主机或不存在的 IP 地址。这里<strong>区别于 ACK 放大攻击</strong><br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs3jao6kj20eq0b0mxc.jpg" alt></p>
+</li>
+</ul>
+</li>
+<li><p>PSH+ACK 洪水攻击  </p>
+<ul>
+<li>在 TCP 数据传输的过程中，可以通过设置 PSH 标志位来表示当前数据传输结束，需要服务端进行处理。   <blockquote>
+<p>在正常的 TCP 传输过程中，如果待发送的数据会清空发送缓冲区，那么操作系统的 TCP/IP 协议栈就会自动为该 TCP 数据包设置 PSH 标志。同样，当服务端接收到了一个设置了 PSH+ACK 标志的报文时，意味着当前数据传输已经结束，因此需要立即将这些数据递交给服务进程并清空接收缓冲区，而无须等待判断是否还会有额外的数据到达。    </p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>攻击思路：<br>  由于带有 PSH 标志位的 TCP 数据包会强制要求接收端将接收缓冲区清空并将数据提交给应用服务进行处理，因此当攻击者利用受控主机向攻击目标发送大量的 PSH+ACK 数据包时，被攻击目标就会<strong>消耗大量的系统资源不断地进行接受缓冲区的清空处理，导致无法正常处理数据，从而造成拒绝服务。</strong></li>
+</ul>
+<p><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs4721wzj20ny0lr3z0.jpg" alt></p>
+<ol start="4">
+<li><p>RST 洪水攻击  </p>
+<blockquote>
+<p>在 TCP 连接的终止阶段，RST 表示复位，用来在异常时关闭连接。发送端在发送 RST 报文关闭连接时，不需要等待缓冲区中的数据包全部发送完毕，而会<strong>直接丢弃缓冲区的数据并发送 RST 报文</strong>；同样，接收端在收到 RST 报文后，也会清空缓冲区并关闭连接，并且不必发送 ACK 报文进行确认。</p>
+</blockquote>
+<ul>
+<li>很多情况下，攻击者不会与被攻击者处于同一内网，导致发动 TCP RST 攻击时难以获取端口和序列号。在这种情况下，攻击者可以<strong>利用大量的受控主机猜测端口和序列号，进行盲打，发动 RST 洪水攻击</strong>。只要在数量巨大的 RST 报文中有一条与攻击目标的端口号相同，并且序列号落在目标的接收窗口之中，就能够中断连接。</li>
+<li>TCP RST 攻击和 RST 洪水攻击多用于针对用户的拒绝服务攻击。这种攻击通常被用来<strong>攻击在线游戏或比赛的用户，从而影响比赛的结果并获得一定的经济效益。</strong></li>
+</ul>
+</li>
+</ol>
+<ol start="5">
+<li>Sockstress 攻击  <blockquote>
+<p>在 TCP 传输数据过程中，并不是直接将数据发送到应用程序，而是先临时存储在接受缓冲区中，该缓冲区的大小由 TCP 窗口表示（ TCP 窗口控制协议）。如果 TCP 窗口大小为 0 ，则表示接受缓冲区已被填满，发送端应该停止发送数据，直到接收端的窗口发生了更新。 <strong>Sockstress 攻击就是利用该原理长时间地维持 TCP 连接，以达到拒绝服务攻击的目的。</strong></p>
+</blockquote>
+</li>
+</ol>
+<p><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs4qbsprj20o00lvgm4.jpg" alt></p>
+<h4 id="攻击-SSL-连接"><a href="#攻击-SSL-连接" class="headerlink" title="攻击 SSL 连接"></a>攻击 SSL 连接</h4><blockquote>
+<p>安全套接层（Secure Sockets Layer, SSL）是为网络通信提供安全及数据完整性的一种安全协议。 SSL 能够在传输层对网络连接进行加密，以防止传输的数据明文被监听和截获。</p>
+</blockquote>
+<ul>
+<li><strong>由于 SSL 协议加密、解密和密钥协商的过程中会消耗大量的系统资源，严重降低机器的性能，因此，通常只有在传输密码等机密信息时才使用 SSL 协议进行传输。</strong></li>
+</ul>
+<ol>
+<li>THC SSL DoS 攻击  </li>
+</ol>
+<ul>
+<li>在进行 SSL 数据传输之前，通信双方首先要进行 SSL 握手，以协商加密算法交换加密密钥，进行身份认证。一般来说，SSL 握手过程只需要进行一次即可，但是在 SSL 协议中有一个 Renegotiation 选项，通过它可以进行密钥的重新协商以建立新的密钥。<strong>THC SSL DoS 攻击就是利用 Renegotiation 选项，造成被攻击目标资源耗尽。</strong></li>
+</ul>
+<p><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs58fsdbj20nt0lw0td.jpg" alt></p>
+<ol start="2">
+<li>SSL 洪水攻击  </li>
+</ol>
+<ul>
+<li>在 SSL 握手的过程中，服务器会消耗较多的 CPU 计算资源进行加解密，并进行数据的有效性检验。然而，<strong>不论数据是否有效，服务器都必须先进行解密才能够做检查。攻击者可以利用这个特性进行 SSL 洪水攻击。</strong></li>
+<li>为了降低成本，攻击者需要在客户端进行的计算尽可能地少。因此，可以在数据传输前、进行 SSL 握手的过程中发动攻击。即：<strong>攻击者并不需要完成 SSL 握手和密钥交换，仅仅在这个过程中让服务器去解密和验证，以致大量消耗服务器的计算资源。</strong></li>
+</ul>
+<p><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs5pw7m1j20nt0lowf4.jpg" alt></p>
+<ul>
+<li>攻击工具：<code>SSLSqueeze</code></li>
+</ul>
+<h2 id="攻击应用资源"><a href="#攻击应用资源" class="headerlink" title="攻击应用资源"></a>攻击应用资源</h2><h4 id="攻击-DNS-服务"><a href="#攻击-DNS-服务" class="headerlink" title="攻击 DNS 服务"></a>攻击 DNS 服务</h4><ol>
+<li><p>DNS QUERY 洪水攻击  </p>
+<ul>
+<li>原理：主要是通过发送大量 DNS QUERY 的包，增大 DNS 服务器的处理压力，直至使其宕机。</li>
+<li>因此，攻击方可以尽量构造不同域名的查询，以有效避开 DNS 服务器缓存中的解析记录，达到更好的资源消耗效果。  </li>
+</ul>
+</li>
+<li><p>DNS NXDOMAIN 洪水攻击  </p>
+<ul>
+<li>作为 DNS QUERY 攻击的变种攻击，区别在于 DNS QUERY 查询的是一个真实存在的域名，而 DNS NXDOMAIN 攻击查询一个不存在的域名。</li>
+</ul>
+</li>
+</ol>
+<h4 id="攻击-Web-服务"><a href="#攻击-Web-服务" class="headerlink" title="攻击 Web 服务"></a>攻击 Web 服务</h4><ol>
+<li>HTTP 洪水攻击  </li>
+</ol>
+<ul>
+<li>与其他攻击思路类似，攻击者操控大量肉鸡，向目标服务器发送大量 HTTP 请求，造成目标服务器处理缓慢甚至得不到处理，导致拒绝服务攻击。  <blockquote>
+<p>由于 HTTP 协议是基于 TCP 协议的，需要完成三次握手建立 TCP 连接才能开始 HTTP 通信，<strong>因此 HTTP 洪水攻击时无法使用伪造源 IP 地址的方式发动攻击</strong>。攻击者通常使用 HTTP 代理服务器。  </p>
+</blockquote>
+</li>
+</ul>
+<p><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs69f4gwj20td0fwq4o.jpg" alt></p>
+<ul>
+<li>Web 服务也会有缓存机制。更高效的 HTTP 洪水攻击应不断发出针对不同资源和页面的 HTTP 请求，<strong>并尽可能请求无法被缓存的资源（如关键词搜索结果、用户相关资料等）</strong>，从而加重服务器的负担，增强攻击效果。<blockquote>
+<p>对于支持 HTTPS 的 Web 服务器，进行 HTTPS 洪水攻击是更为有效的一种攻击方式。一方面，在进行 HTTPS 通信时，Web 服务器需要消耗更多的资源用来进行认证和加解密；另一方面，<strong>一部分防护设备无法对 HTTPS 通信数据流进行处理，也会导致攻击流量绕过设备，直接对 Web 服务器造成攻击。</strong></p>
+</blockquote>
+</li>
+</ul>
+<ol start="2">
+<li><p>Slowloris 攻击  </p>
+<blockquote>
+<p>在 HTP 协议中规定，HTTP 头部以连续的“\r\n\r\n”作为结束标志。许多 Web 服务器在处理 HTTP 请求的头部信息时，会等待头部传输结束后再进行处理。因此，<strong>如果 Web 服务器没有接受到连续的“\r\n\r\n”，就会一直接受数据并保持与客户端的连接</strong>。利用这个特性，攻击者能够长时间与 Web 服务器保持连接，并逐渐耗尽 Web 服务器的连接资源。</p>
+</blockquote>
+<ul>
+<li><p>攻击者可以在发送 HTTP GET 请求时，缓慢地发送无用的 header 字段，并且一直不发送“\r\n\r\n”结束标志，<strong>以长时间占用与 Web 服务器的连接并保证该连接不被超时中断</strong>。而 Web 服务器能够处理的并发连接数是有限的，因此，攻击者可以耗尽 Web 服务器的连接资源，造成拒绝服务攻击。</p>
+<p><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs6qqr4aj20ob0m5q3i.jpg" alt></p>
+</li>
+<li><p>工具：<code>Slowloris、slowhttptest</code>等。</p>
+</li>
+<li><p>摘自《破坏之王》 P91</p>
+<blockquote>
+<p>在 Slowloris 攻击方法出现以后，IIS、nginx 等一部分 Web 服务器软针对该攻击方法进行了修改，但是 Apache、dhttpd 等 Web 服务器软件依然会受到 Slowloris 攻击的影响。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>慢速 POST 请求攻击   </p>
+<blockquote>
+<p>在 HTTP 头部信息中，可以使用 Content-Length 字段来指定 HTTP 消息实体的传输长度。当 Web 服务器接收到的请求中含有 Content-Length 字段时，服务器会将该字段的值作为 HTTP BODY 的长度，持续接收数据并在达到 Content-length 值时对 HTTP BODY 的数据内容进行处理。利用这个特性，攻击者能够长时间与 Web 服务器保持连接，并逐渐耗尽 Web 服务器的连接资源。  </p>
+</blockquote>
+</li>
+</ol>
+<ul>
+<li>攻击思路：攻击者在发送 HTTP POST 请求时，在请求头部中将 Content-Length 设置为一个很大的值，并以缓慢的速度发送 HTTP BODY 内容。以此来长时间占用这个连接，进而造成拒绝服务攻击。  </li>
+</ul>
+<p><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs7f0mnqj20o20lk74s.jpg" alt></p>
+<ul>
+<li>工具：<code>slowhttptest</code></li>
+</ul>
+<ol start="4">
+<li>数据处理过程攻击  </li>
+</ol>
+<ul>
+<li><p>Web 服务器在收到 HTTP 请求之后，需要检查并处理其中的数据，通过恶意构造请求数据的内容，攻击者可以显著地增加数据处理过程中的资源消耗，造成拒绝服务攻击。  </p>
+</li>
+<li><p>正则表达式拒绝服务攻击（ReDoS）<br>  对于很多用<a href="https://zhuanlan.zhihu.com/p/27417442" target="_blank" rel="noopener">正则回溯法</a>的引擎如NFA（非确定性有限状态自动机），处理“否定匹配”（即输入字符串与正则表达式不匹配）时，正则引擎需要对所有可能的匹配路径全部进行测试。<br>  《破坏之王》P93-94：</p>
+<blockquote>
+<p>如果位于 Web 应用中的正则表达式写得不够好，需要测试的匹配路径数量会随着输入字符串的长度呈指数级增长。利用恶意构造的输入字符串，攻击者只需要提交相对较短的输入字符串（30个字符左右）就可以强制正则引擎处理数亿个匹配路径，所需时间可以达到几个小时甚至几天。只需要几个这种类似的恶意正则表达式匹配请求，就能够完全占用 Web 服务器的计算资源，造成 Web 服务器拒绝服务。  </p>
+</blockquote>
+</li>
+<li><p>哈希冲突拒绝服务攻击<br>  攻击者构造一组恶意的 POST 数据，使得请求中的“键”的哈希值全部相同，那么保存 POST 数据的哈希表就会因此退化成为链表，对哈希表的查找和插入等操作则变成了对链表的遍历操作，造成大量的计算资源被占用，导致拒绝服务攻击。  </p>
+</li>
+</ul>
+<h2 id="混合攻击"><a href="#混合攻击" class="headerlink" title="混合攻击"></a>混合攻击</h2><table>
+<thead>
+<tr>
+<th>攻击分类</th>
+<th>洪水攻击</th>
+<th>慢速攻击</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>网络层攻击</td>
+<td>ICMP/IGMP 洪水攻击</td>
+<td></td>
+</tr>
+<tr>
+<td>传输层攻击</td>
+<td>UDP 洪水攻击</td>
+<td>Slowloris 攻击</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>TCP 洪水攻击</td>
+<td>THC SSL DoS 攻击</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>SYN 洪水攻击</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>PSH+ACK 洪水攻击</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>ACK 反射攻击</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>RST 洪水攻击</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>SSL 洪水攻击</td>
+<td></td>
+</tr>
+<tr>
+<td>应用层攻击</td>
+<td>DNS QUERY 洪水攻击</td>
+<td>Slowloris 攻击</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>DNS NXDOMAIN 洪水攻击</td>
+<td>慢速 POST 请求攻击</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>DNS 放大攻击</td>
+<td>数据处理过程攻击</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>HTTP 洪水攻击</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>NTP 放大攻击</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>SNMP 放大攻击</td>
+<td></td>
+</tr>
+</tbody></table>
+<h1 id="DDoS-攻击的防御"><a href="#DDoS-攻击的防御" class="headerlink" title="DDoS 攻击的防御"></a>DDoS 攻击的防御</h1><h2 id="攻击的治理"><a href="#攻击的治理" class="headerlink" title="攻击的治理"></a>攻击的治理</h2><h4 id="僵尸网络的治理"><a href="#僵尸网络的治理" class="headerlink" title="僵尸网络的治理"></a>僵尸网络的治理</h4><ul>
+<li>难题  <ol>
+<li>进行僵尸网络治理的首要困难在于，我们只有能够检测到网络异常，才能够知道系统感染了僵尸程序。</li>
+<li>检测到感染，提取到样本，需要对样本进行逆向分析，找出需要的信息。</li>
+</ol>
+</li>
+<li>手段  <ol>
+<li>根据逆向分析的结果，编写僵尸程序清除工具，分发至企业局域网的其他感染主机进行清除处理。</li>
+<li>接管或摧毁整个僵尸网络。  </li>
+</ol>
+</li>
+</ul>
+<h4 id="地址伪造攻击的治理"><a href="#地址伪造攻击的治理" class="headerlink" title="地址伪造攻击的治理"></a>地址伪造攻击的治理</h4><ul>
+<li><p>难题<br>  根据 TCP/IP 协议内容，无法根除此问题。  </p>
+</li>
+<li><p>手段  </p>
+<ol>
+<li><p>CERT Advisory CA-1996-21<br> 路由过滤。互联网服务提供商在网络出入口处的路由器上，对符合以下条件的数据包进行过滤：  </p>
+<pre><code>- 从外部接口进入内部网络的数据包，但源地址属于内部网络；
+- 由内部网络向外发送的数据包，但是源地址不属于内部网络。  </code></pre></li>
+<li><p>RFC 2827<br> <img src="http://ww1.sinaimg.cn/large/a105112bly1fubs88ozkij210p08ldg6.jpg" alt><br> 攻击者位于 222.222.222.0/24 网段，属于 ISP D 的区域，通过路由器 Router 2，试图攻击其他主机。如果 Router 2 执行了入口流量过滤，只允许源地址在 222.222.222.0/24 网段内的数据包流出，反之则全部禁止，那么攻击将无法进行。  </p>
+</li>
+<li><p>Unicast Reverse Path Forwarding  </p>
+<ol>
+<li><p>对于 Input 方向的数据包，检查访问控制列表 ACL 是否允许通过；</p>
+</li>
+<li><p>按照 Unicast RPF 检查是否由最优路径抵达；</p>
+</li>
+<li><p>Forwarding Information Base（FIB）查找；</p>
+</li>
+<li><p>对于 Output 方向，检查访问控制列表 ACL 是否允许通过；</p>
+</li>
+<li><p>转发数据包。    </p>
+<p>在 IETF 的最佳实践 BCP 84 中对这种方式有较详细的介绍，这份文档名为 <a href="https://tools.ietf.org/html/bcp84" target="_blank" rel="noopener">Ingress Filtering for Multihomed Networks</a></p>
+</li>
+</ol>
+</li>
+<li><p>分布式过滤方法<br> 路由器根据数据包的源地址和目的地址判断其转发路径是否经过自己。如果不经过，则丢弃该数据包。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h4 id="攻击反射点的治理（以-DNS-举例）"><a href="#攻击反射点的治理（以-DNS-举例）" class="headerlink" title="攻击反射点的治理（以 DNS 举例）"></a>攻击反射点的治理（以 DNS 举例）</h4><ul>
+<li>手段  <ol>
+<li>Open Reslover Project </li>
+<li>RRL</li>
+<li>NIST SP 800-81  </li>
+</ol>
+</li>
+</ul>
+<h2 id="攻击的缓解"><a href="#攻击的缓解" class="headerlink" title="攻击的缓解"></a>攻击的缓解</h2><blockquote>
+<p>缓解 DDoS 攻击的主要方法是对网络流量进行清洗，即设法将恶意的网络流量从全部流量中去掉，只将正常的网络交付该服务器。然而，随着分布式拒绝服务攻击的流量不断增大，单一的流量清洗设备和流量清洗中心已经无法处理如此大规模的网络流量了，因此面对当今的 DDoS 攻击时，再进行流量清洗前还需要进行流量稀释。</p>
+</blockquote>
+<h4 id="攻击流量的稀释"><a href="#攻击流量的稀释" class="headerlink" title="攻击流量的稀释"></a>攻击流量的稀释</h4><ol>
+<li>CDN   </li>
+</ol>
+<ul>
+<li>CDN 技术的初衷是提高互联网用户对网站静态资源的访问速度，但是由于分布式多节点的特点，它也能够对分布式拒绝服务攻击的流量产生稀释的作用。  <blockquote>
+<p>所谓 CDN，就是在互联网范围内广泛设置多个节点作为代理缓存，并将用户的访问请求导向最近的缓存节点（通常通过智能 DNS 来实现），以加快访问速度的一种技术手段。  </p>
+</blockquote>
+</li>
+</ul>
+<p>传统 DNS<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs8q348uj20p2059mxi.jpg" alt><br>智能 DNS<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs97fy80j20vd0ecgmf.jpg" alt></p>
+<ul>
+<li>CDN 技术对于通过域名发起的分布式拒绝服务攻击的流量分散和稀释有较大作用。</li>
+</ul>
+<ol start="2">
+<li>Anycast  </li>
+</ol>
+<ul>
+<li>任播<br>  在网络寻址中，任播是指网络地址和网络节点为一对多的关系，每一个目的地址对应一群接受节点，但消息只会发送给拓扑结构上最近的节点。Anycast 通常是通过在不同的节点处同时使用 BGP 协议向外声明同样的 IP 地址的方式实现的。如下图：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs9r96mmj20z006hweu.jpg" alt></li>
+</ul>
+<p>路由器 1 眼中的网络拓扑结构：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubukhnjhdj20xd0ba74w.jpg" alt><br>因此，路由器 1  会优先将用户的请求报文转发给路由器 2，从而实际到达了服务器 A。<br>这就缓解了针对 IP 地址进行攻击的问题。  </p>
+<h4 id="攻击流量的清洗"><a href="#攻击流量的清洗" class="headerlink" title="攻击流量的清洗"></a>攻击流量的清洗</h4><p><strong>优秀的流量清洗设备，应该能够同时将误报率和漏报率降低到可以接受的程度，这样就能够在不影响网络或业务系统正常运行的情况下，最大限度地将恶意攻击流量从全部网络中去除</strong>  </p>
+<ol>
+<li><p>IP 信誉检查<br>类比于白名单、黑名单</p>
+</li>
+<li><p>攻击特征匹配  </p>
+<ul>
+<li>很多攻击过程会借助工具，为了提高发送请求的效率，攻击工具发出的数据包通常是由编写者伪造并固化到工具当中，而不是在交互过程中产生的，因此一种攻击工具所发出的数据包载荷会具有一些特征。  </li>
+<li>流量清洗设备可以将这些数据包载荷中的特征作为指纹，来识别工具发出的攻击流量。  </li>
+<li><strong>指纹识别包括静态指纹识别和动态指纹识别</strong>。静态是指预先将多种攻击工具的指纹特征保存在流量清洗设备内部，设备将经过的网络数据包与内部的特征库进行比对，直接丢弃符合特征的数据包；动态指纹识别则需要<strong>清洗设备对流过的网络数据包进行学习，在学习到若干个数据包的载荷部分之后，将其指纹特征记录下来，后续命中这些指纹特征的数据包会被丢弃，而长期不被命中的指纹特征会逐渐老化直至消失。</strong></li>
+</ul>
+</li>
+<li><p>速度检查与限制  </p>
+<ol>
+<li>eg1：<br>受到THC SSL DoS 攻击时，会在同一个 SSL 会话中多此进行加密密钥的重协商（正常情况下不会这样）。因此，当流量清洗设备进行统计时，如果发现 SSL 会话中密钥重协商的次数超过了特定阀值，就可以直接中断这个会话并把来源加入黑名单。</li>
+<li>eg2：<br>受到 Slowloris 和慢速 POST 请求攻击时，客户端和服务器之间会以非常低的速率进行交互和数据传输。流量清洗设备在发现 HTTP 的请求长时间没有完成传输时，就可以将会话中断。</li>
+<li>对于 UDP 洪水攻击等一些没有明显特征、仅通过大流量进行攻击的方法，可以通过限制流速的方式对其进行缓解。</li>
+</ol>
+</li>
+<li><p>TCP 代理和验证  </p>
+</li>
+</ol>
+<p><img src="http://ww1.sinaimg.cn/large/a105112bly1fubs9r96mmj20z006hweu.jpg" alt></p>
+<p><img src="http://ww1.sinaimg.cn/large/a105112bly1fubsau9n0pj20o70h70t6.jpg" alt></p>
+<ol start="5">
+<li><p>协议完整性验证  </p>
+<ul>
+<li>在 DNS 解析过程中，如果域名解析请求获得的响应数据中 Flags 字段的 Truncated 位被置换，通常客户端就会使用 TCP 53 端口重新发送域名解析请求<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubsb7q7rqj20nt0eewf2.jpg" alt></li>
+<li>攻击者使用的工具由于不接受或不处理解析请求的相应数据，也就不会使用 TCP 53 端口进行重新连接。流量清洗设备可以利用这个区别来有效地区分合法用户与攻击者，拦截恶意的 DNS 攻击请求。  </li>
+<li>对于提供 HTTP 服务的 Web 服务器，可以使用HTTP 协议中的 302 重定向来验证请求的来源是否接受了响应数据并完整实现了 HTTP 协议的功能。HTTP 的 302 状态码表示被请求的资源被临时转移，并会给出一个转移后的地址。正常合法用户在接收到 302 重定向后会顺着跳转地址寻找对应的资源：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubsblo3apj20o30eggm7.jpg" alt></li>
+<li>而攻击者的攻击工具由于不接收或不处理响应数据，则不会进行跳转，因此攻击请求会被清洗设备拦截，Web 服务器不会受到任何影响 ：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubsbz6p1pj20nl0fvq3k.jpg" alt></li>
+</ul>
+</li>
+<li><p>客户端真实性验证  </p>
+<ul>
+<li><p>有些攻击工具在开发过程中使用了现成的协议库，这样就能够完整实现协议交互，通过协议完整性检验。对于这些攻击工具，需要使用客户端真实性验证技术进行攻击流量清洗。 </p>
+</li>
+<li><p>客户端真实性验证是指对客户端程序进行挑战-应答式的交互验证（如各类验证码）。</p>
+</li>
+<li><p>对基于页面的 Web 服务，可以通过检查客户端是否支持 JavaScript 来验证请求是否来自真实的浏览器客户端。<br>例子–正常客户端的脚本验证：  </p>
+<p><img src="http://ww1.sinaimg.cn/large/a105112bly1fubscdixfjj20o60hhdgp.jpg" alt><br>伪造客户端攻击的流量清洗：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1fubscslvsaj20nv0h4jrz.jpg" alt></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1></li>
+<li><p>《破坏之王——DDoS攻击与防范深度剖析》</p>
+</li>
+<li><p>乌云知识库</p>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Or1onX
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://or1onx.github.io/DDoS攻防小结/" title="DDoS攻防小结">https://or1onx.github.io/DDoS攻防小结/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DDoS/" rel="tag"># DDoS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/由一道Vigenere想到的造轮子/" rel="next" title="由一道Vigenere想到的造轮子">
+                <i class="fa fa-chevron-left"></i> 由一道Vigenere想到的造轮子
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/https攻击小结/" rel="prev" title="https攻击小结">
+                https攻击小结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/Or1onX.jpg" alt="Or1onX">
+            
+              <p class="site-author-name" itemprop="name">Or1onX</p>
+              <p class="site-description motion-element" itemprop="description">Stay hungry, stay foolish.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从僵尸网络谈起"><span class="nav-text">从僵尸网络谈起</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#僵尸网络"><span class="nav-text">僵尸网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#僵尸网络的组建"><span class="nav-text">僵尸网络的组建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#节点"><span class="nav-text">节点</span></a></li></ol></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#攻击手段"><span class="nav-text">攻击手段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击网络带宽资源"><span class="nav-text">攻击网络带宽资源</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#直接攻击"><span class="nav-text">直接攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反射放大攻击"><span class="nav-text">反射放大攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击链路"><span class="nav-text">攻击链路</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击系统资源"><span class="nav-text">攻击系统资源</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击-TCP-连接"><span class="nav-text">攻击 TCP 连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击-SSL-连接"><span class="nav-text">攻击 SSL 连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击应用资源"><span class="nav-text">攻击应用资源</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击-DNS-服务"><span class="nav-text">攻击 DNS 服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击-Web-服务"><span class="nav-text">攻击 Web 服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#混合攻击"><span class="nav-text">混合攻击</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DDoS-攻击的防御"><span class="nav-text">DDoS 攻击的防御</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击的治理"><span class="nav-text">攻击的治理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#僵尸网络的治理"><span class="nav-text">僵尸网络的治理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#地址伪造攻击的治理"><span class="nav-text">地址伪造攻击的治理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击反射点的治理（以-DNS-举例）"><span class="nav-text">攻击反射点的治理（以 DNS 举例）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击的缓解"><span class="nav-text">攻击的缓解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击流量的稀释"><span class="nav-text">攻击流量的稀释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击流量的清洗"><span class="nav-text">攻击流量的清洗</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Or1onX</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
