@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="xss那些事儿,">
+  <meta name="keywords" content="墙墙墙,">
 
 
 
@@ -81,20 +81,22 @@
 
 
 
-<meta name="description" content="0x00 引言&amp;emsp;&amp;emsp;这篇文章主要是简单介绍一些常见的XSS漏洞点，我也在本地搭建了一个XSS练习靶场（github上的一个项目，来源戳这），以供大家学习 : )">
-<meta name="keywords" content="xss那些事儿">
+<meta name="description" content="很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。">
+<meta name="keywords" content="墙墙墙">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于xss漏洞点的挖掘">
-<meta property="og:url" content="https://or1onx.github.io/2016/11/26/关于xss漏洞点的挖掘/index.html">
+<meta property="og:title" content="利用net-speeder实现对ss的优化">
+<meta property="og:url" content="https://or1onx.github.io/title.html">
 <meta property="og:site_name" content="Or1onX&#39;s blog">
-<meta property="og:description" content="0x00 引言&amp;emsp;&amp;emsp;这篇文章主要是简单介绍一些常见的XSS漏洞点，我也在本地搭建了一个XSS练习靶场（github上的一个项目，来源戳这），以供大家学习 : )">
+<meta property="og:description" content="很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li2yc4jyj20k50bmwg7.jpg">
-<meta property="og:updated_time" content="2019-06-01T03:36:24.714Z">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li5f6zq6j20j808xt8l.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li4nig79j20om05uwnp.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li4bkia0j208q01iweb.jpg">
+<meta property="og:updated_time" content="2019-06-01T03:38:40.105Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于xss漏洞点的挖掘">
-<meta name="twitter:description" content="0x00 引言&amp;emsp;&amp;emsp;这篇文章主要是简单介绍一些常见的XSS漏洞点，我也在本地搭建了一个XSS练习靶场（github上的一个项目，来源戳这），以供大家学习 : )">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li2yc4jyj20k50bmwg7.jpg">
+<meta name="twitter:title" content="利用net-speeder实现对ss的优化">
+<meta name="twitter:description" content="很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/a105112bly1g3li5f6zq6j20j808xt8l.jpg">
 
 
 
@@ -124,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="https://or1onx.github.io/2016/11/26/关于xss漏洞点的挖掘/">
+  <link rel="canonical" href="https://or1onx.github.io/title.html">
 
 
 
 
 
-  <title>关于xss漏洞点的挖掘 | Or1onX's blog</title>
+  <title>利用net-speeder实现对ss的优化 | Or1onX's blog</title>
   
 
 
@@ -299,7 +301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://or1onx.github.io/2016/11/26/关于xss漏洞点的挖掘/">
+    <link itemprop="mainEntityOfPage" href="https://or1onx.github.io/title.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Or1onX">
@@ -316,7 +318,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">关于xss漏洞点的挖掘</h1>
+          <h1 class="post-title" itemprop="name headline">利用net-speeder实现对ss的优化</h1>
         
 
         <div class="post-meta">
@@ -328,8 +330,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-26T22:06:43+08:00">
-                2016-11-26
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-22T12:51:05+08:00">
+                2016-10-22
               </time>
             
 
@@ -351,8 +353,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
+                  <a href="/categories/proto/" itemprop="url" rel="index">
+                    <span itemprop="name">proto</span>
                   </a>
                 </span>
 
@@ -398,68 +400,17 @@
       
 
       
-        <h3 id="0x00-引言"><a href="#0x00-引言" class="headerlink" title="0x00 引言"></a>0x00 引言</h3><p>&emsp;&emsp;这篇文章主要是简单介绍一些常见的XSS漏洞点，我也在本地搭建了一个<a href="http://www.jupiter23.cn/xss-target" target="_blank" rel="noopener">XSS练习靶场</a>（github上的一个项目，<a href="https://github.com/Y4ngshu/xss-target" target="_blank" rel="noopener">来源戳这</a>），以供大家学习 : )</p>
-<a id="more"></a>
-<h3 id="0x01-XSS"><a href="#0x01-XSS" class="headerlink" title="0x01 XSS"></a>0x01 XSS</h3><ul>
-<li>XSS(跨战脚本攻击)大体可分为 反射型XSS、存储型XSS以及DOM XSS，而XSS漏洞挖掘最重要的就是找到反射点。  </li>
-<li>前两种的漏洞基本上是需要通过与服务器的交互，exploiter(漏洞挖掘者)需要判断用户输入会在哪里输出(如果可以输出<code>&lt;script&gt;</code>标签，浏览器会对其进行解析进而执行其中的脚本)；而DOM XSS可认为完全是客户端的事，触发XSS靠的是浏览器解析DOM。  </li>
-</ul>
-<h3 id="0x02-HTML"><a href="#0x02-HTML" class="headerlink" title="0x02 HTML"></a>0x02 HTML</h3><ul>
-<li>标签之间：<code>&lt;div id=&quot;xss is here&quot;&gt;[输出]&lt;/div&gt;</code><br>比如说<a href="http://www.jupiter23.cn/xss-target/level1.php" target="_blank" rel="noopener">第一关</a>，后端的判断如下<img src="http://ww1.sinaimg.cn/large/a105112bly1g3li2yc4jyj20k50bmwg7.jpg" alt>     </li>
-<li>而输出出现在下面标签中：  <pre><code>  &lt;title&gt;&lt;/title&gt;  
-&lt;textarea&gt;&lt;/textarea&gt;  
-&lt;xmp&gt;&lt;/xmp&gt;  
-&lt;iframe&gt;&lt;/iframe&gt;  
-&lt;noscript&gt;&lt;/noscript&gt;  
-&lt;noframes&gt;&lt;/noframes&gt;  
-&lt;plaintext&gt;&lt;/plaintext&gt;  </code></pre>&emsp;例如，<code>&lt;title&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;/title&gt;</code>不会弹出提示框。但是，payload也可以这样写<code>&lt;/title&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code>  </li>
-<li>标签之内：<code>&lt;input type=&quot;text&quot; value=&quot;[输出]&quot;/&gt;</code>（payload可以考虑闭合引号，也可考虑闭合标签等,比如说<a href="http://xss-game.appspot.com/level3" target="_blank" rel="noopener">google的xss-game第三关</a>以及<a href="http://www.jupiter23.cn/xss-target/level3.php" target="_blank" rel="noopener">第三关</a>）  </li>
-<li>js代码：<code>&lt;script&gt;var username=&quot;[输出]&quot;；……&lt;/script&gt;</code>  </li>
-<li>CSS代码：<code>&lt;style&gt;button { border-radius:[输出]px }&lt;/style&gt;</code>    </li>
-</ul>
-<h3 id="0x03-字符集编码"><a href="#0x03-字符集编码" class="headerlink" title="0x03 字符集编码"></a>0x03 字符集编码</h3><p>《web前端黑客技术揭秘》一书中提到</p>
+        <h4 id="很多玩家-翻GFW-都是通过租一个海外vps，并在其上布置shadowsocks-后文用ss代之-服务端。"><a href="#很多玩家-翻GFW-都是通过租一个海外vps，并在其上布置shadowsocks-后文用ss代之-服务端。" class="headerlink" title="很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。"></a>很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。</h4><a id="more"></a>
+<h6 id="对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-。"><a href="#对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-。" class="headerlink" title="对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-.-。"></a>对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-.-。</h6><h5 id="前些天想下载一些东西，无奈下载速度只有十几KB-s，最终还下载失败-！就想去了解如何优化ss的上网速度（找到了net-speeder）。"><a href="#前些天想下载一些东西，无奈下载速度只有十几KB-s，最终还下载失败-！就想去了解如何优化ss的上网速度（找到了net-speeder）。" class="headerlink" title="前些天想下载一些东西，无奈下载速度只有十几KB/s，最终还下载失败 - -！就想去了解如何优化ss的上网速度（找到了net-speeder）。"></a>前些天想下载一些东西，无奈下载速度只有十几KB/s，最终还下载失败 - -！就想去了解如何优化ss的上网速度（找到了<a href="https://github.com/snooda/net-speeder" target="_blank" rel="noopener">net-speeder</a>）。</h5><h5 id="使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。"><a href="#使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。" class="headerlink" title="使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。"></a>使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。</h5><h5 id="首先有必要了解一下ss的工作原理："><a href="#首先有必要了解一下ss的工作原理：" class="headerlink" title="首先有必要了解一下ss的工作原理："></a>首先有必要了解一下ss的工作原理：</h5><p>ss是基于ssh创建的sock5协议工作的，由于GFW设置了许多过滤，数据包在进行ssh的client ——&gt;GFW——&gt; server过程中，虽然避免了gfw的关键词分析，但是ssh本身特征是明显的，GFW会通过分析连接的特征进行干扰，导致ssh存在被定向进行干扰的问题。<br>ss的作者曾在github上分享了他的解决方案(一年前被和谐…)，简单理解：ss是将原来ssh创建的socks5协议拆成server端和client端…<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3li5f6zq6j20j808xt8l.jpg" alt><br><a href="http://chinadigitaltimes.net/chinese/2016/01/shadowsocks-%E7%9A%84%E7%BF%BB%E5%A2%99%E5%8E%9F%E7%90%86%EF%BC%88%E4%B8%A4%E7%AF%87%EF%BC%89/" target="_blank" rel="noopener"><em>详细原理戳这儿</em></a></p>
+<h5 id="net-speeder"><a href="#net-speeder" class="headerlink" title="net-speeder:"></a>net-speeder:</h5><p><a href="http://www.snooda.com/read/324" target="_blank" rel="noopener"><em>项目简介</em></a><br>源码是c写的，没看懂= =！简单来讲，net-speeder就是通过翻倍发包来降低丢包率</p>
+<p><img src="http://ww1.sinaimg.cn/large/a105112bly1g3li4nig79j20om05uwnp.jpg" alt></p>
+<p>这是我在vps上ping google.com -c 2的结果，连接还算稳定，发出去的两个包全收到了。想必有些同学已经发现这和ping局域网的广播ip一样(linux系统下)出现了DUP。But，DUP是个啥？？  </p>
+<p>在《tcp/ip详解》里，提到过unix某些主机在ping广播地址时，</p>
 <blockquote>
-<p>有些安全问题的罪魁祸首是字符集的使用（即字符集编码与解码）不正确导致的，字符集本身也有一些问题，比如，各种说不清道不明的原因导致字符集之间的交际分歧。</p>
+<p>如果出现重复序列号的数据包就显示DUP！这意味着一个数据包已经在某处重复了。</p>
 </blockquote>
-<ul>
-<li>宽字节编码<br>&emsp;例如在magic_quotes_gpc=On的情况下如何触发XSS？<pre><code>&lt;?php header(&quot;Content-Type: text/html;charset=GBK&quot;);?&gt;
-&lt;head&gt;
-&lt;title&gt;gb xss&lt;/title&gt;
-&lt;/head&gt;
-&lt;script&gt;
-  a = &quot;&lt;?php echo $_GET[&apos;x&apos;]?&gt;&quot;;
-&lt;/script&gt;</code></pre></li>
-</ul>
-<p>&emsp;&emsp;先会想到闭合双引号:<br>&emsp;&emsp;<code>gb.php?x=1&quot;;alert(1)//</code><br>&emsp;&emsp;双引号会被转移成&quot;，导致闭合失败：<br>&emsp;&emsp;<code>a = &quot;1\&quot;;alert(1)//&quot;;</code><br>这本书提供了一种思路：  </p>
-<blockquote>
-<p>这个网页头部响应指明了这是GBK编码，GBK编码第一字节（高字节）的范围是0x81<del>0xFE,第二字节（低字节）的范围是0x40</del>0x7E与0x80~0xFE，这样的十六进制表示。而\符号的十六进制表示为0x5C，正好在GBK的低字节中，如果之前有一个高字节，那么正好会被组成一个合法字符。</p>
-</blockquote>
-<p> &emsp;&emsp;<code>gb.php?x=1%81&quot;;alert(1)//</code><br>&emsp;&emsp;双引号会继续被转移成&quot;，最终如下：<br>&emsp;&emsp;<code>a=&quot;1[0x81]\&quot;;alert(1)//&quot;;</code></p>
-<blockquote>
-<p>[0x81]\组成了一个合法字符，于是之后的双引号就会产生闭合，这样我们就成功触发了XSS。</p>
-</blockquote>
-<ul>
-<li><p>UTF-7<br>&emsp;&emsp;UTF-7编码问题主要出现在老版本的IE浏览器下，在IE6/7时代，如果没声明HTTP响应头字符集编码方式或者声明错误，同时，<code>&lt;meta http-equiv&gt;</code>未指定charset或指定错误，那么IE浏览器会判断相应内容中是否出现UTF-7编码的字符串，如果有，浏览器将解析该字符串。  </p>
-<h3 id="0x04-绕过"><a href="#0x04-绕过" class="headerlink" title="0x04 绕过"></a>0x04 绕过</h3></li>
-<li><p>HTML中<br>&emsp;1.标签<br>&emsp;&emsp;- 黑名单绕过（有些html过滤器是基于黑名单的）<br>&emsp;&emsp;- 注释绕过（有些HTML Parser对于注释的判断）<br>&emsp;&emsp;&emsp;&emsp;- 会去判断当前代码段是否存在于注释中，如果这些过滤器的判断方法为：<code>&lt;!--.*--&gt;</code>，那么注释可这么写：<code>bbb&lt;!-- aaa&lt;!--aaa--&gt; ccc--&gt;bbb</code>，这样，“ccc”代码就暴露出来可以执行了。（这地方还不是很懂判断细则是怎样的（尴尬…） ）<br>&emsp;&emsp;&emsp;&emsp;- 不关心是否有注释。但由于注释优先级较高，可以这么写：<code>&lt;!--&lt;a href=&quot;--&gt;&lt;img src=x onerror=alert(1)//&quot;&gt;test&lt;/a&gt;</code> 扫描器忽略了HTML注释之后，会认为下面这一段是一个完整的HTML语句：<code>&lt;a href=&quot;--&gt;&lt;img src=x onerror=alert(1)//&quot;&gt;test&lt;/a&gt;</code> 那么下面这段就被认为是属性href的值：<code>&quot;--&gt;&lt;img src=x onerror=alert(1)//&quot;</code>，从而对这段代码放行。但实际上对于浏览器来说，<code>&lt;!--&lt;a href=&quot;--&gt;</code>是注释内容，<code>&lt;img src=x onerror=alert(1)//&quot;&gt;</code>则是一个完整的img标签，而onerror则成了一个独立的事件属性得以执行。<br>&emsp;&emsp;&emsp;&emsp;- IE下：</p>
-<pre><code>&lt;!--[if IE]&gt; 所有的IE可识别&lt;![endif]--&gt;
-&lt;!--[if IE 6] 仅IE6可识别&lt;![endif]--&gt;
-&lt;!--[if lt IE 6] IE6以及IE6以下版本可识别&lt;![endif]--&gt;
-&lt;!--[if gte IE 6] IE6以及IE6以上版本可识别&lt;![endif]--&gt;</code></pre></li>
-</ul>
-<p>&emsp;&emsp;- 利用标签优先级的绕过，有些标签如<code>&lt;textarea&gt;、&lt;title&gt;、&lt;style&gt;、&lt;script&gt;、&lt;xmp&gt;</code>等具有非常高的优先级，使得其结束标签甚至可以直接中断其他标签的属性。  </p>
-<p>&emsp;&emsp;&emsp;&emsp;2.属性<br>&emsp;&emsp;&emsp;&emsp;&emsp;- 标签和属性之间、属性名和等号之间、等号和属性值之间可以用空格、换行符、回车符或者tab，并且个数不受限制。<br>&emsp;&emsp;&emsp;&emsp;&emsp;- 另外，还可以在属性值的头部和尾部（引号里面）插入系统控制字符，即ASCII值为1~32这32个控制字符，不同浏览器都有各自的处理方式，如下语句： <code>&lt;a &amp;#8 href=&quot;&amp;#32ajvascript:alert(1)&quot;&gt;test&lt;/a&gt;</code>是可以在IE、Firefox、Chrome下执行的，但语句：<code>&lt;a &amp;#8 href=&quot;&amp;#32javascript:alert(1)&amp;#27&quot;&gt;test&lt;/a&gt;</code>就仅可以在IE和Firefox下执行。  </p>
-<ul>
-<li>CSS<br>&emsp;1. 资源类属性可嵌入xml、css、js等<br>&emsp;2. @import<br>&emsp;3. expression(IE独有的CSS属性，可结合UTF-7)   </li>
-<li>JS<br>&emsp;1.&emsp;JSON<br>&emsp;&emsp;- 通过callback函数名的参数调用Object的形式<br>&emsp;&emsp;&emsp;- 此时，如果数据提供方没有对callback函数名做安全过滤，并且页面本身也没有对HTTP响应头中的Content-Type做限制，那么我们便跨域直接对callback参数进行利用，如：<code>get_json.php?id=123&amp;callback=&lt;script&gt;alert(1);&lt;/script&gt;</code><br>&emsp;2.&emsp;js中eval可执行 oct、hex编码的字符串，不可执行 十进制（但是可通过String.fromCharCode(,,,)转换，js下三套编解码的函数：  escape/unescape；encodeURI/decodeURI；encodeURIComponent/decodeURIComponent。  </li>
-</ul>
-<h3 id="0x05-页脚"><a href="#0x05-页脚" class="headerlink" title="0x05 页脚"></a>0x05 页脚</h3><ul>
-<li>其实xss的挖掘点数不胜数，各大浏览器都会出现或多或少的安全问题，同时xss漏洞也逐渐引起高度的重视。《web前端黑客技术揭秘》里提到一点：<blockquote>
-<p>标准总是过于美好，但是每个浏览器在实施这些标准时不一定就能很好地实施，所以不要轻信它们不会出现BUG。</p>
-</blockquote>
-</li>
-</ul>
-<p>在这里也安利两个书中提到的网站：<a href="html5sec.org">经典的混淆CheckList</a>&emsp;和&emsp;<a href="shazzer.co.uk">在线fuzzing平台</a>，在实践中检验：）</p>
+<p>下面是使用net-speeder后的效果图：<br><img src="http://ww1.sinaimg.cn/large/a105112bly1g3li4bkia0j208q01iweb.jpg" alt><br>这速度下载个小文件还是能够接受的～不过作者也提到了：对于不加速就可以跑满带宽的类型来讲（<strong>多线程下载</strong>），开启后反而由于多出来的无效流量，导致速度减半。所以对于多线程/高速链路，这个方案是<strong>不适合的</strong>。</p>
+<p>第一次写博客，如有错误或表达不善的地方，还垦请大家不吝赐教。^_^</p>
 
       
     </div>
@@ -480,7 +431,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://or1onx.github.io/2016/11/26/关于xss漏洞点的挖掘/" title="关于xss漏洞点的挖掘">https://or1onx.github.io/2016/11/26/关于xss漏洞点的挖掘/</a>
+    <a href="https://or1onx.github.io/title.html" title="利用net-speeder实现对ss的优化">https://or1onx.github.io/title.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -495,7 +446,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/xss那些事儿/" rel="tag"># xss那些事儿</a>
+            <a href="/tags/墙墙墙/" rel="tag"># 墙墙墙</a>
           
         </div>
       
@@ -508,18 +459,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/10/22/利用net-speeder实现对ss的优化/" rel="next" title="利用net-speeder实现对ss的优化">
-                <i class="fa fa-chevron-left"></i> 利用net-speeder实现对ss的优化
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/12/17/Tips-of-xss-target/" rel="prev" title="Tips of xss-target">
-                Tips of xss-target <i class="fa fa-chevron-right"></i>
+              <a href="/title.html" rel="prev" title="关于xss漏洞点的挖掘">
+                关于xss漏洞点的挖掘 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -661,7 +608,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-引言"><span class="nav-text">0x00 引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-XSS"><span class="nav-text">0x01 XSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-HTML"><span class="nav-text">0x02 HTML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-字符集编码"><span class="nav-text">0x03 字符集编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-绕过"><span class="nav-text">0x04 绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-页脚"><span class="nav-text">0x05 页脚</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#很多玩家-翻GFW-都是通过租一个海外vps，并在其上布置shadowsocks-后文用ss代之-服务端。"><span class="nav-text">很多玩家 翻GFW 都是通过租一个海外vps，并在其上布置shadowsocks(后文用ss代之)服务端。</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-。"><span class="nav-text">对于像我这样的普通玩家来说，从搬瓦工上租用一个最便宜的vps即可满足基本要求（使用ss进行网页浏览、搜索资料的速度还可以），但要想下载一些东西，（至少对于我的这台vps）速度着实不敢恭维-.-。</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#前些天想下载一些东西，无奈下载速度只有十几KB-s，最终还下载失败-！就想去了解如何优化ss的上网速度（找到了net-speeder）。"><span class="nav-text">前些天想下载一些东西，无奈下载速度只有十几KB/s，最终还下载失败 - -！就想去了解如何优化ss的上网速度（找到了net-speeder）。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。"><span class="nav-text">使用的具体步骤作者在github上说得比较详细，我也就不再赘述。下面简单阐述其中涉及到的一些原理。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#首先有必要了解一下ss的工作原理："><span class="nav-text">首先有必要了解一下ss的工作原理：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#net-speeder"><span class="nav-text">net-speeder:</span></a></li></ol></div>
             
 
           </div>
@@ -691,7 +638,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -699,7 +646,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+  <div class="theme-info">Theme &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
 
 
 
